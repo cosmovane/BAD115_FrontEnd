@@ -6,12 +6,19 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 // import FormControl from 'react-bootstrap/FormControl'
 // import Button from 'react-bootstrap/Button'
 // import {NavLink, withRouter}  from 'react-router-dom'
+import Card from 'react-bootstrap/Card';
+import CardGroup from 'react-bootstrap/CardGroup';
+
 class MenuComponent extends Component {
     // getNavLinkClass = (path) => {
     //     return this.props.location.pathname === path ? 'active' : '';
     // }
     render(){
       return (
+        <Card
+          bg="secondary" key="secondary"
+        >
+          <Card.Header>
         <Navbar bg="dark" expand="lg" variant="dark">
           <Navbar.Brand href="#home">Planilla</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -40,6 +47,8 @@ class MenuComponent extends Component {
             </Form> */}
           </Navbar.Collapse>
         </Navbar>
+        </Card.Header>
+        </Card>
       );
     }
   }
