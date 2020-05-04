@@ -41,9 +41,10 @@ class PuestoTrabajoComponent extends Component {
         <table className="table">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Descripción</th>
-              <th>Acciones</th>
+              <th style={{ width: '15%' }}>Nombre</th>
+              <th style={{ width: '55%' }}>Descripción</th>
+              <th style={{ width: '20%' }}>Rango de salario</th>
+              <th style={{ width: '10%' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -54,6 +55,7 @@ class PuestoTrabajoComponent extends Component {
                   return <tr key={puestoTrabajo.idPuestotrabajo}>
                     <td>{puestoTrabajo.nombre}</td>
                     <td>{puestoTrabajo.descripcion}</td>
+                <td>${puestoTrabajo.id_salario.desde} - ${puestoTrabajo.id_salario.hasta}</td>
                     <td>
                       <Link to={`/puestotrabajo/editar/${puestoTrabajo.idPuestotrabajo}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
                       <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(puestoTrabajo.idPuestotrabajo)} /></button>
