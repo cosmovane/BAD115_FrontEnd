@@ -23,7 +23,7 @@ class MenuComponent extends Component {
             <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/empresa">Empresa</Nav.Link>
-            <Nav.Link href="/empleados">Empleados</Nav.Link>
+            <Nav.Link href="/empleado">Empleados</Nav.Link>
             <Nav.Link href="/departamentos">Departamentos</Nav.Link>
          
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
