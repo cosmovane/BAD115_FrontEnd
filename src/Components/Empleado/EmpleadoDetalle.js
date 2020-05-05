@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import EmpleadoService from '../../Service/Empresa/EmpleadoService';
+import EmpleadoService from '../../Service/Empleado/EmpleadoService';
 import { Row } from 'react-bootstrap';
 import { Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -14,7 +14,7 @@ const inputStyle = {
     'width': '25em',
 }
 const textoValidator = /^[a-zA-Z\s]*$/i; //Nombre (1,2,3,4,5) fechaNac, Direccion, Genero, EStadoCivil
-const inputLengthTest = /^.{5,50}$/;
+const inputLengthTest = /^.{0,50}$/;
 
 class EmpleadoDetalleComponent extends Component {
 
@@ -30,10 +30,12 @@ class EmpleadoDetalleComponent extends Component {
             apellidocasada: '',
             fechanacimiento: '',
             idDireccion: '',
-            idGEnero: '',
+            idGenero: '',
             idEstadoCivil: '',
 
             departamento: [],
+            generos: [],
+            estadosciviles: [],
             descripcion: '',
             colonia: '',
             selectedOption: 0,
@@ -49,12 +51,18 @@ class EmpleadoDetalleComponent extends Component {
 
     componentDidMount() {
         // console.log(this.state.idEmpresa)
-        // EmpleadoService.departamentosMunicipios().then(response => {
-        //     console.log(response);
-        //     this.setState({
-        //         departamento: response.data,
-        //     });
-        // })
+        EmpleadoService.listarGeneros().then(response => {
+            console.log(response);
+            this.setState({
+                generos: response.data,
+            });
+        })
+        EmpleadoService.listarEstadosCiviles().then(response => {
+            console.log(response);
+            this.setState({
+                estadosciviles: response.data,
+            });
+        })
         if (this.state.idEmpleado == -1) {
             return
         }
@@ -68,6 +76,7 @@ class EmpleadoDetalleComponent extends Component {
                 apellidomaterno: response.data.apellidomaterno,
                 apellidocasada: response.data.apellidocasada,
                 fechanacimiento: response.data.fechanacimiento,
+
 
                 // idDireccion: response.data.id_direccion.idDireccion,
                 // idGenero: response.data.id_genero.idGenero,
@@ -100,10 +109,11 @@ class EmpleadoDetalleComponent extends Component {
 
         if (this.state.idEmpleado == -1) {
             console.log(empleado);
-            EmpleadoService.empleadoCrear('-1', '-1', '-1', empleado).then(() => this.props.history.push('/empleado'));
+            var promesa = EmpleadoService.empleadoCrear( this.state.id_genero, this.state.id_estadocivil,'-1', empleado).then(() => this.props.history.push('/empleado'));
+            console.log(promesa.isResolved);
         } else {
             empleado.idEmpleado = values.idEmpleado;
-            EmpleadoService.empleadoActualizar('-1', '-1', '-1', empleado).then(() => this.props.history.push('/empleado'));
+            EmpleadoService.empleadoActualizar(this.state.id_genero, this.state.id_estadocivil, '-1', empleado).then(() => this.props.history.push('/empleado'));
         }
     }
 
@@ -118,40 +128,29 @@ class EmpleadoDetalleComponent extends Component {
         //         text: 'Seleccione departamento y/o municipio!',
         //     })
         // }
-        // if(!values.primernombre){
-        //     errors.primernombre = "Debe ingresar al menos un nombre"
-        // } else if(!inputLengthTest.test(values.primernombre)){
-        //     errors.primernombre = "No exceda los 50 caracteres por valor.";
-        // }
-        //
-        // if(!values.apellidopaterno){
-        //     errors.apellidopaterno = "Debe ingresar al menos un apellid"
-        // } else if(!inputLengthTest.test(values.apellidopaterno)){
-        //     errors.apellidopaterno = "No exceda los 50 caracteres por valor.";
-        // }
+        if(!values.primernombre){
+            errors.primernombre = "Debe ingresar al menos un nombre"
+        } else if(!inputLengthTest.test(values.primernombre)){
+            errors.primernombre = "No exceda los 50 caracteres por valor.";
+        }
 
-        // if(!inputLengthTest.test(values.segundonombre)){
-        //     errors.segundonombre = "No exceda los 50 caracteres por valor.";
-        // }
-        //
-        // if(!inputLengthTest.test(values.apellidomaterno)){
-        //     errors.apellidomaterno = "No exceda los 50 caracteres por valor.";
-        // }
-        //
-        // if(!inputLengthTest.test(values.apellidocasada)){
-        //     errors.apellidocasada = "No exceda los 50 caracteres por valor.";
-        // }
+        if(!values.apellidopaterno){
+            errors.apellidopaterno = "Debe ingresar al menos un apellido"
+        } else if(!inputLengthTest.test(values.apellidopaterno)){
+            errors.apellidopaterno = "No exceda los 50 caracteres por valor.";
+        }
 
-        // else if (!values.colonia) {
-        //     errors.colonia = 'Ingrese colonia';
-        // } else if (!pageLengthTest.test(values.colonia)) {
-        //     errors.colonia = 'Colonia debe contener mínimo 5 y máximo 50 caracteres';
-        // }
-        // else if (!values.descripcion) {
-        //     errors.descripcion = 'Ingrese descripción';
-        // }else if(!inputLengthTest.test(values.descripcion)){
-        //     errors.descripcion = 'Descripción debe contener mínimo 5 y máximo 100 caracteres';
-        // }
+        if(!inputLengthTest.test(values.segundonombre)){
+            errors.segundonombre = "No exceda los 50 caracteres por valor.";
+        }
+
+        if(!inputLengthTest.test(values.apellidomaterno)){
+            errors.apellidomaterno = "No exceda los 50 caracteres por valor.";
+        }
+
+        if(!inputLengthTest.test(values.apellidocasada)){
+            errors.apellidocasada = "No exceda los 50 caracteres por valor.";
+        }
 
         return errors;
     }
@@ -169,24 +168,34 @@ class EmpleadoDetalleComponent extends Component {
 
     render() {
         let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento } = this.state
-        // const getMunicipios = () => {
-        //     const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento == this.state.selectedOption)[0];
-        //     // console.log()
-        //     return (
-        //         <div>
-        //             <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>
-        //                 {
-        //                     selectedOption > 0 ? <option value={selectedOptionMunicipio}>{municipio}</option> : <option value="NM">seleccione municipio</option>
-        //                 }
-        //
-        //                 {
-        //                     municipios ? municipios.municipiosByIdDepartmento.map(m => <option key={m.nombre} value={m.idMunicipio}>{m.nombre}</option>) : <option>Seleccione departamento</option>
-        //                 }
-        //             </select>
-        //
-        //         </div>
-        //     )
-        // }
+        const getGeneros = () => {
+            const generos = this.state.generos;
+            return (
+                <div>
+                    <select className="form-control" onChange={(e) => this.setState({ id_genero: e.target.value })}>
+                        <option value='-1'>Seleccione un Genero</option>
+                        {
+                            generos ? generos.map(m => <option key={m.idGenero} value={m.idGenero}>{m.nombre}</option>) : <option>Seleccione un Genero</option>
+                        }
+                    </select>
+                </div>
+            )
+
+        }
+        const getEstadosCiviles = () => {
+            const estadosciviles = this.state.estadosciviles;
+            return (
+                <div>
+                    <select className="form-control" onChange={(e) => this.setState({ id_estadocivil: e.target.value })}>
+                        <option value='-1'>Seleccione un Estado Civil</option>
+                        {
+                            estadosciviles ? estadosciviles.map(m => <option key={m.idEstadocivil} value={m.idEstadocivil}>{m.nombre}</option>) : <option>Seleccione un Estado Civil</option>
+                        }
+                    </select>
+
+                </div>
+            )
+        }
         return (
             < div >
                 <Card style={{ width: 'relative', 'marginLeft': 'auto', 'marginRight': 'auto' }} >
@@ -246,7 +255,7 @@ class EmpleadoDetalleComponent extends Component {
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-
+                                                    { getGeneros() }
                                                 </Col>
                                             </Row>
                                             <Row>
@@ -258,7 +267,7 @@ class EmpleadoDetalleComponent extends Component {
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-
+                                                    { getEstadosCiviles()  }
                                                 </Col>
                                             </Row>
 

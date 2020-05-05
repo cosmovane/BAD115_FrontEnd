@@ -25,7 +25,7 @@ function App() {
           render={ (props) =><PuestoTrabajoForm {...props} editar={true}
           />
           }/>
-          <Route path="/empleado" component={EmpleadoComponent} ></Route>
+          <Route exact path="/empleado" component={EmpleadoComponent} ></Route>
           <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>
         </div>
       </Router>

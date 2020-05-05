@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EmpleadoService from '../../Service/Empresa/EmpleadoService';
+import EmpleadoService from '../../Service/Empleado/EmpleadoService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
 
@@ -56,7 +56,6 @@ export default class EmpleadoComponent extends Component {
                             {/* <th>ID</th> */}
                             <th>Nombre</th>
                             <th>Fecha de Nacimiento</th>
-                            <th>Salario</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -68,7 +67,6 @@ export default class EmpleadoComponent extends Component {
                                         {/* <td>{empresa.idEmpresa}</td> */}
                                         <td>{empleado.primernombre} {empleado.segundonombre} {empleado.apellidopaterno} {empleado.apellidomaterno}</td>
                                         <td>{empleado.fechanacimiento}</td>
-                                        <td>{empleado.salario}</td>
                                         <td><button className="btn btn-warning btn-sm" onClick={() => this.updateEmpleadoClicked(empleado.idEmpleado)}><FontAwesomeIcon icon={faEdit}/></button></td>
                                     </tr>
                             )
