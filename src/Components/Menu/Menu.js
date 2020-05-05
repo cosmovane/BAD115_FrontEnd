@@ -22,6 +22,7 @@ class MenuComponent extends Component {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/empresa">Empresa</Nav.Link>
             <Nav.Link href="/empleados">Empleados</Nav.Link>
+            <Nav.Link href="/profesion">Profesiones</Nav.Link>
             <Nav.Link href="/departamentos">Departamentos</Nav.Link>
             <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link>
             {/* <Nav.Link><NavLink className={this.getNavLinkClass("/empresa")} to="/empresa">Empresa</NavLink></Nav.Link>
