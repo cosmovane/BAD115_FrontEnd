@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Link } from 'react-router-dom'
 import PuestosTrabajoService from '../../Service/PuestoTrabajo/PuestoTrabajoService'
+import Swal from 'sweetalert2'
 
 class PuestoTrabajoForm extends Component {
 
@@ -19,11 +20,11 @@ class PuestoTrabajoForm extends Component {
     this.validateNumber = this.validateNumber.bind(this)
   }
 
-  async componentDidMount(){
+  async componentDidMount() {
     if (this.props.editar) {
       const id = this.props.location.pathname.split('/')[3]
       const puestoTrabajo = await PuestosTrabajoService.obtenerPuestoTrabajo(parseInt(id))
-      const {nombre, descripcion} = puestoTrabajo.data
+      const { nombre, descripcion } = puestoTrabajo.data
       const desde = puestoTrabajo.data.id_salario.desde
       const hasta = puestoTrabajo.data.id_salario.hasta
       this.setState({
@@ -32,7 +33,7 @@ class PuestoTrabajoForm extends Component {
     }
   }
 
-  validateNumber(number){
+  validateNumber(number) {
     const isNumber = /^\s*-?[1-9]\d*(\.\d{1,2})?\s*$/
     return isNumber.test(number)
   }
@@ -40,11 +41,11 @@ class PuestoTrabajoForm extends Component {
   validate(values) {
     let errors = {}
 
-    if(!this.validateNumber(values.desde) || !this.validateNumber(values.hasta) ) errors.desde = 'Debe ingresar un monton con dos decimales'
-    if(!this.validateNumber(values.hasta) || !this.validateNumber(values.hasta) ) errors.hasta = 'Debe ingresar un monton con dos decimales'
-    if((values.desde <= 0 || values.desde >= 100000)) errors.desde = 'Debe ingresar un monto mayor a cero y menor de 100,000'
-    if((values.hasta <= 0 || values.hasta >= 100000)) errors.hasta = 'Debe ingresar un monto mayor a cero y menor de 100,000'
-    if(values.desde > values.hasta) errors.hasta = 'El salario mínimo debe ser menor al salario máximo'
+    if (!this.validateNumber(values.desde) || !this.validateNumber(values.hasta)) errors.desde = 'Debe ingresar un monton con dos decimales'
+    if (!this.validateNumber(values.hasta) || !this.validateNumber(values.hasta)) errors.hasta = 'Debe ingresar un monton con dos decimales'
+    if ((values.desde <= 0 || values.desde >= 100000)) errors.desde = 'Debe ingresar un monto mayor a cero y menor de 100,000'
+    if ((values.hasta <= 0 || values.hasta >= 100000)) errors.hasta = 'Debe ingresar un monto mayor a cero y menor de 100,000'
+    if (values.desde > values.hasta) errors.hasta = 'El salario mínimo debe ser menor al salario máximo'
 
     if (!values.nombre) errors.nombre = 'Ingrese un nombre'
     if (!values.descripcion) errors.descripcion = 'Ingrese una descripción'
@@ -67,8 +68,16 @@ class PuestoTrabajoForm extends Component {
     }
     console.log("PuestoTrabajoForm -> onSubmit -> puestoTrabajo", puestoTrabajo)
     this.props.editar ? await PuestosTrabajoService.modificarPuestoTrabajo(puestoTrabajo.idPuestotrabajo, puestoTrabajo)
-    : await PuestosTrabajoService.agregarPuestoTrabajo(puestoTrabajo) 
+      : await PuestosTrabajoService.agregarPuestoTrabajo(puestoTrabajo)
     this.props.history.push('/puestotrabajo')
+    const mensaje = this.props.editar ? 'Registro modificado con éxito' : 'Registro creado con éxito'
+    Swal.fire({
+      icon: 'success',
+      title: 'Buen trabajo!',
+      html: mensaje,
+      timer: 5000,
+      timerProgressBar: true,
+    })
   }
 
   render() {

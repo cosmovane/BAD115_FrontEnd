@@ -3,6 +3,7 @@ import PuestosTrabajoService from '../../Service/PuestoTrabajo/PuestoTrabajoServ
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faBan } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 class PuestoTrabajoComponent extends Component {
   constructor(props) {
@@ -22,11 +23,31 @@ class PuestoTrabajoComponent extends Component {
   async desactivar(id) {
     await PuestosTrabajoService.desactivarPuestoTrabajo(id)
     await this.refreshPuestosTrabajo()
+    Swal.fire({
+      icon: 'success',
+      title: 'Buen trabajo!',
+      html: 'Registro desactivado',
+      timer: 5000,
+      timerProgressBar: true,
+    })
   }
 
   async refreshPuestosTrabajo() {
     const response = await PuestosTrabajoService.allPuestosTrabajo()
-    this.setState({ puestosTrabajo: response.data })
+     const puestosActivos = response.data.filter(
+      r => {
+        if(r.estado){
+          return {
+            idPuestotrabajo: r.idPuestotrabajo,
+            nombre: r.nombre,
+            descripcion: r.descripcion,
+            estado: r.estado,
+            id_salario: r.id_salario
+          }
+        }
+      }
+    )
+    this.setState({ puestosTrabajo: puestosActivos })
   }
 
   render() {
@@ -60,7 +81,8 @@ class PuestoTrabajoComponent extends Component {
                       <Link to={`/puestotrabajo/editar/${puestoTrabajo.idPuestotrabajo}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
                       <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(puestoTrabajo.idPuestotrabajo)} /></button>
                     </td>
-                  </tr>}
+                  </tr>
+                  else return <div></div>}
               )
             }
           </tbody>
