@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import EmpresaService from '../../Service/Empresa/EmpresaService';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
 
 export default class EmpresaComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
             empresas: [],
-            message: null
         }
-        this.refreshEmpresas = this.refreshEmpresas.bind(this);
+
+        this.updateEmpresaClicked = this.updateEmpresaClicked.bind(this)
         this.addCourseClicked = this.addCourseClicked.bind(this)
-        this.updateEmpresaClicked = this.updateEmpresaClicked(this)
+        this.refreshEmpresas = this.refreshEmpresas.bind(this);
     }
 
     componentDidMount() {
@@ -21,7 +23,7 @@ export default class EmpresaComponent extends Component {
         EmpresaService.allEmpresas()//HARDCODED
             .then(
                 response => {
-                    console.log(response);
+                 //   console.log(response);
                     this.setState({ empresas: response.data });
                 }
             )
@@ -31,6 +33,7 @@ export default class EmpresaComponent extends Component {
         this.props.history.push(`/empresa/-1`)
     }
 
+   
     updateEmpresaClicked(id){
         this.props.history.push(`/empresa/${id}`)
     }
@@ -39,20 +42,23 @@ export default class EmpresaComponent extends Component {
         return (
 
             <div className="container">
-                <h3>Todas Empresas</h3>
+                <h3>Empresas</h3>
                 {/* {this.state.message && <div class="alert alert-success">{this.state.message}</div>} */}
                 <div className="container">
                     <div className="row">
-                        <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button>
+                        {
+                            this.state.empresas.length > 0 ? <button className="btn btn-success" disabled ><FontAwesomeIcon icon={faPlus}/> Agregar</button> : <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+                        }
+                        {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
                     </div>
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Representante</th>
-                                <th>NIT</th>
-                                <th>NIC</th>
-                                <th></th>
+                                {/* <th>ID</th> */}
+                                <th style={{ width: '15%' }}>Representante</th>
+                                <th style={{ width: '55%' }}>NIT</th>
+                                <th style={{ width: '20%' }}>NIC</th>
+                                <th style={{ width: '10%' }}>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,11 +66,11 @@ export default class EmpresaComponent extends Component {
                                 this.state.empresas.map(
                                     empresa =>
                                         <tr key={empresa.idEmpresa}>
-                                            <td>{empresa.idEmpresa}</td>
+                                            {/* <td>{empresa.idEmpresa}</td> */}
                                             <td>{empresa.representante}</td>
                                             <td>{empresa.nit}</td>
                                             <td>{empresa.nic}</td>
-                                            <td><button className="btn btn-secondary" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}>Actualizar</button></td>
+                                            <td><button className="btn btn-warning btn-sm" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}><FontAwesomeIcon icon={faEdit}/></button></td>
                                         </tr>
                                 )
                             }
