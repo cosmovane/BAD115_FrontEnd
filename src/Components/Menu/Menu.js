@@ -20,9 +20,10 @@ class MenuComponent extends Component {
             <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/empresa">Empresa</Nav.Link>
-            <Nav.Link href="/empleados">Empleados</Nav.Link>
+            <Nav.Link href="/empleado">Empleados</Nav.Link>
             <Nav.Link href="/profesion">Profesiones</Nav.Link>
             <Nav.Link href="/departamentos">Departamentos</Nav.Link>
+
             <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link>
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
@@ -33,7 +34,6 @@ class MenuComponent extends Component {
                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
               </NavDropdown>
             </Nav>
-           
           </Navbar.Collapse>
         </Navbar>
         </Card.Header>

@@ -9,6 +9,8 @@ import ProfesionComponent from './Components/Profesion/Profesion';
 import ProfesionF from './Components/Profesion/ProfesionF';
 import PuestoTrabajoComponent from './Components/PuestoTrabajo/PuestoTrabajo'
 import PuestoTrabajoForm from './Components/PuestoTrabajo/PuestoTrabajoForm'
+import EmpleadoComponent from './Components/Empleado/Empleado';
+import EmpleadoDetalleComponent from './Components/Empleado/EmpleadoDetalle';
 
 
 function App() {
@@ -26,10 +28,12 @@ function App() {
 
           <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
           <Route path="/puestotrabajo/crear" component={PuestoTrabajoForm} />
-          <Route path="/puestotrabajo/editar/:id" 
+          <Route path="/puestotrabajo/editar/:id"
           render={ (props) =><PuestoTrabajoForm {...props} editar={true}
           />
           }/>
+          <Route exact path="/empleado" component={EmpleadoComponent} ></Route>
+          <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>
         </div>
       </Router>
     </div>
