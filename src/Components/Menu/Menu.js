@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Redirect,Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
-import CardGroup from 'react-bootstrap/CardGroup';
 import Image from 'react-bootstrap/Image';
 class MenuComponent extends Component {
     render(){
@@ -12,7 +10,6 @@ class MenuComponent extends Component {
         <Card
           bg="secondary" key="secondary"
         >
-          <Card.Header>
         <Navbar bg="dark" expand="lg" variant="dark">
           <Navbar.Brand href="#home"> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -36,7 +33,6 @@ class MenuComponent extends Component {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        </Card.Header>
         </Card>
       );
     }
