@@ -5,11 +5,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { Redirect,Link } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
-
+import Image from 'react-bootstrap/Image';
 class MenuComponent extends Component {
-    // getNavLinkClass = (path) => {
-    //     return this.props.location.pathname === path ? 'active' : '';
-    // }
     render(){
       return (
         <Card
@@ -17,15 +14,16 @@ class MenuComponent extends Component {
         >
           <Card.Header>
         <Navbar bg="dark" expand="lg" variant="dark">
-          <Navbar.Brand href="#home">Planilla</Navbar.Brand>
+          <Navbar.Brand href="#home"> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/empresa">Empresa</Nav.Link>
             <Nav.Link href="/empleados">Empleados</Nav.Link>
+            <Nav.Link href="/profesion">Profesiones</Nav.Link>
             <Nav.Link href="/departamentos">Departamentos</Nav.Link>
-         
+            <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link>
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">Gestión tipos descuentos</NavDropdown.Item>
