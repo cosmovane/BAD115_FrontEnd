@@ -11,6 +11,9 @@ import PuestoTrabajoComponent from './Components/PuestoTrabajo/PuestoTrabajo'
 import PuestoTrabajoForm from './Components/PuestoTrabajo/PuestoTrabajoForm'
 
 
+import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
+import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
+
 function App() {
   return (
     <div className="App">
@@ -20,10 +23,12 @@ function App() {
           <Route exact path="/" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
-
+          <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
+          <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />
+          <Route path="/departamentos/editar/:id"
+          render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true}
           <Route path="/profesion" component={ProfesionComponent} />
           <Route path="profesion/crear" component={ProfesionF} />
-
           <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
           <Route path="/puestotrabajo/crear" component={PuestoTrabajoForm} />
           <Route path="/puestotrabajo/editar/:id" 
