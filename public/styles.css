@@ -1,0 +1,9 @@
+form-control{
+    size: 5px;
+}
+
+#idEmpresa{
+    size: 4px;
+    color: blue;
+    background: #282c34;
+}
