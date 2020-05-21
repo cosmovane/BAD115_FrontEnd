@@ -11,7 +11,7 @@ class MenuComponent extends Component {
           bg="secondary" key="secondary"
         >
         <Navbar bg="dark" expand="lg" variant="dark">
-          <Navbar.Brand href="#home"> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
+          <Navbar.Brand href=""> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
@@ -23,9 +23,9 @@ class MenuComponent extends Component {
 
             <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link>
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/centro_costo">Gestión de costos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">Gestión tipos descuentos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>

@@ -29,3 +29,5 @@ class CentroCostoService{
 		return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`);
 	}
 }
+
+export default new CentroCostoService();
