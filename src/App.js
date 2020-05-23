@@ -27,8 +27,12 @@ function App() {
           <Route exact path="/" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
-          <Route exact path="/centro_costo" component={CentroCostoComponent}></Route>
-          <Route path="/centro_costo/crear" component={CentroCostoForm}></Route>
+          {/*<Route exact path="/centro_costo" component={CentroCostoComponent}></Route>*/}
+
+          <Route exact path="/centro_costo/:id" render={(props)=><CentroCostoComponent {...props}/>}/>
+
+          {/*<Route path="/centro_costo/crear" component={CentroCostoForm}></Route>*/}
+          <Route  path="/centro_costo/crear/:id" render={(props)=><CentroCostoForm {...props} crear={true}/>}/>
           <Route  path="/centro_costo/editar/:id" render={(props)=><CentroCostoForm {...props} editar={true}/>}/>
           <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
           <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />

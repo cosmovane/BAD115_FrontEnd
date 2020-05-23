@@ -10,7 +10,7 @@ class CentroCostoService{
 	}
 
 	listCostos(id){
-		return axios.get(`${EMPRESA_API_URL}/centro_costo/list/{${id}}`);
+		return axios.get(`${EMPRESA_API_URL}/centro_costo/list/${id}`);
 	}
 
 	buscarCosto(id){
