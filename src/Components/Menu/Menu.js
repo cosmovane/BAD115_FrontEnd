@@ -24,7 +24,7 @@ class MenuComponent extends Component {
             <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link>
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Gestión tipos descuentos</NavDropdown.Item>
+                <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
                 <NavDropdown.Divider />
