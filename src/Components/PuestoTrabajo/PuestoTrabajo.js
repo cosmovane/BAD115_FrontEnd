@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PuestosTrabajoService from '../../Service/PuestoTrabajo/PuestoTrabajoService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faBan } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
@@ -56,7 +56,7 @@ class PuestoTrabajoComponent extends Component {
         <br />
         <h3> Puestos de Trabajo</h3>
         <div className="row">
-          <Link to="/puestotrabajo/crear"> <button className="btn btn-success"> Agregar </button> </Link>
+          <Link to="/puestotrabajo/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
         </div>
         <br />
         <table className="table">
