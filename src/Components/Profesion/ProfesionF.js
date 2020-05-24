@@ -46,25 +46,20 @@ class ProfesionF extends Component {
           estado: true
       }
     
-    
-    
-    
-    
-    
+      console.log("ProfesionF -> onSubmit -> profesion", profesion)
+    this.props.editar ? await ProfesionService.modificarProfesion(profesion.idProfesion, profesion)
+      : await ProfesionService.agregarProfesion(profesion)
+    this.props.history.push('/profesion')
+    const mensaje = this.props.editar ? 'Registro modificado con éxito' : 'Registro creado con éxito'
+    Swal.fire({
+      icon: 'success',
+      title: 'Buen trabajo!',
+      html: mensaje,
+      timer: 5000,
+      timerProgressBar: true,
+    })
     }
-
-
-
-
     
-    
-
-
-
-
-
-
-
 
     render() {
       let { acronimo, nombre} = this.state
