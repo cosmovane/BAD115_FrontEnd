@@ -35,6 +35,8 @@ export default class CentroCostoForm extends Component{
 			const id = this.props.location.pathname.split('/')[3]
 			console.log("ID PASADO:"+id)
 			const unidades = await CentroCostoService.listUnidades(parseInt(id))
+			console.log("aqui:"+unidades)
+			if(unidades != undefined){
 			this.setState({
 				unidades:unidades.data.unidades,
 				unidadPadre: (id != -1) ? unidades.data.unidadPadre : -1,
@@ -43,12 +45,22 @@ export default class CentroCostoForm extends Component{
 				presupuestoAsignado:unidades.data.presupuestoAsignado
 			})
 			const {unidadPadre} = this.state
-			console.log("ID EN STATE:"+unidadPadre)
+			//console.log("ID EN STATE:"+unidadPadre)
+		 if(unidades.data.unidades == ''){
+		 	Swal.fire(
+                'Algo ha salido mal',
+                unidades.data.mensaje ,
+                'error'
+            )
+		 }
+		}
 		}
 		
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3]
 			const costo = await CentroCostoService.buscarCosto(parseInt(id))
+			console.log("aqui costo:"+costo)
+			if(costo != undefined){
 			const {idCosto,monto} = costo.data
 			const idUnidad = costo.data.id_unidadorganizacional.idUnidadorganizacional
 			const unidad = costo.data.id_unidadorganizacional.nombre
@@ -59,7 +71,7 @@ export default class CentroCostoForm extends Component{
 			this.setState({
 				idCosto:idCosto,
 				monto:monto,
-				unidades:unidades.data.unidades,
+				//unidades:unidades.data.unidades,
 				unidadPadre: (id != -1) ? unidades.data.unidadPadre : -1,
 				idUnidad:idUnidad,
 				unidad:unidad,
@@ -70,6 +82,7 @@ export default class CentroCostoForm extends Component{
 				editar:this.props.editar,
 				unidadPadreEdit: unidadPadreEdit,
 			})
+		}
 
 		}
 	}

@@ -6,7 +6,14 @@ const EMPRESA_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}`;
 class CentroCostoService{
 
 	listUnidades(id){
-		return axios.get(`${EMPRESA_API_URL}/unidad_organizacional/list/${id}`);
+		return axios.get(`${EMPRESA_API_URL}/unidad_organizacional/list/${id}`).catch( (err)=> {
+            Swal.fire(
+                'Algo ha salido mal',
+                err.response.data.mensaje ,
+                'error'
+            )
+            console.log(err.response.data.mensaje)
+        } );
 	}
 
 	listCostos(id){
@@ -14,19 +21,62 @@ class CentroCostoService{
 	}
 
 	buscarCosto(id){
-		return axios.get(`${EMPRESA_API_URL}/centro_costo/${id}`);
+		return axios.get(`${EMPRESA_API_URL}/centro_costo/${id}`).catch( (err)=> {
+            Swal.fire(
+                'Algo ha salido mal',
+                err.response.data.mensaje ,
+                'error'
+            )
+            console.log(err.response.data.mensaje)
+        } );
 	}
 
 	crearCosto(costo,idUnidad){
-		return axios.post(`${EMPRESA_API_URL}/centro_costo/${idUnidad}`,costo);
+		return axios.post(`${EMPRESA_API_URL}/centro_costo/${idUnidad}`,costo).then( ()=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    'El registro fue creado con exito.',
+                    'success'
+                )
+        } ).catch( (err)=> {
+            Swal.fire(
+                'Algo ha salido mal',
+                err.response.data.mensaje ,
+                'error'
+            )
+        } );
 	}
 
 	editarCosto(costo,idUnidad,idCosto){
-		return axios.put(`${EMPRESA_API_URL}/centro_costo/${idUnidad}/${idCosto}`,costo);
+		return axios.put(`${EMPRESA_API_URL}/centro_costo/${idUnidad}/${idCosto}`,costo).then( ()=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    'El registro fue editado con exito.',
+                    'success'
+                )
+        } ).catch( (err)=> {
+            Swal.fire(
+                'Algo ha salido mal',
+                err.response.data.mensaje ,
+                'error'
+            )
+        } );
 	}
 
 	desactivarCosto(idCosto){
-		return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`);
+		return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`).then( ()=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    'El registro fue desactivado con exito.',
+                    'success'
+                )
+        } ).catch( (err)=> {
+            Swal.fire(
+                'Algo ha salido mal',
+                err.response.data.mensaje ,
+                'error'
+            )
+        } );
 	}
 }
 

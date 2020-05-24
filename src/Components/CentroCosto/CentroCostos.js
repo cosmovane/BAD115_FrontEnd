@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert'
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
 
 export default class CentroCostoComponent extends Component{
@@ -37,13 +38,15 @@ export default class CentroCostoComponent extends Component{
         this.props.history.push('/centro_costo/crear/'+id)
     }
 
-    costoListAtras(){
+    async costoListAtras(){
         const id = this.props.location.pathname.split('/')[2]
         this.props.history.push('/centro_costo_list/'+id)
+        await this.refreshCostos();
     }
 
-    costoListHijos(id){
+    async costoListHijos(id){
         this.props.history.push('/centro_costo_list/'+id)
+        await this.refreshCostos();
     }
 
 	render(){
