@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faEdit,faSave,faPlus,faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
@@ -17,11 +17,13 @@ export default class CentroCostoForm extends Component{
 			unidades:[],
 			idUnidad:0,
 			unidad:'',
-			unidadPadre:0,
+			unidadPadre:-1,
 			presupuestoTotal:0,
 			presupuestoDisponible:0,
 			presupuestoAsignado:0,
 			unidadMayor:false,
+			editar:false,
+			unidadPadreEdit:'',
 		}
 		this.onSubmit = this.onSubmit.bind(this)
 		this.validate = this.validate.bind(this)
@@ -40,7 +42,8 @@ export default class CentroCostoForm extends Component{
 				presupuestoDisponible:unidades.data.presupuestoDisponible,
 				presupuestoAsignado:unidades.data.presupuestoAsignado
 			})
-			console.log("ID EN STATE:"+this.state.unidadPadre)
+			const {unidadPadre} = this.state
+			console.log("ID EN STATE:"+unidadPadre)
 		}
 		
 		if(this.props.editar){
@@ -50,6 +53,7 @@ export default class CentroCostoForm extends Component{
 			const idUnidad = costo.data.id_unidadorganizacional.idUnidadorganizacional
 			const unidad = costo.data.id_unidadorganizacional.nombre
 			const unidadMayor = costo.data.id_unidadorganizacional.unidadmayor
+			const unidadPadreEdit = costo.data.idUnidadPadre
 
 			const unidades = unidadMayor ? await CentroCostoService.listUnidades(parseInt(-1)) :await CentroCostoService.listUnidades(parseInt(idUnidad))
 			this.setState({
@@ -62,8 +66,9 @@ export default class CentroCostoForm extends Component{
 				unidadMayor: unidadMayor,
 				presupuestoTotal:unidades.data.presupuestoTotal,
 				presupuestoDisponible:unidades.data.presupuestoDisponible,
-				presupuestoAsignado:unidades.data.presupuestoAsignado
-
+				presupuestoAsignado:unidades.data.presupuestoAsignado,
+				editar:this.props.editar,
+				unidadPadreEdit: unidadPadreEdit,
 			})
 
 		}
@@ -97,18 +102,36 @@ export default class CentroCostoForm extends Component{
 		this.props.editar ? await CentroCostoService.editarCosto(costo,this.state.idUnidad,idCosto) 
 			: await CentroCostoService.crearCosto(costo,this.state.idUnidad)
 
-		const id = this.state.unidadMayor ? -1 : this.state.unidadPadre
-		console.log("UNIDAD PADRE LIST:"+id)
-		this.props.history.push('/centro_costo/'+id)
+		//const id = this.state.unidadMayor ? -1 : this.state.unidadPadre
+		//console.log("UNIDAD PADRE LIST:"+id)
+		//this.props.history.push('/centro_costo_list/'+id)
+
+		if(this.props.editar){
+        	const {unidadPadreEdit} = this.state 
+        	this.props.history.push('/centro_costo_list/'+unidadPadreEdit)
+    	}else{
+    		const {unidadPadre} = this.state
+       	 	this.props.history.push('/centro_costo_list/'+unidadPadre)
+    	}
 	}
 
+	costoList(){
+		if(this.props.editar){
+        	const {unidadPadreEdit} = this.state 
+        	this.props.history.push('/centro_costo_list/'+unidadPadreEdit)
+    	}else{
+    	const {unidadPadre} = this.state
+        this.props.history.push('/centro_costo_list/'+unidadPadre)
+    	}
+    }
+
 	render(){
-		let {idUnidad,monto,unidad} = this.state
+		let {idUnidad,monto,unidad,editar} = this.state
 		return(
 			<div className="container">
 				{this.props.editar ? <h3>Editar costo</h3> : <h3>Crear costo</h3>}
 				<Formik
-				initialValues={{ idUnidad, monto,unidad}}
+				initialValues={{ idUnidad, monto,unidad,editar}}
           		validateOnChange={false}
           		validateOnBlur={false}
           		validate={this.validate}
@@ -130,11 +153,11 @@ export default class CentroCostoForm extends Component{
 						<fieldset className="form-group">
                           	<select className="form-control" onChange={(e) => this.setState({ idUnidad: e.target.value })}>
                           		{
-                                  idUnidad > 0 ? <option value={idUnidad}>{unidad}</option> :''
+                                  editar  ? <option value={idUnidad}>{unidad}</option> :<option value="NU">Seleccione unidad..</option>
 								  
                               	}
                               	{
-                              	  idUnidad == 0 ? this.state.unidades.map(unidad => <option key={unidad.nombre} value={unidad.idUnidadorganizacional}>{unidad.nombre}</option>):''
+                              	  !editar ? this.state.unidades.map(unidad => <option key={unidad.nombre} value={unidad.idUnidadorganizacional}>{unidad.nombre}</option>):''
                               	}
                            		
                         	</select>                           
@@ -151,8 +174,9 @@ export default class CentroCostoForm extends Component{
                 		className="alert alert-danger" />
               		  </Col>
               		 </Row>
-              		 <button className="btn btn-success" type="submit">Guardar</button>
-              		 <Link to="{{pathname:'/centro_costo/${this.state.unidadPadre}'}}"><button className="btn btn-danger">Regresar</button></Link>
+              		 <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/>Guardar</button>
+              		{/* <Link to="{{pathname:'/centro_costo_list/${this.state.unidadPadre}'}}"><button className="btn btn-danger">Regresar</button></Link>*/}
+					<button className="btn btn-danger" onClick={() => this.costoList()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>
 					</Form>
 					)
 				}

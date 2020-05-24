@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faEdit,faPlus,faList,faBan} from '@fortawesome/free-solid-svg-icons';
+import {faEdit,faPlus,faList,faBan,faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
 
@@ -32,15 +32,31 @@ export default class CentroCostoComponent extends Component{
 		this.setState({costos:response.data,id:id}); 
 	}
 
-	render(){
+    costoForm(){
+        const id = this.props.location.pathname.split('/')[2]
+        this.props.history.push('/centro_costo/crear/'+id)
+    }
 
+    costoListAtras(){
+        const id = this.props.location.pathname.split('/')[2]
+        this.props.history.push('/centro_costo_list/'+id)
+    }
+
+    costoListHijos(id){
+        this.props.history.push('/centro_costo_list/'+id)
+    }
+
+	render(){
+        let {id} = this.state
 		return(
 				 <div className="container">
                 <h3>Centro de costos</h3>
                 {/* {this.state.message && <div class="alert alert-success">{this.state.message}</div>} */}
                 <div className="container">
                     <div className="row">   
-                     <Link to={`/centro_costo/crear/${this.state.id}`}"><button className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</button></Link>  
+                  {/*   <Link to={`/centro_costo/crear/${id}`}><button className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</button></Link> */}
+                   <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+                   <button className="btn btn-danger" onClick={() => this.costoListAtras()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>
                     </div>
                     <table className="table">
                         <thead>
@@ -64,8 +80,9 @@ export default class CentroCostoComponent extends Component{
                                             <td>{costo.id_unidadorganizacional.idUnidadorganizacional}</td>
                                             <td>
                       						   <Link to={`/centro_costo/crear/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faPlus} /></button></Link>
-                      						   <Link to={`/centro_costo/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faList} /></button></Link>
-                      						   <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
+                      						  {/* <Link to={`/centro_costo_list/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faList} /></button></Link>*/}
+                      						   <button className="btn btn-info btn-sm" onClick={() => this.costoListHijos(costo.id_unidadorganizacional.idUnidadorganizacional)}><FontAwesomeIcon icon={faList} /></button>
+                                               <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
                       						   <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(costo.idCosto)} /></button>
                     					    </td>
                                         </tr>
