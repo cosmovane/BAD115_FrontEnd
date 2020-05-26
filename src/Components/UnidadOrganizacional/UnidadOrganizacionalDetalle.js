@@ -12,7 +12,7 @@ class UnidadOrganizacionalDetalle extends Component {
         this.state = {
             unidadOrganizacionalSuperior: "",
             nombre: "",
-            id_empresa: 1
+            id_empresa: ""
         }
 
         this.onSubmit = this.onSubmit.bind(this)

@@ -35,21 +35,21 @@ class UnidadOrganizacionalComponent extends Component {
     }
 
     async refreshUnidadesOrganizacionales() {
-      const response = await UnidadOrganizacionalService.allUnidadesOrganizacionales()
-       const unidadesActivos = response.data.filter(
-        r => {
-          if(r.estado){
-            return {
-              idUnidadorganizacional: r.idUnidadorganizacional,
-              unidadOrganizacionalSuperior: r.unidadOrganizacionalSuperior,
-              nombre: r.nombre,
-              id_empresa: r.id_empresa,
-              estado: r.estado
-            }
-          }
-        }
-      )
-      this.setState({ unidadesOrganizacionales: unidadesActivos })
+      const response=await UnidadOrganizacionalService.allUnidadesOrganizacionales()
+      // const unidadesActivos = response.data.filter(
+      //   r => {
+      //     if(r.estado){
+      //       return {
+      //         idUnidadorganizacional: r.idUnidadorganizacional,
+      //         unidadOrganizacionalSuperior: r.unidadOrganizacionalSuperior,
+      //         nombre: r.nombre,
+      //         id_empresa: r.id_empresa,
+      //         estado: r.estado
+      //       }
+      //     }
+      //   }
+      // )
+      // this.setState({ unidadesOrganizacionales: unidadesActivos })
     }
 
     render() {
