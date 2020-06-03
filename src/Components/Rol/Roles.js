@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import RolService from '../../Service/Rol/RolService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft,faEye} from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 export default class Roles extends Component{
 	constructor(props){
 		super(props)
 		this.state={
-			roles:[]
+			roles:[],
 		}
 
 		this.refreshRoles = this.refreshRoles.bind(this);
@@ -18,8 +19,13 @@ export default class Roles extends Component{
 	}
 
 
+	async desactivarActivarRol(id){
+		await RolService.desactivarRol(id);
+		await this.refreshRoles();
+	}
+
 	async refreshRoles(){
-		const response = RolService.allRoles();
+		const response = await RolService.allRoles();
 		this.setState({roles:response.data});
 	}
 
@@ -29,7 +35,7 @@ export default class Roles extends Component{
                 <h3>Roles</h3>
                 <div className="container">
                     <div className="row">
-                        {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
+                         <Link to="/rol/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
                     </div>
                     <table className="table">
                         <thead>

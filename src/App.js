@@ -15,8 +15,16 @@ import CentroCostoComponent from './Components/CentroCosto/CentroCostos';
 import CentroCostoForm from './Components/CentroCosto/CentroCostoForm';
 
 
+
 import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
 import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
+
+
+import Roles from './Components/Rol/Roles';
+import RolForm from './Components/Rol/RolForm';
+import Usuarios from './Components/Usuario/Usuarios';
+import UsuarioForm from './Components/Usuario/UsuarioForm';
+import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
 
 function App() {
   return (
@@ -35,6 +43,14 @@ function App() {
           <Route  path="/centro_costo/crear/:id" render={(props)=><CentroCostoForm {...props} crear={true}/>}/>
           <Route  path="/centro_costo/editar/:id" render={(props)=><CentroCostoForm {...props} editar={true}/>}/>
          
+          <Route exact path="/roles" component={Roles}/>
+          <Route path="/rol/crear" component={RolForm}/>
+          <Route path="/rol/editar/:id" render={(props) =><RolForm {...props} editar={true}/>} />
+
+          <Route exact path="/usuarios" component={Usuarios}/>
+          <Route path="/usuario/crear" component={UsuarioForm} />
+          <Route path="/usuario/editar/:id" render={(props)=><UsuarioForm {...props} editar={true}} />
+
           <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
           <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />
           <Route path="/departamentos/editar/:id" render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true}/>

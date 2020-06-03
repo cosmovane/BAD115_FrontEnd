@@ -8,13 +8,7 @@ const USUARIO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}`;
 class UsuarioService{
 
 	allUsuarios(){
-		return axios.get(`${USUARIO_API_URL}/users/list`).catch( (err)=> {
-            Swal.fire(
-                'Algo ha salido mal',
-                'No se puede cargar la lista de usuarios',
-                'error'
-            )
-        } );
+		return axios.get(`${USUARIO_API_URL}/users/list`);
 	}
 
 	buscarUsuario(idUser){

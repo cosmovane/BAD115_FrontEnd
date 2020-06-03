@@ -17,14 +17,18 @@ class RolService{
         } );
 	}
 
-	allRoles(){
-		return axios.get(`${ROL_API_URL}/rol/list`).catch( (err)=> {
+	allRolesUser(){
+		return axios.get(`${ROL_API_URL}/rol/list/user`).catch( (err)=> {
             Swal.fire(
                 'Algo ha salido mal',
                 'No se puede cargar la lista de roles' ,
                 'error'
             )
         } );
+	}
+
+	allRoles(){
+		return axios.get(`${ROL_API_URL}/rol/list`);
 	}
 
 	buscarRol(idRol){
@@ -71,7 +75,7 @@ class RolService{
 	}
 
 	desactivarRol(idRol){
-		return axiios.put(`${ROL_API_URL}/${idRol}`).then( ()=>{
+		return axios.put(`${ROL_API_URL}/${idRol}`).then( ()=>{
                 Swal.fire(
                     'Buen trabajo!',
                     'El registro fue desactivado con exito.',
