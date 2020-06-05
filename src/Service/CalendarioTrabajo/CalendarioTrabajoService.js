@@ -11,6 +11,7 @@ class CalendarioTrabajoService{
 
     agregarCalendarioTrabajo(calendarioTrabajo) {
         return axios.post(`${CALENDARIOTRABAJO_API_URL}`, calendarioTrabajo);
+        //return axios.post(`${CALENDARIOTRABAJO_API_URL}/crear`, calendarioTrabajo);
     }
     
     modificarCalendarioTrabajo(id, calendarioTrabajo){
@@ -26,4 +27,4 @@ class CalendarioTrabajoService{
     }
 }
 
-export default new CalendarioTrabajoService;
+export default new CalendarioTrabajoService();

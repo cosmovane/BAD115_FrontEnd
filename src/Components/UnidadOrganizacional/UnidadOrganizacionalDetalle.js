@@ -10,47 +10,49 @@ class UnidadOrganizacionalDetalle extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            idUnidadorganizacional:this.props.match.params.id,
             unidadOrganizacionalSuperior: "",
             nombre: "",
+            unidadesOrganizacionales: [],
             id_empresa: ""
+         //   empresas: []
         }
-
         this.onSubmit = this.onSubmit.bind(this)
-        this.validate = this.validate.bind(this)
-        this.validateNumber = this.validateNumber.bind(this)
     }
 
     async componentDidMount() {
+        UnidadOrganizacionalService.allUnidadesOrganizacionales().then(response =>{console.log(response);
+            this.setState({unidadesOrganizacionales: response.data,
+            });
+        })
         if (this.props.editar) {
             const id = this.props.location.pathname.split('/')[3]
             const unidadOrganizacional = await UnidadOrganizacionalService.obtenerUnidadOrganizacional(parseInt(id))
-            const unidadOrganizacionalSuperior = unidadOrganizacional.data.unidadOrganizacionalSuperior
-            const nombre = unidadOrganizacional.data.nombre
-            const id_empresa = unidadOrganizacional.data.id_empresa
+            const {unidadOrganizacionalSuperior, nombre, id_empresa} = unidadOrganizacional.data
+            //const {unidadOrganizacionalSuperior, nombre} = unidadOrganizacional.data
+        //    //  const unidadOrganizacionalSuperior = unidadOrganizacional.data.unidadOrganizacionalSuperior
+        //    // const nombre = unidadOrganizacional.data
+        //    // const id_empresa = unidadOrganizacional.data.id_empresa
             this.setState({
-                unidadOrganizacionalSuperior, nombre, id_empresa
+               unidadOrganizacionalSuperior, nombre, id_empresa
+                //unidadOrganizacionalSuperior, nombre
             })
         }
     }
 
-    validateNumber(number) {
-        const isNumber = /^\s*-?[1-9]\d*(\.\d{1,2})?\s*$/
-        return isNumber.test(number)
-    }
-
-    validate(values) {
-        let errors = {}
-        if (!values.nombre) errors.nombre = 'Ingrese un nombre de departamento'
-        return errors
-    }
-
     async onSubmit(values) {
+        if(values.unidadOrganizacionalSuperior){
+            values.unidadmayor=true
+        } else{
+            values.unidadmayor=false
+        }
         const unidadOrganizacional = {
             idUnidadorganizacional: this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '',
             unidadOrganizacionalSuperior: values.unidadOrganizacionalSuperior,
             nombre: values.nombre,
             id_empresa: values.id_empresa,
-            estado:true
+            estado:true,
+            unidadmayor: values.unidadmayor
         }
  
         console.log("UnidadOrganizacionalDetalle -> onSubmit -> unidadOrganizacional", unidadOrganizacional)
@@ -72,39 +74,56 @@ class UnidadOrganizacionalDetalle extends Component {
 
 
     render() {
-        let { unidadOrganizacionalSuperior, nombre, id_empresa } = this.state
+        //let { unidadOrganizacionalSuperior, nombre, id_empresa } = this.state
+        let { unidadOrganizacionalSuperior, nombre } = this.state
+        const getUnidadSuperior = () => {
+            const unidadesOrganizacionales = this.state.unidadesOrganizacionales;
+            return(
+                <div>
+                    <select className="form-control" onChange={(uni) => this.setState({unidadOrganizacionalSuperior: uni.target.value })}>
+                        <option value='-1'>Seleccione departamento</option>
+                        {
+                            unidadesOrganizacionales ? unidadesOrganizacionales.map(m => <option key={m.idUnidadorganizacional} value={m.idUnidadorganizacional}>{m.nombre} </option>) : <option>Seleccione un departamento</option>
+                        }
+                    </select>
+                </div>
+            )
+        }
         return (
             <div className="container">
                 {this.props.editar ? <h3>Editar Unidad Organizacional</h3> : <h3>Crear Unidad Organizacional</h3>}
                 <Formik
-                    initialValues={{ unidadOrganizacionalSuperior, nombre, id_empresa }}
+                    //initialValues={{ unidadOrganizacionalSuperior, nombre, id_empresa }}
+                    initialValues={{ unidadOrganizacionalSuperior, nombre }}
                     validateOnChange={false}
                     validateOnBlur={false}
-                    validate={this.validate}
                     enableReinitialize={true}
-                    onSubmit={this.onSubmit}
-                >
+                    onSubmit={this.onSubmit}>
                     {
                         <Form>
                             <ErrorMessage name="unidadOrganizacionalSuperior" component="div"
                                 className="alert alert-warning" />
                             <ErrorMessage name="nombre" component="div"
                                 className="alert alert-warning" />
-                            <ErrorMessage name="id_empresa" component="div"
-                                className="alert alert-warning" />
+                            
 
                             <fieldset className="form-group">
                                 <label htmlFor="">Unidad organizacional Superior</label>
-                                <Field className="form-control" type="text" placeholder="Unidad Superior" name="unidadOrganizacionalSuperior" />
+                                
+                                { getUnidadSuperior() }
                             </fieldset>
+                            
                             <fieldset className="form-group">
                                 <label htmlFor="">Nombre</label>
                                 <Field className="form-control" type="text" placeholder="Nombre" name="nombre" />
                             </fieldset>
                             <fieldset className="form-group">
-                                <label htmlFor="">Empresa</label>
-                                <Field className="form-control" type="text" placeholder="Empresa" name="id_empresa" />
+                                <select className="form-control" onChange={(e) => this.setState({ selectedOptionve: e.target.value })}>
+                                    
+                                </select>
+                                                       
                             </fieldset>
+                                                        
 
                             <button className="btn btn-success" type="submit">Guardar</button>
                             <Link to="/departamentos"><button className="btn btn-danger">Regresar</button></Link>

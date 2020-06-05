@@ -17,7 +17,7 @@ class CalendarioTrabajo extends Component{
     async componentDidMount(){
         await this.refreshCalendariosTrabajo()
     }
-    //desactivar
+    desactivar
     async desactivar(id){
         await CalendarioTrabajoService.desactivarCalendarioTrabajo(id)
         await this.refreshCalendariosTrabajo()
@@ -26,21 +26,21 @@ class CalendarioTrabajo extends Component{
     
     async refreshCalendariosTrabajo(){
         const response = await CalendarioTrabajoService.allCalendarioTrabajo()
-        // const calendariosActivos = response.data.filter(
-        //     r => {
-        //         if(r.estado){
-        //             return {
-        //                 calendariotrabajo: r.calendariotrabajo,
-        //                 periocidad: r.periocidad,
-        //                 desde: r.desde,
-        //                 hasta: r.hasta,
-        //                 activo: r.activo,
-        //                 estado: r.estado
-        //             }
-        //         }
-        //     }
-        // )
-        // this.setState({ calendariosTrabajo: calendariosActivos})
+        const calendariosActivos = response.data.filter(
+            r => {
+                if(r.estado){
+                    return {
+                        calendariotrabajo: r.calendariotrabajo,
+                        periocidad: r.periocidad,
+                        desde: r.desde,
+                        hasta: r.hasta,
+                        activo: r.activo,
+                        estado: r.estado
+                    }
+                }
+            }
+        )
+        this.setState({ calendariosTrabajo: calendariosActivos})
     }
 
     render(){
