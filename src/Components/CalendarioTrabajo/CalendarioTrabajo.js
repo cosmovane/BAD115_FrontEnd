@@ -32,10 +32,8 @@ class CalendarioTrabajo extends Component{
                     return {
                         calendariotrabajo: r.calendariotrabajo,
                         periocidad: r.periocidad,
-                        desde: r.desde,
-                        hasta: r.hasta,
-                        activo: r.activo,
-                        estado: r.estado
+                        periodo: r.periodo,
+                        activo: r.activo
                     }
                 }
             }
@@ -54,8 +52,7 @@ class CalendarioTrabajo extends Component{
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Desde</th>
-                            <th>Hasta</th>
+                            <th>Periodo</th>
                             <th>Periocidad</th>
                             <th>Acciones</th>
                         </tr>
@@ -66,8 +63,7 @@ class CalendarioTrabajo extends Component{
                                 calendarioTrabajo => {
                                     if(calendarioTrabajo.estado)
                                     return <tr key={calendarioTrabajo.calendariotrabajo}>
-                                        <td>{calendarioTrabajo.desde}</td>
-                                        <td>{calendarioTrabajo.hasta}</td>
+                                        <td>{calendarioTrabajo.periodo}</td>
                                         <td>{calendarioTrabajo.periocidad}</td>
                                         <td><Link to={`/periocidad/editar/${calendarioTrabajo.calendariotrabajo}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
                                         <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(calendarioTrabajo.calendariotrabajo)} /></button>
