@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import CalendarioTrabajoService from '../../Service/CalendarioTrabajo/CalendarioTrabajoService';
 import { Link } from "react-router-dom";
-//import { faPlus } from "@fortawesome/free-solid-svg-icons";
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Formik, Form, ErrorMessage, Field } from "formik";
+import Select from 'react-select'
+import Swal from 'sweetalert2'
 
 class CalendarioTrabajoDetalle extends Component{
 
@@ -11,83 +11,99 @@ class CalendarioTrabajoDetalle extends Component{
         super(props)
         this.state ={
             periocidad: "",
-            desde: "",
-            hasta: "",
-            activo: ""
+            periodo: ""
+            
         }
         this.onSubmit = this.onSubmit.bind(this)
-        this.validar = this.validar.bind(this)
-        this.validarNumero = this.validarNumero.bind(this) 
+        this.validate = this.validate.bind(this) 
     }
     async componentDidMount() {
         if (this.props.editar){
             const id=this.props.location.pathname.split('/')[3]
             const calendarioTrabajo = await CalendarioTrabajoService.obtenerCalendarioTrabajo(parseInt(id))
-            const{periocidad, desde, hasta, activo} = calendarioTrabajo.data
-            this.setState({periocidad, desde, hasta, activo
+            const{periocidad, periodo} = calendarioTrabajo.data
+            this.setState({
+                periocidad, periodo
             })
         }
     }
 
-    validarNumero(values){
-        const isNumber = /^\s*-?[1-9]\d*(\.\d{1,2})?\s*$/
-        return isNumber.test(Number)
-    }
-    validar(values){
+    validate(values){
+        var fecha = new Date();
+        var ano = fecha.getFullYear();
+        console.log(ano)
         let errors ={}
-        if(!this.validarNumero(values.desde)||!this.validarNumero(values.desde)) errors.desde = 'Ingrese un numero con dos decimales'
-        if(!this.validarNumero(values.hasta)||!this.validarNumero(values.hasta)) errors.hasta = 'Ingrese un numero con dos decimales'
-        if(values.desde <= 0 || values.desde>=366) errors.desde = 'Debe ingresar un monto mayor que 0 y menor 366'
-        if(values.hasta <= 0 || values.hasta>=366) errors.hasta = 'Debe ingresar un monto mayor que 0 y menor 366'
-        if(values.desde > values.hasta) errors.hasta = 'La fecha final debe ser mayor'
+        if(values.periodo < ano || values.periodo>=2120) errors.desde = 'Ingrese el ano de planilla'
         if(!values.periocidad) errors.periocidad = 'Ingrese periocidad'
         return errors
     }
+    
     async onSubmit(values) {
+        var fecha = new Date();
+        var ano = fecha.getFullYear();
+        if(values.periodo == ano){
+            values.activo=true
+        } else{
+            values.activo=false
+        }
         const calendarioTrabajo = {
           calendariotrabajo: this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '',
           periocidad: values.periocidad,
-          desde: values.desde,
-          hasta: values.hasta,
+          periodo: values.periodo,
           activo: values.activo
         }
 
+        console.log("CalendarioTrabajoDetalle -> onSubmit -> calendarioTrabajo", calendarioTrabajo)
+        this.props.editar ? await CalendarioTrabajoService.modificarCalendarioTrabajo(calendarioTrabajo.calendariotrabajo, calendarioTrabajo)
+            : await CalendarioTrabajoService.agregarCalendarioTrabajo(calendarioTrabajo)
+        this.props.history.push('/empresa')
+        const mensaje = this.props.editar ? 'Registro modificado con éxito' : 'Registro creado con éxito'
+        Swal.fire({
+            icon: 'success',
+            title: 'Buen trabajo!',
+            html: mensaje,
+            timer: 5000,
+            timerProgressBar: true,
+        })
     }
 
     render(){
-        let {periocidad, desde, hasta, activo} = this.state
+        let {periocidad, periodo} = this.state
+        const options = [
+            { value: 'mensual', label: 'Mensual' },
+            { value: 'semanal', label: 'Semanal' }
+          ]
+          const MyComponent = () => (
+            <Select options={options} />
+          )
         
         return(
             <div className="container">
-                {this.props.editar ? <h3>Editar puesto de trabajo</h3> : <h3>Crear un puesto de trabajo</h3>}
+                {this.props.editar ? <h3>Editar Periodo</h3> : <h3>Crear un nuevo Periodo</h3>}
                 <Formik
-                initialValues={{ periocidad, desde, hasta, activo}}validateOnChange={false}
+                initialValues={{periocidad, periodo}}validateOnChange={false}
                 validateOnBlur={false}
-                //validate={this.validar}
+                validate={this.validate}
                 enableReinitialize={true}
                 onSubmit={this.onSubmit}
                 >
                 {
                     <Form>
                         <ErrorMessage name="periocidad" component="div" className="alert-warning" />
-                        <ErrorMessage name="desde" component="div" className="alert-warning" />
-                        <ErrorMessage name="hasta" component="div" className="alert-warning" />
-                        <ErrorMessage name="activo" component="div" className="alert-warning" />
-                        <fieldset className="form-group">
+                        <ErrorMessage name="periodo" component="div" className="alert-warning" />
+
+                        <fieldset>
                             <label htmlFor="">Periocidad</label>
-                            <Field className="form-control" type="text" placeholder="Periodidad" name="periocidad"></Field>                           
+                            <Field className="form-control" type="text" placeholder="Semanal o Mensual" name="periocidad"></Field>  
+                            {/*MyComponent()*/}
                         </fieldset>
+
                         <fieldset>
-                            <Field className="form-control" type="number" placeholder="Desde" name="desde"></Field>
-                        </fieldset>
-                        <fieldset>
-                            <Field className="form-control" type="number" placeholder="Hasta" name="hasta"></Field>
-                        </fieldset>
-                        <fieldset>
-                            <Field className="form-control" type="number" placeholder="Activo" name="activo"></Field>
+                        <label htmlFor="">Periodo</label>
+                            <Field className="form-control" type="number" placeholder="A?o de planilla" name="periodo"></Field>
                         </fieldset>
                         <button className="btn btn-success" type="submit">Guardar</button>
-                        <Link to="/periocidad"><button className="btn btn-danger">Regresar</button></Link>
+                        <Link to="/empresa"><button className="btn btn-danger">Regresar</button></Link>
                     </Form>
                 }
                     </Formik>
