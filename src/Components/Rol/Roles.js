@@ -12,6 +12,7 @@ export default class Roles extends Component{
 		}
 
 		this.refreshRoles = this.refreshRoles.bind(this);
+        this.desactivarActivarRol = this.desactivarActivarRol.bind(this)
 	}
 
 	async componentDidMount(){
@@ -57,8 +58,8 @@ export default class Roles extends Component{
                                             <td>{rol.estado}</td>
                                             <td>
                                             <Link><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
-                                            <Link ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan}/></button>
+                                            <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
+                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button>
                                             </td>
                                         </tr>
                                 )

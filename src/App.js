@@ -49,7 +49,7 @@ function App() {
 
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/usuario/crear" component={UsuarioForm} />
-          <Route path="/usuario/editar/:id" render={(props)=><UsuarioForm {...props} editar={true}} />
+          <Route path="/usuario/editar/:id" render={(props)=><UsuarioForm {...props} editar={true} />}/>
 
           <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
           <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />

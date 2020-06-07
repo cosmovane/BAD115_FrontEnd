@@ -11,6 +11,7 @@ export default class Usuarios extends Component{
 		}
 
 		this.refreshUsuarios = this.refreshUsuarios.bind(this);
+        this.desactivarActivarUsuario = this.desactivarActivarUsuario.bind(this);
 	}
 
 	async componentDidMount(){
@@ -55,8 +56,8 @@ export default class Usuarios extends Component{
                                             <td>{usuario.estado}</td>
                                             <td>
                                             <Link><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
-                                            <Link ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan}/></button>
+                                            <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
+                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button>
                                             </td>
                                         </tr>
                                 )
