@@ -8,13 +8,7 @@ const ROL_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}`;
 class RolService{
 
 	allPermisos(){
-		return axios.get(`${ROL_API_URL}/permisos/list`).catch( (err)=> {
-            Swal.fire(
-                'Algo ha salido mal',
-                'No se puede cargar la lista de permisos' ,
-                'error'
-            )
-        } );
+		return axios.get(`${ROL_API_URL}/permisos/list`);
 	}
 
 	allRolesUser(){
@@ -59,7 +53,7 @@ class RolService{
 	}
 
 	editarRol(rol,idRol){
-		return axios.put(`${ROL_API_URL}/${idRol}`,rol).then( ()=>{
+		return axios.put(`${ROL_API_URL}/rol/${idRol}`,rol).then( ()=>{
                 Swal.fire(
                     'Buen trabajo!',
                     'El registro fue editado con exito.',
@@ -75,7 +69,7 @@ class RolService{
 	}
 
 	desactivarRol(idRol){
-		return axios.put(`${ROL_API_URL}/${idRol}`).then( ()=>{
+		return axios.put(`${ROL_API_URL}/rol/desactivar/${idRol}`).then( ()=>{
                 Swal.fire(
                     'Buen trabajo!',
                     'El registro fue desactivado con exito.',

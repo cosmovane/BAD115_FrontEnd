@@ -5,9 +5,12 @@ import {faEdit,faPlus,faList,faBan,faArrowLeft,faEye} from '@fortawesome/free-so
 import { Link } from 'react-router-dom';
 import { Multiselect } from 'multiselect-react-dropdown';
 import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert';
+import Select from 'react-select';  
+import makeAnimated from 'react-select/animated';  
 
 import RolService from '../../Service/Rol/RolService';
-
+const animatedComponents = makeAnimated();  
+let perSelect = [];
 export default class RolForm extends Component{
 	constructor(props){
 		super(props)
@@ -18,30 +21,50 @@ export default class RolForm extends Component{
 			permisosSeleccionados:[]
 		}
 
-		this.multiselectRef = React.createRef();
-
+		//this.multiselectRef = React.createRef();
+		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
     	this.validate = this.validate.bind(this);
 	}
 
 	async componentDidMount(){
-		const permisosList = RolService.allPermisos();
-		this.setState({permisos:permisosList}) 
+		const permisosList = await RolService.allPermisos();
+		//console.log(permisosList.data)
+		this.setState({permisos:permisosList.data}) 
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
 			const rol = await RolService.buscarRol(parseInt(id));
-			const {nombre,detalle} = rol.data
+			console.log(rol.data)
+			const {nombre,detalle,permisos} = rol.data
 			this.setState({
-				nombre,detalle,permisosSeleccionados:rol.data.permisos
+				nombre:nombre,detalle:detalle,permisosSeleccionados:permisos.map(data=>({label:data.nombre,value:data.idPermiso})),permisos:permisosList.data
 			})
+
+			console.log(this.state.permisosSeleccionados)
 		}
 	}
 
+	Permisos(){
+		return (this.state.permisos.map(data=>({label:data.nombre,value:data.idPermiso})));
+	}
+
+	PermisosSubmit(){
+		return (this.state.permisosSeleccionados.map(data=>({idPermiso:data.value,nombre:data.label})));
+	}
+
+	// PermisosSeleccionados(permisos){
+	// 	return (permisos.map(data=>({label:data.nombre,value:data.idPermiso})));
+	// }
+
 	validate(values){
 		let errors={}
+		//console.log(this.state.permisosSeleccionados);
+		console.log(perSelect)
 		if(!values.nombre) errors.nombre = 'Ingrese nombre de rol'
 		if(!values.detalle) errors.detalle = 'Ingrese detalle de rol'
-		if(this.state.permisosSeleccionados === []) Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione permisos!'})
+		console.log("antes de validar permisos")
+		//if(JSON.stringify(this.state.permisosSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione permisos!'})
+		console.log("despues de validar permisos")
 		return errors;
 	}
 
@@ -49,17 +72,33 @@ export default class RolForm extends Component{
 		const rol = {
 			nombre: values.nombre,
 			detalle: values.detalle,
-			permisos:values.permisosSeleccionados
+			permisos:this.PermisosSubmit()
 		}
-		const idRol = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
-		this.props.editar ? await RolService.editarRol(rol,idRol) : await RolService.crearRol(rol);
-		this.props.history.push('/roles')
+
+		console.log(rol);
+		//const idRol = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
+		//this.props.editar ? await RolService.editarRol(rol,idRol) : await RolService.crearRol(rol);
+		//this.props.history.push('/roles')
 	}
 
-	permisoSeleccionado(){
-		const permiso = this.multiselectRef.current.getSelectedItems();
-		this.setState({permisosSeleccionados:permiso})
-	}
+	onChange(value, { action, removedValue }) {
+    	switch (action) {
+    	  case 'remove-value':
+    	  case 'pop-value':
+    	    if (removedValue.isFixed) {
+    	      return;
+     	   }
+    	    break;
+    	  case 'clear':
+    	    value = this.Permisos().filter(v => v.isFixed);
+    	    break;
+    }
+
+    //value = orderOptions(value);
+    //this.setState({ permisosSeleccionados: value });
+    perSelect = value;
+  }
+
 
 	render(){
 		let {nombre,detalle,permisosSeleccionados} = this.state 
@@ -90,16 +129,18 @@ export default class RolForm extends Component{
               			</fieldset>
               			<fieldset className="form-group">
                 			<label htmlFor="">Permisos:</label>
-                			<Multiselect
-								options={this.state.permisos} // Options to display in the dropdown
-								selectedValues={permisosSeleccionados} // Preselected value to persist in dropdown
-								ref={this.multiselectRef}
-								onSelect={this.permisoSeleccionado} // Function will trigger on select event
-								onRemove={this.permisoSeleccionado} // Function will trigger on remove event
-								displayValue="nombre" // Property name to display in the dropdown options
-								
-							/>
+                			<Select
+                				value={permisosSeleccionados}
+                				options={this.Permisos()}
+                				components={animatedComponents}
+                				isMulti
+                				className="basic-multi-select"
+        						classNamePrefix="select"
+        						onChange={this.onChange}
+                			/>
               			</fieldset>
+              			 <button className="btn btn-success" type="submit">Guardar</button>
+              			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>
         			</Form>
         		}
         		</Formik>

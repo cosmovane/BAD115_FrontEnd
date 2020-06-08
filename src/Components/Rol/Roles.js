@@ -44,8 +44,8 @@ export default class Roles extends Component{
                                 {/* <th>ID</th> */}
                                 <th style={{ width: '15%' }}>Nombre</th>
                                 <th style={{ width: '55%' }}>Descripción</th>
-                                <th style={{ width: '20%' }}>Estado</th>
-                                <th style={{ width: '10%' }}>Acciones</th>
+                                <th style={{ width: '10%' }}>Estado</th>
+                                <th style={{ width: '20%' }}>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +55,9 @@ export default class Roles extends Component{
                                         <tr key={rol.idRol}>
                                             <td>{rol.nombre}</td>
                                             <td>{rol.detalle}</td>
-                                            <td>{rol.estado}</td>
+                                            <td>{
+                                                    rol.estado ? 'Activo' : 'Desactivo'
+                                                }</td>
                                             <td>
                                             <Link><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
                                             <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
