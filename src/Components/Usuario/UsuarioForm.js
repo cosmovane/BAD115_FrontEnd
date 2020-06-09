@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import RolService from '../../Service/Rol/RolService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft,faEye} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert';
 import { Multiselect } from 'multiselect-react-dropdown';
+import Select from 'react-select';  
+import makeAnimated from 'react-select/animated'; 
 
+import RolService from '../../Service/Rol/RolService';
 import UsuarioService from '../../Service/Usuario/UsuarioService';
+const animatedComponents = makeAnimated();  
 export default class UsuarioForm extends Component{
 	constructor(props){
 		super(props)
@@ -26,16 +29,25 @@ export default class UsuarioForm extends Component{
 	}
 
 	async componentDidMount(){
-		const rolesList = await this.RolService.allRolesUser();
+		const rolesList = await RolService.allRolesUser();
+		console.log(rolesList.data)
 		this.setState({roles:rolesList.data})
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
 			const usuario = await UsuarioService.buscarUsuario(id);
 			const {username,email} = usuario.data;
 			this.setState({
-				username,email,rolesSeleccionados:usuario.data.roles
+				username,email,rolesSeleccionados:usuario.data.roles,roles:rolesList.data
 			});
 		}
+	}
+
+	Roles(){
+		return (this.state.roles.map(data=>({label:data.nombre,value:data.idRol})));
+	}
+
+	RolesSubmit(){
+		return (this.state.rolesSeleccionados.map(data=>({idRol:data.value,nombre:data.label})));
 	}
 
 	validate(values){
@@ -45,7 +57,7 @@ export default class UsuarioForm extends Component{
 		if(!this.props.editar){
 			if(!values.password) errors.password ='Ingrese password';
 		}
-		if(values.rolesSeleccionados ===[]) Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione roles!'});
+		if(JSON.stringify(this.state.rolesSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione roles!'});
 		return errors;
 	}
 
@@ -54,17 +66,30 @@ export default class UsuarioForm extends Component{
 			username: values.username,
 			email: values.email,
 			password: values.password,
-			roles:values.rolesSeleccionados
+			roles:this.RolesSubmit();
 		}
 		const idUser = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
 		this.props.editar ? await UsuarioService.editarUsuario(usuario,idUser) : await UsuarioService.crearUsuario(usuario);
 		this.props.history.push('/usuarios')
 	}
 
-	rolSeleccionado(){
-		const rol = this.multiselectRef.current.getSelectedItems();
-		this.setState({rolesSeleccionados:rol})
-	}
+	onChange(value, { action, removedValue }) {
+    	switch (action) {
+    	  case 'remove-value':
+    	  case 'pop-value':
+    	    if (removedValue.isFixed) {
+    	      return;
+     	   }
+    	    break;
+    	  case 'clear':
+    	    value = this.Roles().filter(v => v.isFixed);
+    	    break;
+    }
+
+    //value = orderOptions(value);
+    this.setState({ rolesSeleccionados: update(this.state.rolesSeleccionados, {$set:value})});
+   // perSelect = value;
+  }
 
 	render(){
 		let {username,email,password,rolesSeleccionados} = this.state;
@@ -101,16 +126,19 @@ export default class UsuarioForm extends Component{
               			</fieldset>
               			<fieldset className="form-group">
                 			<label htmlFor="">Roles:</label>
-                			<Multiselect
-								options={this.state.roles} // Options to display in the dropdown
-								selectedValues={rolesSeleccionados} // Preselected value to persist in dropdown
-								ref={this.multiselectRef}
-								onSelect={this.rolSeleccionado} // Function will trigger on select event
-								onRemove={this.rolSeleccionado} // Function will trigger on remove event
-								displayValue="nombre" // Property name to display in the dropdown options
-								
-							/>
+                			<Select
+                				value={rolesSeleccionados}
+                				options={this.Roles()}
+                				components={animatedComponents}
+                				isMulti
+                				className="basic-multi-select"
+        						classNamePrefix="select"
+        						onChange={this.onChange}
+        						isSelectAll={true}
+                			/>
               			</fieldset>
+              			 <button className="btn btn-success" type="submit">Guardar</button>
+              			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>
         			</Form>
         		}
         		</Formik>

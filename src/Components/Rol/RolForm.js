@@ -7,6 +7,8 @@ import { Multiselect } from 'multiselect-react-dropdown';
 import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert';
 import Select from 'react-select';  
 import makeAnimated from 'react-select/animated';  
+import update from 'immutability-helper';
+import MultiSelect from "react-multi-select-component";
 
 import RolService from '../../Service/Rol/RolService';
 const animatedComponents = makeAnimated();  
@@ -58,12 +60,12 @@ export default class RolForm extends Component{
 
 	validate(values){
 		let errors={}
-		//console.log(this.state.permisosSeleccionados);
-		console.log(perSelect)
+		console.log(this.state.permisosSeleccionados);
+		//console.log(perSelect)
 		if(!values.nombre) errors.nombre = 'Ingrese nombre de rol'
 		if(!values.detalle) errors.detalle = 'Ingrese detalle de rol'
 		console.log("antes de validar permisos")
-		//if(JSON.stringify(this.state.permisosSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione permisos!'})
+		if(JSON.stringify(this.state.permisosSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione permisos!'})
 		console.log("despues de validar permisos")
 		return errors;
 	}
@@ -76,9 +78,9 @@ export default class RolForm extends Component{
 		}
 
 		console.log(rol);
-		//const idRol = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
-		//this.props.editar ? await RolService.editarRol(rol,idRol) : await RolService.crearRol(rol);
-		//this.props.history.push('/roles')
+		const idRol = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
+		this.props.editar ? await RolService.editarRol(rol,idRol) : await RolService.crearRol(rol);
+		this.props.history.push('/roles')
 	}
 
 	onChange(value, { action, removedValue }) {
@@ -95,9 +97,10 @@ export default class RolForm extends Component{
     }
 
     //value = orderOptions(value);
-    //this.setState({ permisosSeleccionados: value });
-    perSelect = value;
+    this.setState({ permisosSeleccionados: update(this.state.permisosSeleccionados, {$set:value})});
+   // perSelect = value;
   }
+
 
 
 	render(){
@@ -137,6 +140,7 @@ export default class RolForm extends Component{
                 				className="basic-multi-select"
         						classNamePrefix="select"
         						onChange={this.onChange}
+        						isSelectAll={true}
                 			/>
               			</fieldset>
               			 <button className="btn btn-success" type="submit">Guardar</button>

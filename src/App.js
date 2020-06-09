@@ -22,6 +22,7 @@ import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/Unida
 
 import Roles from './Components/Rol/Roles';
 import RolForm from './Components/Rol/RolForm';
+import RolVer from './Components/Rol/RolVer';
 import Usuarios from './Components/Usuario/Usuarios';
 import UsuarioForm from './Components/Usuario/UsuarioForm';
 import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
@@ -46,6 +47,7 @@ function App() {
           <Route exact path="/roles" component={Roles}/>
           <Route path="/rol/crear" component={RolForm}/>
           <Route path="/rol/editar/:id" render={(props) =><RolForm {...props} editar={true}/>} />
+          <Route path="/rol/ver/:id" render={(props) =><RolVer {...props} ver={true}/>} />
 
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/usuario/crear" component={UsuarioForm} />

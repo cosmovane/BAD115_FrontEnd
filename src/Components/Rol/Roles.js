@@ -59,9 +59,9 @@ export default class Roles extends Component{
                                                     rol.estado ? 'Activo' : 'Desactivo'
                                                 }</td>
                                             <td>
-                                            <Link><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
+                                            <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
                                             <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button>
+                                            <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button>
                                             </td>
                                         </tr>
                                 )
