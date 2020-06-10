@@ -32,10 +32,10 @@ class CentroCostoService{
 	}
 
 	crearCosto(costo,idUnidad){
-		return axios.post(`${EMPRESA_API_URL}/centro_costo/${idUnidad}`,costo).then( ()=>{
+		return axios.post(`${EMPRESA_API_URL}/centro_costo/${idUnidad}`,costo).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue creado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
@@ -48,10 +48,10 @@ class CentroCostoService{
 	}
 
 	editarCosto(costo,idUnidad,idCosto){
-		return axios.put(`${EMPRESA_API_URL}/centro_costo/${idUnidad}/${idCosto}`,costo).then( ()=>{
+		return axios.put(`${EMPRESA_API_URL}/centro_costo/${idUnidad}/${idCosto}`,costo).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue editado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
@@ -64,10 +64,10 @@ class CentroCostoService{
 	}
 
 	desactivarCosto(idCosto){
-		return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`).then( ()=>{
+		return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue desactivado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {

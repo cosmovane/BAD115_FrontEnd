@@ -26,6 +26,7 @@ import RolVer from './Components/Rol/RolVer';
 import Usuarios from './Components/Usuario/Usuarios';
 import UsuarioForm from './Components/Usuario/UsuarioForm';
 import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
+import UsuarioVer from './Components/Usuario/UsuarioVer';
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
           <Route exact path="/usuarios" component={Usuarios}/>
           <Route path="/usuario/crear" component={UsuarioForm} />
           <Route path="/usuario/editar/:id" render={(props)=><UsuarioForm {...props} editar={true} />}/>
+          <Route path="/usuario/ver/:id" render={(props)=><UsuarioVer {...props} ver={true} />}/>
 
           <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
           <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />

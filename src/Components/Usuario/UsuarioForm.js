@@ -7,10 +7,13 @@ import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert';
 import { Multiselect } from 'multiselect-react-dropdown';
 import Select from 'react-select';  
 import makeAnimated from 'react-select/animated'; 
+import update from 'immutability-helper';
 
 import RolService from '../../Service/Rol/RolService';
 import UsuarioService from '../../Service/Usuario/UsuarioService';
 const animatedComponents = makeAnimated();  
+const emailTest = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+const passwordTest = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 export default class UsuarioForm extends Component{
 	constructor(props){
 		super(props)
@@ -22,8 +25,8 @@ export default class UsuarioForm extends Component{
 			roles:[],
 		}
 
-		this.multiselectRef = React.createRef();
-
+		//this.multiselectRef = React.createRef();
+		this.onChange = this.onChange.bind(this);
 		this.onSubmit = this.onSubmit.bind(this);
     	this.validate = this.validate.bind(this);
 	}
@@ -35,9 +38,9 @@ export default class UsuarioForm extends Component{
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
 			const usuario = await UsuarioService.buscarUsuario(id);
-			const {username,email} = usuario.data;
+			const {username,email,roles} = usuario.data;
 			this.setState({
-				username,email,rolesSeleccionados:usuario.data.roles,roles:rolesList.data
+				username,email,rolesSeleccionados:roles.map(data=>({label:data.nombre,value:data.idRol})),roles:rolesList.data
 			});
 		}
 	}
@@ -54,8 +57,10 @@ export default class UsuarioForm extends Component{
 		let errors ={}
 		if(!values.username) errors.username='Ingrese nombre de usuario';
 		if(!values.email) errors.username = 'Ingrese correo electronico';
+		if(!emailTest.test(values.email)) errors.email='Email con coincide con formato';
 		if(!this.props.editar){
 			if(!values.password) errors.password ='Ingrese password';
+			if(!passwordTest.test(values.password)) errors.password = 'Password no coincide con formato';
 		}
 		if(JSON.stringify(this.state.rolesSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione roles!'});
 		return errors;
@@ -66,7 +71,7 @@ export default class UsuarioForm extends Component{
 			username: values.username,
 			email: values.email,
 			password: values.password,
-			roles:this.RolesSubmit();
+			roles:this.RolesSubmit()
 		}
 		const idUser = this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '';
 		this.props.editar ? await UsuarioService.editarUsuario(usuario,idUser) : await UsuarioService.crearUsuario(usuario);

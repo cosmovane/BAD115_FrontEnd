@@ -41,9 +41,9 @@ export default class Usuarios extends Component{
                             <tr>
                                 {/* <th>ID</th> */}
                                 <th style={{ width: '15%' }}>Username</th>
-                                <th style={{ width: '55%' }}>Email</th>
+                                <th style={{ width: '45%' }}>Email</th>
                                 <th style={{ width: '20%' }}>Estado</th>
-                                <th style={{ width: '10%' }}>Acciones</th>
+                                <th style={{ width: '20%' }}>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,11 +53,13 @@ export default class Usuarios extends Component{
                                         <tr key={usuario.idUser}>
                                             <td>{usuario.username}</td>
                                             <td>{usuario.email}</td>
-                                            <td>{usuario.estado}</td>
+                                            <td>{
+                                                    usuario.estado ? 'Activo' : 'Desactivo'
+                                                }</td>
                                             <td>
-                                            <Link><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
+                                            <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
                                             <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-danger btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button>
+                                            <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button>
                                             </td>
                                         </tr>
                                 )

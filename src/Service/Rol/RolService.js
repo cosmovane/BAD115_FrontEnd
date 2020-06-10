@@ -37,10 +37,10 @@ class RolService{
 	}
 
 	crearRol(rol){
-		return axios.post(`${ROL_API_URL}/rol`,rol).then( ()=>{
+		return axios.post(`${ROL_API_URL}/rol`,rol).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue creado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
@@ -53,10 +53,10 @@ class RolService{
 	}
 
 	editarRol(rol,idRol){
-		return axios.put(`${ROL_API_URL}/rol/${idRol}`,rol).then( ()=>{
+		return axios.put(`${ROL_API_URL}/rol/${idRol}`,rol).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue editado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
@@ -69,10 +69,10 @@ class RolService{
 	}
 
 	desactivarRol(idRol){
-		return axios.put(`${ROL_API_URL}/rol/desactivar/${idRol}`).then( ()=>{
+		return axios.put(`${ROL_API_URL}/rol/desactivar/${idRol}`).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue desactivado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {

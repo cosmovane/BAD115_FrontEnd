@@ -22,13 +22,15 @@ class UsuarioService{
 	}
 
 	crearUsuario(usuario){
-		return axios.post(`${USUARIO_API_URL}/user`,usuario).then( ()=>{
+		return axios.post(`${USUARIO_API_URL}/user`,usuario).then( (res)=>{
+            console.log(res.data)
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue creado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
+            console.log(err.response)
             Swal.fire(
                 'Algo ha salido mal',
                 err.response.data.mensaje ,
@@ -38,10 +40,10 @@ class UsuarioService{
 	}
 
 	editarUsuario(usuario,idUsuario){
-		return axios.put(`${USUARIO_API_URL}/user/${idUsuario}`,usuario).then( ()=>{
+		return axios.put(`${USUARIO_API_URL}/user/${idUsuario}`,usuario).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue editado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
@@ -54,10 +56,10 @@ class UsuarioService{
 	}
 
 	desactivarUsuario(idUsuario){
-		return axios.put(`${USUARIO_API_URL}/user/desactivar/${idUsuario}`).then( ()=>{
+		return axios.put(`${USUARIO_API_URL}/user/desactivar/${idUsuario}`).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
-                    'El registro fue desactivado con exito.',
+                    res.data.mensaje,
                     'success'
                 )
         } ).catch( (err)=> {
