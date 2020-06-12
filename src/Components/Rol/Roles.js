@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import RolService from '../../Service/Rol/RolService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft,faEye} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
+import RolService from '../../Service/Rol/RolService';
 export default class Roles extends Component{
 	constructor(props){
 		super(props)
 		this.state={
 			roles:[],
+            rolesBackup:[],
+            textBuscar:''
 		}
 
 		this.refreshRoles = this.refreshRoles.bind(this);
@@ -25,19 +29,52 @@ export default class Roles extends Component{
 		await this.refreshRoles();
 	}
 
+    Roles(roles){
+        return (roles.map(data=>({idRol:data.idRol,nombre:data.nombre,detalle:data.detalle,estado:data.estado ? 'Activo' : 'Inactivo'})));
+    }
+
 	async refreshRoles(){
 		const response = await RolService.allRoles();
-		this.setState({roles:response.data});
+
+		this.setState({roles:this.Roles(response.data),rolesBackup:this.Roles(response.data)});
 	}
+
+        Roles(roles){
+        return (roles.map(data=>({idRol:data.idRol,nombre:data.nombre,detalle:data.detalle,estado:data.estado ? 'Activo' : 'Desactivado'})));
+    }
+
+    filter(event){
+        let text = event.target.value
+        const data = this.state.rolesBackup
+        const newData = data.filter(res=>{
+            const resDataNombre = res.nombre.toUpperCase()
+            const resDataDescripcion = res.detalle.toUpperCase()
+            const resDataEstado = res.estado.toUpperCase()
+            const campo = resDataNombre+" "+resDataDescripcion+" "+resDataEstado
+            const textData = text.toUpperCase()
+            return campo.indexOf(textData) > -1
+        })
+
+        this.setState({
+            roles:newData,
+            buscarText:text
+        })
+    }
 
 	render(){
 		return (
 			<div className="container">
                 <h3>Roles</h3>
                 <div className="container">
-                    <div className="row">
-                         <Link to="/rol/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
-                    </div>
+                    <Row>
+                        <Col sm={2}>
+                            <Link to="/rol/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>
+                        </Col>
+                        <Col sm={4}></Col>
+                        <Col sm={6}>
+                            <input className="form-control"  placeholder="Buscar.." value={this.state.buscarText} onChange={(text) => this.filter(text)}/>
+                        </Col>
+                    </Row>
                     <table className="table">
                         <thead>
                             <tr>
@@ -56,7 +93,7 @@ export default class Roles extends Component{
                                             <td>{rol.nombre}</td>
                                             <td>{rol.detalle}</td>
                                             <td>{
-                                                    rol.estado ? 'Activo' : 'Desactivo'
+                                                    rol.estado
                                                 }</td>
                                             <td>
                                             <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>

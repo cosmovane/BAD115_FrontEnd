@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import UsuarioService from '../../Service/Usuario/UsuarioService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft,faEye} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+
+import UsuarioService from '../../Service/Usuario/UsuarioService';
 export default class Usuarios extends Component{
 	constructor(props){
 		super(props)
 		this.state={
-			usuarios:[]
+			usuarios:[],
+            buscarText:'',
+            usuariosBackup:[]
 		}
 
 		this.refreshUsuarios = this.refreshUsuarios.bind(this);
@@ -23,19 +28,47 @@ export default class Usuarios extends Component{
 		await this.refreshUsuarios();
 	}
 
+    Usuarios(usuarios){
+        return (usuarios.map(data=>({idUser:data.idUser,username:data.username,email:data.email,estado:data.estado ? 'Activo' : 'Desactivado'})));
+    }
+
 	async refreshUsuarios(){
 		const response = await UsuarioService.allUsuarios();
-		this.setState({usuarios:response.data});
+		this.setState({usuarios:this.Usuarios(response.data),usuariosBackup:this.Usuarios(response.data)});
 	}
+
+    filter(event){
+        let text = event.target.value
+        const data = this.state.usuariosBackup
+        const newData = data.filter(res=>{
+            const resDataUsername = res.username.toUpperCase()
+            const resDataEmail = res.email.toUpperCase()
+            const resDataEstado = res.estado.toUpperCase()
+            const campo = resDataUsername+" "+resDataEmail+" "+resDataEstado
+            const textData = text.toUpperCase()
+            return campo.indexOf(textData) > -1
+        })
+
+        this.setState({
+            usuarios:newData,
+            buscarText:text
+        })
+    }
 
 	render(){
 		return (
 			<div className="container">
                 <h3>Usuarios</h3>
                 <div className="container">
-                    <div className="row">
-                        <Link to="/usuario/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
-                    </div>
+                     <Row>
+                        <Col sm={2}>
+                            <Link to="/usuario/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>
+                        </Col>
+                        <Col sm={4}></Col>
+                        <Col sm={6}>
+                            <input className="form-control"  placeholder="Buscar.." value={this.state.buscarText} onChange={(text) => this.filter(text)}/>
+                        </Col>
+                    </Row>
                     <table className="table">
                         <thead>
                             <tr>
