@@ -4,8 +4,29 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
+import  { Redirect,withRouter } from 'react-router-dom'
+import Swal from 'sweetalert2';
+import LoginService from '../../Service/Login/LoginService';
+
 class MenuComponent extends Component {
+  constructor(props){
+    super(props)
+    this.logout = this.logout.bind(this);
+  }
+
+
+  logout(){
+    LoginService.logout();
+   // this.props.history.push('/login');
+   Swal.fire({icon: 'info',title: 'Sesión cerrada',text: `Has cerrado sesión con éxito!`})
+   window.location.reload(false);
+  }
+
     render(){
+      let username = LoginService.obtenerUsuario();
+      console.log(username)
+      console.log(LoginService.isAuthenticated())
+      if(LoginService.isAuthenticated()){
       return (
         <Card
           bg="secondary" key="secondary"
@@ -33,9 +54,17 @@ class MenuComponent extends Component {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
+          <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
+              <NavDropdown.Item href="">Mi perfil</NavDropdown.Item>
+            <button onClick={()=>this.logout()} className="dropdown-item" type="submit">Sign Out</button>
+
+              </NavDropdown>
         </Navbar>
         </Card>
       );
+      } else {
+        return <Redirect to='/' />
+      }
     }
   }
   export default MenuComponent;

@@ -28,13 +28,17 @@ import UsuarioForm from './Components/Usuario/UsuarioForm';
 import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
 import UsuarioVer from './Components/Usuario/UsuarioVer';
 
+import Login from './Components/Login/Login';
+
 function App() {
   return (
     <div className="App">
       <Router>
         <div>
           <MenuComponent></MenuComponent>
-          <Route exact path="/" component={HomeComponent}></Route>
+          <Route exact path="/" component={Login}></Route>
+          <Route exact path="/login" component={Login}></Route>
+          <Route exact path="/home" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
           {/*<Route exact path="/centro_costo" component={CentroCostoComponent}></Route>*/}
