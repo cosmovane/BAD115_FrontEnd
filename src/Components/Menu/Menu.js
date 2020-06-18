@@ -55,7 +55,7 @@ class MenuComponent extends Component {
             </Nav>
           </Navbar.Collapse>
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
-              <NavDropdown.Item href="">Mi perfil</NavDropdown.Item>
+           <Link to={`/usuario/general/${username.id}`} className="dropdown-item"></Link>
             <button onClick={()=>this.logout()} className="dropdown-item" type="submit">Sign Out</button>
 
               </NavDropdown>
