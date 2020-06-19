@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
+import LoginService from '../../Service/Login/LoginService';
 import RolService from '../../Service/Rol/RolService';
 export default class Roles extends Component{
 	constructor(props){
@@ -68,7 +69,10 @@ export default class Roles extends Component{
                 <div className="container">
                     <Row>
                         <Col sm={2}>
-                            <Link to="/rol/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>
+                         {
+                            LoginService.hasPermiso('ROLE_CREATE') ? <Link to="/rol/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
+                        }
+                            
                         </Col>
                         <Col sm={4}></Col>
                         <Col sm={6}>
@@ -96,9 +100,18 @@ export default class Roles extends Component{
                                                     rol.estado
                                                 }</td>
                                             <td>
-                                            <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
-                                            <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button>
+                                             {
+                                                 LoginService.hasPermiso('ROLE_READ') ? <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
+                                             }
+                                             {
+                                                 LoginService.hasPermiso('ROLE_UPDATE') ? <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                             }
+                                             {
+                                                 LoginService.hasPermiso('ROLE_DISABLED') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button> : ""
+                                             }
+
+                                            
+                                            
                                             </td>
                                         </tr>
                                 )

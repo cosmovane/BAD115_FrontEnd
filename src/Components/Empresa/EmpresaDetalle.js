@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
 
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
     'width': '25em',
 }
@@ -305,7 +306,11 @@ class EmpresaDetalleComponent extends Component {
                                                     </fieldset>
                                                 </Col>
                                             </Row>
-                                            <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/> Guardar</button>
+                                            {
+
+                                                LoginService.hasPermiso('EMPRESA_CREATE') ? <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/> Guardar</button> : ""
+                                            }                   
+                                            
                                             <Link to="/empresa"><button className="btn btn-danger"><FontAwesomeIcon icon={faReply}/> Regresar</button></Link>
                                             
                                         </Form>

@@ -10,7 +10,8 @@ class UsuarioService{
 
 	allUsuarios(){
 		return axios.get(`${USUARIO_API_URL}/users/list`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-            if(LoginService.isNoAutorizado(err.response)){
+            console.log(err)
+            if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,
@@ -115,6 +116,48 @@ class UsuarioService{
             }
         } );
 	}
+
+    buscarUsuarioGeneral(idUser){
+        return axios.get(`${USUARIO_API_URL}/user/general/${idUser}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err.response)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }else{
+                Swal.fire(
+                    'Algo ha salido mal',
+                    err.response.data.mensaje,
+                    'error'
+                    )
+            }
+        } );
+    }
+
+    editarUsuarioGeneral(usuario,idUsuario){
+        return axios.put(`${USUARIO_API_URL}/user/general/${idUsuario}`,usuario,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    res.data.mensaje,
+                    'success'
+                )
+        } ).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err.response)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }else{
+                Swal.fire(
+                    'Algo ha salido mal',
+                    err.response.data.mensaje,
+                    'error'
+                    )
+            }
+        } );
+    }
 }
 
 export default new UsuarioService();

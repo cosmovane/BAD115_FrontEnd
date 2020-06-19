@@ -9,6 +9,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated'; 
 import update from 'immutability-helper';
 
+import LoginService from '../../Service/Login/LoginService';
 import RolService from '../../Service/Rol/RolService';
 import UsuarioService from '../../Service/Usuario/UsuarioService';
 const animatedComponents = makeAnimated();  
@@ -32,7 +33,7 @@ export default class UsuarioGeneral extends Component{
 	async componentDidMount(){
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
-			const usuario = await UsuarioService.buscarUsuario(id);
+			const usuario = await UsuarioService.buscarUsuarioGeneral(id);
 			const {username,email} = usuario.data;
 			this.setState({
 				username,email
@@ -59,7 +60,7 @@ export default class UsuarioGeneral extends Component{
 
 		}
 		const idUser =  parseInt(this.props.location.pathname.split('/')[3])
-		await UsuarioService.editarUsuario(usuario,idUser)
+		await UsuarioService.editarUsuarioGeneral(usuario,idUser)
 		this.props.history.push('/home')
 	}
 
@@ -98,7 +99,9 @@ export default class UsuarioGeneral extends Component{
                 			<label htmlFor="">Password:</label>
                 			<Field className="form-control" type="text" placeholder="Password" name="password" />
               			</fieldset>
-              			 <button className="btn btn-success" type="submit">Guardar</button>
+              			 {
+                            LoginService.hasPermiso('USUARIO_PERFIL_UPDATE') ? <button className="btn btn-success" type="submit">Guardar</button>: ""
+                        }
               			<Link to="/home"><button className="btn btn-danger">Regresar</button></Link>
         			</Form>
         		}

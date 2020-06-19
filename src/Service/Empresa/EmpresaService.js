@@ -15,9 +15,10 @@ class EmpresaService{
 
   
     allEmpresas(){
+        console.log(LoginService.agregarAuthorizationHeader())
         return axios.get(`${EMPRESA_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
 
-            if(LoginService.isNoAutorizado(err.response)){
+            if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,

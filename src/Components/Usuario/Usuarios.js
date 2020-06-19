@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 
 import UsuarioService from '../../Service/Usuario/UsuarioService';
+import LoginService from '../../Service/Login/LoginService';
 export default class Usuarios extends Component{
 	constructor(props){
 		super(props)
@@ -62,7 +63,10 @@ export default class Usuarios extends Component{
                 <div className="container">
                      <Row>
                         <Col sm={2}>
-                            <Link to="/usuario/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>
+                        {
+                            LoginService.hasPermiso('USUARIO_CREATE') ? <Link to="/usuario/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
+                        }
+                            
                         </Col>
                         <Col sm={4}></Col>
                         <Col sm={6}>
@@ -90,9 +94,15 @@ export default class Usuarios extends Component{
                                                     usuario.estado ? 'Activo' : 'Desactivo'
                                                 }</td>
                                             <td>
-                                            <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link>
-                                            <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                                            <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button>
+                                            {
+                                                LoginService.hasPermiso('USUARIO_CREATE') ? <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
+                                            }
+                                            {
+                                                LoginService.hasPermiso('USUARIO_UPDATE') ? <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                            }
+                                            {
+                                                LoginService.hasPermiso('USUARIO_READ') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button> : ""
+                                            }
                                             </td>
                                         </tr>
                                 )

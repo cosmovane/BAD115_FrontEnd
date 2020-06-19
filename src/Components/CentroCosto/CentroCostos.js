@@ -3,7 +3,9 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faPlus,faList,faBan,faArrowLeft} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert'
+
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
+import LoginService from '../../Service/Login/LoginService';
 
 export default class CentroCostoComponent extends Component{
 	constructor(props){
@@ -58,7 +60,10 @@ export default class CentroCostoComponent extends Component{
                 <div className="container">
                     <div className="row">   
                   {/*   <Link to={`/centro_costo/crear/${id}`}><button className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</button></Link> */}
-                   <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+                   {
+                        LoginService.hasPermiso('COSTO_CREATE') ? <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
+                    }
+                   
                    <button className="btn btn-danger" onClick={() => this.costoListAtras()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>
                     </div>
                     <table className="table">
@@ -82,11 +87,21 @@ export default class CentroCostoComponent extends Component{
                                             <td>{costo.periodo}</td>
                                             <td>{costo.id_unidadorganizacional.idUnidadorganizacional}</td>
                                             <td>
-                      						   <Link to={`/centro_costo/crear/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faPlus} /></button></Link>
-                      						  {/* <Link to={`/centro_costo_list/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faList} /></button></Link>*/}
-                      						   <button className="btn btn-info btn-sm" onClick={() => this.costoListHijos(costo.id_unidadorganizacional.idUnidadorganizacional)}><FontAwesomeIcon icon={faList} /></button>
-                                               <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                      						   <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(costo.idCosto)} /></button>
+                                            {
+                                                LoginService.hasPermiso('COSTO_CREATE') ?  <Link to={`/centro_costo/crear/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faPlus} /></button></Link> : ""
+                                            }
+                                            {
+                                                LoginService.hasPermiso('COSTO_READ') ?  <button className="btn btn-info btn-sm" onClick={() => this.costoListHijos(costo.id_unidadorganizacional.idUnidadorganizacional)}><FontAwesomeIcon icon={faList} /></button> : ""
+                                            }
+                      						  
+                      						{
+                                                LoginService.hasPermiso('COSTO_UPDATE') ?  <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                            }
+                                            {
+                                                LoginService.hasPermiso('COSTO_DISABLED') ?  <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(costo.idCosto)} /></button> : ""
+                                            }
+                                               
+                      						   
                     					    </td>
                                         </tr>
                                 )

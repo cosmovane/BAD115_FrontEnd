@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Route, BrowserRouter as Router } from 'react-router-dom'
+import { withRouter } from "react-router";
 import MenuComponent from './Components/Menu/Menu';
 import EmpresaComponent from './Components/Empresa/Empresa';
 import EmpresaDetalleComponent from './Components/Empresa/EmpresaDetalle';
@@ -27,7 +28,7 @@ import Usuarios from './Components/Usuario/Usuarios';
 import UsuarioForm from './Components/Usuario/UsuarioForm';
 import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
 import UsuarioVer from './Components/Usuario/UsuarioVer';
-import UsuarioGeneral from './Components/Usuario/UsuarioGeneral';
+
 
 import Login from './Components/Login/Login';
 
@@ -37,8 +38,8 @@ function App() {
       <Router>
         <div>
           <MenuComponent></MenuComponent>
-          <Route exact path="/" component={Login}></Route>
-          <Route exact path="/login" component={Login}></Route>
+          <Route exact path="/" component={Login} history ={'/home'}></Route>
+          <Route exact path="/login" component={Login} history ={'/home'}></Route>
           <Route exact path="/home" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>

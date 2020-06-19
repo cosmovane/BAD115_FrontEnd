@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import EmpresaService from '../../Service/Empresa/EmpresaService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
 
+import EmpresaService from '../../Service/Empresa/EmpresaService';
+import LoginService from '../../Service/Login/LoginService';
 export default class EmpresaComponent extends Component {
     constructor(props) {
         super(props)
@@ -47,7 +48,8 @@ export default class EmpresaComponent extends Component {
                 <div className="container">
                     <div className="row">
                         {
-                            this.state.empresas.length > 0 ? <button className="btn btn-success" disabled ><FontAwesomeIcon icon={faPlus}/> Agregar</button> : <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+
+                            LoginService.hasPermiso('EMPRESA_CREATE') ? this.state.empresas.length > 0 ? <button className="btn btn-success" disabled ><FontAwesomeIcon icon={faPlus}/> Agregar</button> : <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                         }
                         {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
                     </div>
@@ -70,7 +72,12 @@ export default class EmpresaComponent extends Component {
                                             <td>{empresa.representante}</td>
                                             <td>{empresa.nit}</td>
                                             <td>{empresa.nic}</td>
-                                            <td><button className="btn btn-warning btn-sm" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}><FontAwesomeIcon icon={faEdit}/></button></td>
+                                            <td>
+                                            {
+                                                LoginService.hasPermiso('COSTO_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                            }
+                                                
+                                            </td>
                                         </tr>
                                 )
                             }

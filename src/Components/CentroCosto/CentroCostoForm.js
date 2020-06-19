@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Col, Row } from 'react-bootstrap';
 import Swal from 'sweetalert2';import Alert from 'react-bootstrap/Alert'
 
+import LoginService from '../../Service/Login/LoginService';
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
 
 export default class CentroCostoForm extends Component{
@@ -187,7 +188,10 @@ export default class CentroCostoForm extends Component{
                 		className="alert alert-danger" />
               		  </Col>
               		 </Row>
-              		 <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/>Guardar</button>
+              		 {
+                        LoginService.hasPermiso('COSTO_CREATE') ?  <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/>Guardar</button> : ""
+                      }
+              		 
               		{/* <Link to="{{pathname:'/centro_costo_list/${this.state.unidadPadre}'}}"><button className="btn btn-danger">Regresar</button></Link>*/}
 					<button className="btn btn-danger" onClick={() => this.costoList()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>
 					</Form>

@@ -9,8 +9,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated'; 
 import update from 'immutability-helper';
 
+import LoginService from '../../Service/Login/LoginService';
 import RolService from '../../Service/Rol/RolService';
 import UsuarioService from '../../Service/Usuario/UsuarioService';
+
 const animatedComponents = makeAnimated();  
 const emailTest = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const passwordTest = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
@@ -142,7 +144,10 @@ export default class UsuarioForm extends Component{
         						isSelectAll={true}
                 			/>
               			</fieldset>
-              			 <button className="btn btn-success" type="submit">Guardar</button>
+                     {
+                       LoginService.hasPermiso('USUARIO_CREATE') ?  <button className="btn btn-success" type="submit">Guardar</button>: ""
+                     }
+              			
               			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>
         			</Form>
         		}
