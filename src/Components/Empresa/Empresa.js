@@ -74,7 +74,7 @@ export default class EmpresaComponent extends Component {
                                             <td>{empresa.nic}</td>
                                             <td>
                                             {
-                                                LoginService.hasPermiso('COSTO_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                                LoginService.hasPermiso('EMPRESA_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateEmpresaClicked(empresa.idEmpresa)}><FontAwesomeIcon icon={faEdit}/></button> : ""
                                             }
                                                 
                                             </td>
