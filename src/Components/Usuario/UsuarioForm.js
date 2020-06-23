@@ -129,7 +129,7 @@ export default class UsuarioForm extends Component{
                 			className="alert alert-warning" />
               			<fieldset className="form-group">
                 			<label htmlFor="">Password:</label>
-                			<Field className="form-control" type="text" placeholder="Password" name="password" />
+                			<Field className="form-control" type="password" placeholder="Password" name="password" />
               			</fieldset>
               			<fieldset className="form-group">
                 			<label htmlFor="">Roles:</label>
