@@ -7,9 +7,9 @@ import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
 
 const EMPRESA_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/empresa`;
 
-const headers = {
-    'Content-Type': 'application/json'
-}
+// const headers = {
+//     'Content-Type': 'application/json'
+// }
 
 class EmpresaService{
 

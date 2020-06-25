@@ -64,7 +64,7 @@ export default class Usuarios extends Component{
                      <Row>
                         <Col sm={2}>
                         {
-                            LoginService.hasPermiso('USUARIO_CREATE') ? <Link to="/usuario/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
+                            LoginService.hasPermiso('USER_CREATE') ? <Link to="/usuario/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
                         }
                             
                         </Col>
@@ -95,13 +95,13 @@ export default class Usuarios extends Component{
                                                 }</td>
                                             <td>
                                             {
-                                                LoginService.hasPermiso('USUARIO_CREATE') ? <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
+                                                LoginService.hasPermiso('USER_READ') ? <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
                                             }
                                             {
-                                                LoginService.hasPermiso('USUARIO_UPDATE') ? <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                                LoginService.hasPermiso('USER_UPDATE') ? <Link to={`/usuario/editar/${usuario.idUser}`} ><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
                                             }
                                             {
-                                                LoginService.hasPermiso('USUARIO_READ') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button> : ""
+                                                LoginService.hasPermiso('USER_DISABLED') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarUsuario(usuario.idUser)}/></button> : ""
                                             }
                                             </td>
                                         </tr>

@@ -61,7 +61,7 @@ export default class CentroCostoComponent extends Component{
                     <div className="row">   
                   {/*   <Link to={`/centro_costo/crear/${id}`}><button className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</button></Link> */}
                    {
-                        LoginService.hasPermiso('COSTO_CREATE') ? <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
+                        LoginService.hasPermiso('CENTRO_COSTO_CREATE') ? <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                     }
                    
                    <button className="btn btn-danger" onClick={() => this.costoListAtras()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>
@@ -88,17 +88,17 @@ export default class CentroCostoComponent extends Component{
                                             <td>{costo.id_unidadorganizacional.idUnidadorganizacional}</td>
                                             <td>
                                             {
-                                                LoginService.hasPermiso('COSTO_CREATE') ?  <Link to={`/centro_costo/crear/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faPlus} /></button></Link> : ""
+                                                LoginService.hasPermiso('CENTRO_COSTO_CREATE') ?  <Link to={`/centro_costo/crear/${costo.id_unidadorganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faPlus} /></button></Link> : ""
                                             }
                                             {
-                                                LoginService.hasPermiso('COSTO_READ') ?  <button className="btn btn-info btn-sm" onClick={() => this.costoListHijos(costo.id_unidadorganizacional.idUnidadorganizacional)}><FontAwesomeIcon icon={faList} /></button> : ""
+                                                LoginService.hasPermiso('CENTRO_COSTO_READ') ?  <button className="btn btn-info btn-sm" onClick={() => this.costoListHijos(costo.id_unidadorganizacional.idUnidadorganizacional)}><FontAwesomeIcon icon={faList} /></button> : ""
                                             }
                       						  
                       						{
-                                                LoginService.hasPermiso('COSTO_UPDATE') ?  <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                                LoginService.hasPermiso('CENTRO_COSTO_UPDATE') ?  <Link to={`/centro_costo/editar/${costo.idCosto}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
                                             }
                                             {
-                                                LoginService.hasPermiso('COSTO_DISABLED') ?  <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(costo.idCosto)} /></button> : ""
+                                                LoginService.hasPermiso('CENTRO_COSTO_DISABLED') ?  <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(costo.idCosto)} /></button> : ""
                                             }
                                                
                       						   

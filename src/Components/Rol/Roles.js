@@ -27,6 +27,7 @@ export default class Roles extends Component{
 
 	async desactivarActivarRol(id){
 		await RolService.desactivarRol(id);
+       // console.log("despues de desactivar debe pasar a refresh")
 		await this.refreshRoles();
 	}
 
@@ -35,6 +36,7 @@ export default class Roles extends Component{
     }
 
 	async refreshRoles(){
+       // console.log("entro a roles a refrescar despues de eliminar")
 		const response = await RolService.allRoles();
 
 		this.setState({roles:this.Roles(response.data),rolesBackup:this.Roles(response.data)});
@@ -70,7 +72,7 @@ export default class Roles extends Component{
                     <Row>
                         <Col sm={2}>
                          {
-                            LoginService.hasPermiso('ROLE_CREATE') ? <Link to="/rol/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
+                            LoginService.hasPermiso('ROL_CREATE') ? <Link to="/rol/crear" style={{' position': 'absolute','left': '150px'}} className="btn btn-success"><FontAwesomeIcon icon={faPlus}/>Agregar</Link>: ""
                         }
                             
                         </Col>
@@ -101,13 +103,13 @@ export default class Roles extends Component{
                                                 }</td>
                                             <td>
                                              {
-                                                 LoginService.hasPermiso('ROLE_READ') ? <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
+                                                 LoginService.hasPermiso('ROL_READ') ? <Link to={`/rol/ver/${rol.idRol}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""
                                              }
                                              {
-                                                 LoginService.hasPermiso('ROLE_UPDATE') ? <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                                                 LoginService.hasPermiso('ROL_UPDATE') ? <Link to={`/rol/editar/${rol.idRol}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
                                              }
                                              {
-                                                 LoginService.hasPermiso('ROLE_DISABLED') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button> : ""
+                                                 LoginService.hasPermiso('ROL_DISABLED') ? <button className="btn btn-secondary btn-sm" ><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivarActivarRol(rol.idRol)}/></button> : ""
                                              }
 
                                             

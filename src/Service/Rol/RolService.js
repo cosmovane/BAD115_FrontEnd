@@ -46,7 +46,7 @@ class RolService{
 	}
 
 	allRoles(){
-		return axios.get(`${ROL_API_URL}/rol/list`).catch( (err)=> {
+		return axios.get(`${ROL_API_URL}/rol/list`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err.response)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -130,7 +130,7 @@ class RolService{
 	}
 
 	desactivarRol(idRol){
-		return axios.put(`${ROL_API_URL}/rol/desactivar/${idRol}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+		return axios.get(`${ROL_API_URL}/rol/desactivar/${idRol}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
                     res.data.mensaje,

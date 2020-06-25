@@ -40,7 +40,7 @@ export default class UsuarioVer extends Component{
             	</Row>
             	<Row>
             	 {
-                    LoginService.hasPermiso('USUARIO_UPDATE') ? <Link to={`/usuario/editar/${this.props.location.pathname.split('/')[3]}`}><button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} />Editar</button></Link>: ""
+                    LoginService.hasPermiso('USER_UPDATE') ? <Link to={`/usuario/editar/${this.props.location.pathname.split('/')[3]}`}><button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} />Editar</button></Link>: ""
                   }
             		<Link to="/usuarios"><button className="btn btn-danger">Regresar</button></Link>
             	</Row>

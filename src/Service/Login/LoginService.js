@@ -18,8 +18,8 @@ let _token=''
 class LoginService {
 
 	login(usuario){
-		console.log(usuario.username)
-		console.log(usuario.password)
+	//	console.log(usuario.username)
+	//	console.log(usuario.password)
 		let params = new URLSearchParams();
 		params.set('grant_type','password');
 		params.set('username',usuario.username);
@@ -48,31 +48,31 @@ class LoginService {
 	
 
 	obtenerUsuario(){
-		if(_usuario.username !=''){
-			console.log("hay datos en usuario")
-			console.log(_usuario.username)
+		if(_usuario.username !==''){
+		//	console.log("hay datos en usuario")
+		//	console.log(_usuario.username)
 			return _usuario;
-		}else if(_usuario.username == '' && sessionStorage.getItem('usuario') !=null){
-			console.log("no hay datos en _usuario y busca sessionStorage")
+		}else if(_usuario.username === '' && sessionStorage.getItem('usuario') !==null){
+		//	console.log("no hay datos en _usuario y busca sessionStorage")
 			let payload=JSON.parse(sessionStorage.getItem('usuario'));
-			console.log(payload)
+		//	console.log(payload)
 			_usuario.id = payload.id
 			_usuario.username = payload.username;
 			_usuario.email = payload.email;
 			_usuario.permisos = payload.permisos;
-			console.log(_usuario)
+		//	console.log(_usuario)
 			return _usuario
 		}
-		console.log("retorna null")
+		//console.log("retorna null")
 		return null;
 	}
 
 	obtenerToken(){
 		if(_token !=''){
-			console.log("hay token")
+	//		console.log("hay token")
 			return _token;
 		}else if(_token == '' && sessionStorage.getItem('token') !=null){
-			console.log("no hay busca en storage")
+	//		console.log("no hay busca en storage")
 			_token = sessionStorage.getItem('token');
 			return _token
 		}
@@ -83,11 +83,11 @@ class LoginService {
 	isAuthenticated(){
 		let payload = this.obtenerDatosToken(this.obtenerToken());
 		if(payload !=null && payload.username && payload.username.length > 0){
-			console.log("retorna true")
+	//		console.log("retorna true")
 			return true;
 		}
 
-		console.log("retorna false")
+	//	console.log("retorna false")
 		return false;
 	}
 

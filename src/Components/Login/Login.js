@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Button, FormGroup, FormControl } from "react-bootstrap";
+import React from "react";
+//import { Button, FormGroup, FormControl } from "react-bootstrap";
 import Swal from 'sweetalert2';
-import Alert from 'react-bootstrap/Alert';
+//import Alert from 'react-bootstrap/Alert';
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import  { Redirect } from 'react-router-dom'
+//import  { Redirect } from 'react-router-dom'
 
 import "../../Container/Login.css";
 import LoginService from '../../Service/Login/LoginService';

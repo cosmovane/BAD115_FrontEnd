@@ -119,21 +119,22 @@ function App() {
           <GuardedRoute path="/usuario/ver/:id" render={(props)=><UsuarioVer {...props} ver={true} />} meta={{ auth: true,permiso:'USER_GENERAL_READ' }}/>
           <GuardedRoute path="/usuario/general/:id" render={(props)=><UsuarioGeneral {...props}/>} meta={{ auth: true,permiso:'USER_GENERAL_UPDATE' }}/>
 
-          //FALTA QUE ME DIGAN SUS PERMISOS PARA UNIDAD ORGANIZACIONAL
+          {/*FALTA QUE ME DIGAN SUS PERMISOS PARA UNIDAD ORGANIZACIONAL
+              FALTA PERMISOS PARA PROFESION
+              FALTAN PERMISOS PARA PUESTO DE TRABAJO
+              FALTAN PERMISOS PARA EMPLEADO
+          */}
           <GuardedRoute exact path="/departamentos" component={UnidadOrganizacionalComponent} meta={{ auth: true,permiso:'USER_READ'}}/>
           <GuardedRoute path="/departamentos/crear" component={UnidadOrganizacionalDetalle} meta={{ auth: true,permiso:'USER_READ'}}/>
           <GuardedRoute path="/departamentos/editar/:id" render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true}/>} meta={{ auth: true,permiso:'USER_READ'}}/>
 
-          //FALTA PERMISOS PARA PROFESION
           <GuardedRoute path="/profesion" component={ProfesionComponent}/>
           <GuardedRoute path="profesion/crear" component={ProfesionF}/>
           
-          //FALTAN PERMISOS PARA PUESTO DE TRABAJO
           <GuardedRoute exact path="/puestotrabajo" component={PuestoTrabajoComponent}/>
           <GuardedRoute path="/puestotrabajo/crear" component={PuestoTrabajoForm}/>
           <GuardedRoute path="/puestotrabajo/editar/:id" render={ (props) =><PuestoTrabajoForm {...props} editar={true}/>}/>
           
-          //FALTAN PERMISOS PARA EMPLEADO
           <GuardedRoute exact path="/empleado" component={EmpleadoComponent}/>
           <GuardedRoute path="/empleado/:id" component={EmpleadoDetalleComponent}/>
 

@@ -56,7 +56,7 @@ class EmpresaDetalleComponent extends Component {
                 departamento: response.data,
             });
         })
-        if (this.state.idEmpresa == -1) {
+        if (this.state.idEmpresa === -1) {
             return
         }
 
@@ -95,7 +95,7 @@ class EmpresaDetalleComponent extends Component {
             municipio: this.state.selectedOptionMunicipio
         }
         
-        if (this.state.idEmpresa == -1) {
+        if (this.state.idEmpresa === -1) {
             console.log(empresa);
             EmpresaService.empresaCrear(empresa).then(() => this.props.history.push('/empresa'));
         } else {
@@ -105,7 +105,7 @@ class EmpresaDetalleComponent extends Component {
 
     validate(values) {
         let errors = {}
-        if(this.state.selectedOption == 0 || this.state.selectedOptionMunicipio == 0 ){
+        if(this.state.selectedOption === 0 || this.state.selectedOptionMunicipio === 0 ){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -176,7 +176,7 @@ class EmpresaDetalleComponent extends Component {
     render() {
         let { representante, idEmpresa, nit, nic, paginaweb, telefono, email, page, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio } = this.state
         const getMunicipios = () => {
-            const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento == this.state.selectedOption)[0];
+            const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento === this.state.selectedOption)[0];
             return (
                 <div>
                     <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>

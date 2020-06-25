@@ -40,7 +40,7 @@ export default class RolVer extends Component{
             	</Row>
             	<Row>
             	 {
-                     LoginService.hasPermiso('ROLE_UPDATE') ? <Link to={`/rol/editar/${this.props.location.pathname.split('/')[3]}`}><button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} />Editar</button></Link> : ""
+                     LoginService.hasPermiso('ROL_UPDATE') ? <Link to={`/rol/editar/${this.props.location.pathname.split('/')[3]}`}><button className="btn btn-warning"><FontAwesomeIcon icon={faEdit} />Editar</button></Link> : ""
                  }	
             		<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>
             	</Row>

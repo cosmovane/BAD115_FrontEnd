@@ -145,7 +145,7 @@ export default class RolForm extends Component{
                 			/>
               			</fieldset>
               			 {
-                            LoginService.hasPermiso('ROLE_CREATE') ? <button className="btn btn-success" type="submit">Guardar</button>: ""
+                            LoginService.hasPermiso('ROL_CREATE') ? <button className="btn btn-success" type="submit">Guardar</button>: ""
                         }
               			 
               			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>

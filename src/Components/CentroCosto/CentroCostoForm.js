@@ -189,7 +189,7 @@ export default class CentroCostoForm extends Component{
               		  </Col>
               		 </Row>
               		 {
-                        LoginService.hasPermiso('COSTO_CREATE') ?  <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/>Guardar</button> : ""
+                        LoginService.hasPermiso('CENTRO_COSTO_CREATE') ?  <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/>Guardar</button> : ""
                       }
               		 
               		{/* <Link to="{{pathname:'/centro_costo_list/${this.state.unidadPadre}'}}"><button className="btn btn-danger">Regresar</button></Link>*/}

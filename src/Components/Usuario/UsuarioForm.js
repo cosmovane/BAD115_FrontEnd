@@ -145,7 +145,7 @@ export default class UsuarioForm extends Component{
                 			/>
               			</fieldset>
                      {
-                       LoginService.hasPermiso('USUARIO_CREATE') ?  <button className="btn btn-success" type="submit">Guardar</button>: ""
+                       LoginService.hasPermiso('USER_CREATE') ?  <button className="btn btn-success" type="submit">Guardar</button>: ""
                      }
               			
               			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>

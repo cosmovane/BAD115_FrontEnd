@@ -37,8 +37,9 @@ class MenuComponent extends Component {
 
     render(){
       let username = LoginService.obtenerUsuario();
-      console.log(username)
-      console.log(LoginService.isAuthenticated())
+   //   console.log(username)
+   //   console.log(LoginService.isAuthenticated())
+   //console.log(username.id)
       if(LoginService.isAuthenticated()){
       return (
         <Card
@@ -78,10 +79,10 @@ class MenuComponent extends Component {
                 LoginService.hasPermiso('TIPO_DESCUENTO_READ') ? <NavDropdown.Item href="">Gestión tipos descuentos</NavDropdown.Item> : ""
               }
               {
-                 LoginService.hasPermiso('USUARIO_READ') ? <NavDropdown.Item href="/usuarios">Gestión usuario</NavDropdown.Item> : ""
+                 LoginService.hasPermiso('USER_READ') ? <NavDropdown.Item href="/usuarios">Gestión usuario</NavDropdown.Item> : ""
               }
               {
-                LoginService.hasPermiso('ROLE_READ') ? <NavDropdown.Item href="/roles">Gestión roles</NavDropdown.Item> : ""
+                LoginService.hasPermiso('ROL_READ') ? <NavDropdown.Item href="/roles">Gestión roles</NavDropdown.Item> : ""
               }
               </NavDropdown>
             </Nav>
@@ -91,7 +92,7 @@ class MenuComponent extends Component {
           />
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
           {
-            LoginService.hasPermiso('USUARIO_PERFIL_READ') ? <Link to={`/usuario/general/${username.id}`} className="dropdown-item"></Link> : ""
+            LoginService.hasPermiso('USER_GENERAL_READ') ? <Link to={`/usuario/general/${username.id}`} className="dropdown-item">Mi perfíl</Link> : ""
           }
            
             <button onClick={()=>this.logout()} className="dropdown-item" type="submit">Sign Out</button>
