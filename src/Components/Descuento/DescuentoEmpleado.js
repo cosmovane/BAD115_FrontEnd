@@ -1,13 +1,39 @@
 import React, { Component } from 'react';
+import { Row, Col, Card, Container } from 'react-bootstrap'
+import { Field } from 'formik'
 
-class DescuentoEmpleadoComponent extends Component {
+const inputStyle = {
+  'width': '25em',
+  'display': 'inline-block'
+}
+
+class DescuentoEmpleadoPorcentajeCero extends Component {
+  // state = {
+  //   descuentosEmplePorcentajeCero: []
+  // }
+
   render() {
     return (
       <div>
-        SI WE
+        <br />
+        <Row>
+          <Col>
+            <h5>Cantidad a descontar en dólares del descuento {this.props.descuento.nombre}</h5>
+            <fieldset className="form-group">
+              <Field 
+                className="form-control" 
+                type="number" 
+                style={inputStyle} 
+                placeholder="Cantidad en dólares"
+                name={this.props.descuento.idDescuento} 
+                onChange={this.props.onChange}
+              />
+            </fieldset>
+          </Col>
+        </Row>
       </div>
     );
   }
 }
 
-export default DescuentoEmpleadoComponent;
+export default DescuentoEmpleadoPorcentajeCero;

@@ -56,6 +56,9 @@ class DescuentoDetalle extends Component {
       if (!this.validarNumero(values.porcentaje)) errors.porcentaje = 'Ingresar un número válido. Ej: 45 , 45.8 , 98.0'
       if (values.porcentaje >= 100 || values.porcentaje <= 0) errors.porcentaje = 'Debe ingresar un porcentaje mayor a 0 y menor a 100'
     }
+    if(values.acronimo.length > 7) errors.acronimo = 'El acrónimo debe contener 7 o menos caracteres'
+    if(values.nombre.length > 40) errors.nombre = 'El nombre debe contener 40 o menos caracteres'
+    if(values.descripcion.length > 495) errors.descripcion = 'Escriba una descripción más corta'
     if (!values.acronimo) errors.acronimo = 'Ingrese un acrónimo'
     if (!values.nombre) errors.nombre = 'Ingrese un nombre'
     if (!values.descripcion) errors.descripcion = 'Ingrese una descripción'

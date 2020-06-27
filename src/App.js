@@ -13,6 +13,7 @@ import EmpleadoComponent from './Components/Empleado/Empleado';
 import EmpleadoDetalleComponent from './Components/Empleado/EmpleadoDetalle';
 import DescuentoComponent from './Components/Descuento/Descuento'
 import DescuentoDetalle from './Components/Descuento/DescuentoDetalle'
+import Planilla from './Components/Planilla/Planilla'
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/descuento/editar/:id"
           render={ (props) => <DescuentoDetalle {...props} editar={true}/>}
           />
+          <Route path="/planilla" component={Planilla}/>
         </div>
       </Router>
     </div>
