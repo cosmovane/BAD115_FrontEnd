@@ -8,7 +8,12 @@ import HomeComponent from './Components/Home/Home';
 import ProfesionComponent from './Components/Profesion/Profesion';
 import ProfesionF from './Components/Profesion/ProfesionF';
 import PuestoTrabajoComponent from './Components/PuestoTrabajo/PuestoTrabajo'
-import PuestoTrabajoForm from './Components/PuestoTrabajo/PuestoTrabajoForm'
+import PuestoTrabajoDetalle from './Components/PuestoTrabajo/PuestoTrabajoDetalle'
+import EmpleadoComponent from './Components/Empleado/Empleado';
+import EmpleadoDetalleComponent from './Components/Empleado/EmpleadoDetalle';
+import DescuentoComponent from './Components/Descuento/Descuento'
+import DescuentoDetalle from './Components/Descuento/DescuentoDetalle'
+import Planilla from './Components/Planilla/Planilla'
 
 
 import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
@@ -33,19 +38,25 @@ function App() {
           <Route path="/profesion" component={ProfesionComponent} />
           <Route path="profesion/crear" component={ProfesionF} />
           <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
-          <Route path="/puestotrabajo/crear" component={PuestoTrabajoForm} />
-          <Route path="/puestotrabajo/editar/:id" 
-          render={ (props) =><PuestoTrabajoForm {...props} editar={true}
+          <Route path="/puestotrabajo/crear" component={PuestoTrabajoDetalle} />
+          <Route path="/puestotrabajo/editar/:id"
+          render={ (props) =><PuestoTrabajoDetalle {...props} editar={true}
           />
           }/>
-
           <Route exact path="/periocidad" component={CalendarioTrabajo} />
           <Route path="/periocidad/crear" component={CalendarioTrabajoDetalle} />
           <Route path="/periocidad/editar/:id" 
           render={ (props) =><CalendarioTrabajoDetalle {...props} editar={true}
           />
           }/>
-
+          <Route exact path="/empleado" component={EmpleadoComponent} ></Route>
+          <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>
+          <Route exact path="/descuento" component={DescuentoComponent} />
+          <Route path="/descuento/crear" component={DescuentoDetalle} />
+          <Route path="/descuento/editar/:id"
+          render={ (props) => <DescuentoDetalle {...props} editar={true}/>}
+          />
+          <Route path="/planilla" component={Planilla}/>
         </div>
       </Router>
     </div>

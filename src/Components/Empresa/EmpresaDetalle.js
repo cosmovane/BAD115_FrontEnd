@@ -93,7 +93,7 @@ class EmpresaDetalleComponent extends Component {
             departamento: this.state.selectedOption,
             municipio: this.state.selectedOptionMunicipio
         }
-
+        
         if (this.state.idEmpresa == -1) {
             console.log(empresa);
             EmpresaService.empresaCrear(empresa).then(() => this.props.history.push('/empresa'));
@@ -159,6 +159,17 @@ class EmpresaDetalleComponent extends Component {
         }
 
         return errors;
+    }
+
+    setRedirect = () => {
+        this.setState({
+            redirect: true
+        })
+    }
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/empresa' />
+        }
     }
 
     render() {
