@@ -16,6 +16,11 @@ import DescuentoDetalle from './Components/Descuento/DescuentoDetalle'
 import Planilla from './Components/Planilla/Planilla'
 
 
+import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
+import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
+import CalendarioTrabajo from './Components/CalendarioTrabajo/CalendarioTrabajo';
+import CalendarioTrabajoDetalle from './Components/CalendarioTrabajo/CalendarioTrabajoDetalle';
+
 function App() {
   return (
     <div className="App">
@@ -25,14 +30,23 @@ function App() {
           <Route exact path="/" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
-
+          <Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
+          <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />
+          <Route path="/departamentos/editar/:id"
+          render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true} />
+          }/>
           <Route path="/profesion" component={ProfesionComponent} />
           <Route path="profesion/crear" component={ProfesionF} />
-
           <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
           <Route path="/puestotrabajo/crear" component={PuestoTrabajoDetalle} />
           <Route path="/puestotrabajo/editar/:id"
           render={ (props) =><PuestoTrabajoDetalle {...props} editar={true}
+          />
+          }/>
+          <Route exact path="/periocidad" component={CalendarioTrabajo} />
+          <Route path="/periocidad/crear" component={CalendarioTrabajoDetalle} />
+          <Route path="/periocidad/editar/:id" 
+          render={ (props) =><CalendarioTrabajoDetalle {...props} editar={true}
           />
           }/>
           <Route exact path="/empleado" component={EmpleadoComponent} ></Route>
