@@ -23,10 +23,13 @@ export default class UsuarioVer extends Component{
 		if(this.props.ver){
 			const id = this.props.location.pathname.split('/')[3];
 			const user = await UsuarioService.buscarUsuario(parseInt(id));
-			const {username,email,roles} = user.data
+			if (user !== undefined) {
+				const {username,email,roles} = user.data
 			this.setState({
 				username,email,roles
 			})
+			}
+			
 		}
 	}
 

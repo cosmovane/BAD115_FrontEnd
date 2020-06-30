@@ -70,10 +70,10 @@ class MenuComponent extends Component {
             
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
               {
-                 LoginService.hasPermiso('COSTO_READ') ?  <NavDropdown.Item href="/centro_costo_list/-1">Gestión de costos</NavDropdown.Item> : ""
+                 LoginService.hasPermiso('CENTRO_COSTO_READ') ?  <NavDropdown.Item href="/centro_costo_list/-1">Gestión de costos</NavDropdown.Item> : ""
               }
               {
-                LoginService.hasPermiso('TIPO_INGRESO_READ') ? <NavDropdown.Item href="">Gestión tipos ingresos</NavDropdown.Item> : ""
+                LoginService.hasPermiso('INGRESO_READ') ? <NavDropdown.Item href="/ingresos">Gestión tipos ingresos</NavDropdown.Item> : ""
               }
               {
                 LoginService.hasPermiso('TIPO_DESCUENTO_READ') ? <NavDropdown.Item href="">Gestión tipos descuentos</NavDropdown.Item> : ""

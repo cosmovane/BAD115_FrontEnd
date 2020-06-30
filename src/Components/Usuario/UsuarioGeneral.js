@@ -52,7 +52,7 @@ export default class UsuarioGeneral extends Component{
 		if(!values.email) errors.username = 'Ingrese correo electronico';
 		if(!emailTest.test(values.email)) errors.email='Email con coincide con formato';
 		if(values.password){
-			if(!passwordTest.test(values.password)) errors.password = 'Password no coincide con formato';
+			if(!passwordTest.test(values.password)) errors.password = 'Password no coincide con formato.. debe tener mínimo una mayuscula, una mínuscula y un numero, entre 6 y 20 caracteres';
 		}
 		return errors;
 	}
@@ -102,7 +102,7 @@ export default class UsuarioGeneral extends Component{
                 			className="alert alert-warning" />
               			<fieldset className="form-group">
                 			<label htmlFor="">Password:</label>
-                			<Field className="form-control" type="text" placeholder="Password" name="password" />
+                			<Field className="form-control" type="password" placeholder="Password.. debe tener mínimo una mayuscula, una mínuscula y un numero, entre 6 y 20 caracteres" name="password" />
               			</fieldset>
               			 {
                             LoginService.hasPermiso('USER_GENERAL_UPDATE') ? <button className="btn btn-success" type="submit">Guardar</button>: ""

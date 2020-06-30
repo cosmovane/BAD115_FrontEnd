@@ -141,6 +141,17 @@ class LoginService {
 		return axios.get(`${BASE_API_URL}/api/planilla/user/bloqueado/${username}`,{headers: this.agregarAuthorizationHeader()});
 	}
 
+	isTokenExpirado(){
+		let token = this.obtenerToken();
+		let payload = this.obtenerDatosToken(token);
+		let now = new Date().getTime()/1000;
+		if (payload.exp < now) {
+			return true;
+		}
+
+		return false;
+	}
+
 }
 
 export default new LoginService();

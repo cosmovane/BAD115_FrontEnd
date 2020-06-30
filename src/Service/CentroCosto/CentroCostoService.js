@@ -109,7 +109,7 @@ class CentroCostoService{
 }
 
 desactivarCosto(idCosto){
-  return axios.put(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+  return axios.get(`${EMPRESA_API_URL}/centro_costo/desactivar/${idCosto}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
     Swal.fire(
         'Buen trabajo!',
         res.data.mensaje,

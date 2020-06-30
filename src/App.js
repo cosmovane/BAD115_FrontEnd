@@ -22,6 +22,8 @@ import CentroCostoForm from './Components/CentroCosto/CentroCostoForm';
 import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
 import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
 
+import Ingresos from './Components/CatalogoIngreso/Ingresos';
+import IngresoForm from './Components/CatalogoIngreso/IngresoForm';
 
 import Roles from './Components/Rol/Roles';
 import RolForm from './Components/Rol/RolForm';
@@ -38,7 +40,11 @@ import LoginService from '../src/Service/Login/LoginService';
 const requireLogin=(to,from,next)=>{
 	if(to.meta.auth){
 		if(LoginService.isAuthenticated()){
-			if (LoginService.hasPermiso(to.meta.permiso)) {
+      if (LoginService.isTokenExpirado()) {
+        LoginService.logout();
+        next.redirect('/login');
+      }
+			else if (LoginService.hasPermiso(to.meta.permiso)){ 
 				next();
 			}
 			next.redirect('/home');
@@ -48,6 +54,7 @@ const requireLogin=(to,from,next)=>{
 		next();
 	}
 };
+
 
 function App() {
   return (
@@ -138,7 +145,9 @@ function App() {
           <GuardedRoute exact path="/empleado" component={EmpleadoComponent}/>
           <GuardedRoute path="/empleado/:id" component={EmpleadoDetalleComponent}/>
 
-          
+          <GuardedRoute exact path="/ingresos" component={Ingresos} meta={{ auth: true,permiso:'INGRESO_READ'}}/>
+          <GuardedRoute path="/ingreso/crear" component={IngresoForm} meta={{ auth: true,permiso:'INGRESO_CREATE'}}/>
+          <GuardedRoute path="/ingreso/editar/:id" render={(props) =><IngresoForm {...props} editar={true}/>} meta={{ auth: true,permiso:'INGRESO_UPDATE'}}/>
 
           {/*<Route path="*" component={()=>"404 NOT FOUND"}/>*/}
         </div>

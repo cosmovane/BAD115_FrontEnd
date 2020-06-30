@@ -35,7 +35,10 @@ export default class Usuarios extends Component{
 
 	async refreshUsuarios(){
 		const response = await UsuarioService.allUsuarios();
-		this.setState({usuarios:this.Usuarios(response.data),usuariosBackup:this.Usuarios(response.data)});
+        if (response !== undefined) {
+            this.setState({usuarios:this.Usuarios(response.data),usuariosBackup:this.Usuarios(response.data)});
+        }
+		
 	}
 
     filter(event){
@@ -90,9 +93,7 @@ export default class Usuarios extends Component{
                                         <tr key={usuario.idUser}>
                                             <td>{usuario.username}</td>
                                             <td>{usuario.email}</td>
-                                            <td>{
-                                                    usuario.estado ? 'Activo' : 'Desactivo'
-                                                }</td>
+                                            <td>{usuario.estado }</td>
                                             <td>
                                             {
                                                 LoginService.hasPermiso('USER_READ') ? <Link to={`/usuario/ver/${usuario.idUser}`}><button className="btn btn-info btn-sm"><FontAwesomeIcon icon={faEye} /></button></Link> : ""

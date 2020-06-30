@@ -38,13 +38,12 @@ export default class Roles extends Component{
 	async refreshRoles(){
        // console.log("entro a roles a refrescar despues de eliminar")
 		const response = await RolService.allRoles();
-
-		this.setState({roles:this.Roles(response.data),rolesBackup:this.Roles(response.data)});
+        if (response !== undefined) {
+            this.setState({roles:this.Roles(response.data),rolesBackup:this.Roles(response.data)});
+        }
+		
 	}
 
-        Roles(roles){
-        return (roles.map(data=>({idRol:data.idRol,nombre:data.nombre,detalle:data.detalle,estado:data.estado ? 'Activo' : 'Desactivado'})));
-    }
 
     filter(event){
         let text = event.target.value

@@ -40,10 +40,13 @@ export default class UsuarioForm extends Component{
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
 			const usuario = await UsuarioService.buscarUsuario(id);
-			const {username,email,roles} = usuario.data;
-			this.setState({
-				username,email,rolesSeleccionados:roles.map(data=>({label:data.nombre,value:data.idRol})),roles:rolesList.data
-			});
+      if (usuario !== undefined) {
+        const {username,email,roles} = usuario.data;
+      this.setState({
+        username,email,rolesSeleccionados:roles.map(data=>({label:data.nombre,value:data.idRol})),roles:rolesList.data
+      });
+      }
+			
 		}
 	}
 
@@ -62,7 +65,7 @@ export default class UsuarioForm extends Component{
 		if(!emailTest.test(values.email)) errors.email='Email con coincide con formato';
 		if(!this.props.editar){
 			if(!values.password) errors.password ='Ingrese password';
-			if(!passwordTest.test(values.password)) errors.password = 'Password no coincide con formato';
+			if(!passwordTest.test(values.password)) errors.password = 'Password no coincide con formato.. debe tener mínimo una mayuscula, una mínuscula y un numero, entre 6 y 20 caracteres';
 		}
 		if(JSON.stringify(this.state.rolesSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione roles!'});
 		return errors;
@@ -129,7 +132,7 @@ export default class UsuarioForm extends Component{
                 			className="alert alert-warning" />
               			<fieldset className="form-group">
                 			<label htmlFor="">Password:</label>
-                			<Field className="form-control" type="password" placeholder="Password" name="password" />
+                			<Field className="form-control" type="password" placeholder="Password.. debe tener mínimo una mayuscula, una mínuscula y un numero, entre 6 y 20 caracteres" name="password" />
               			</fieldset>
               			<fieldset className="form-group">
                 			<label htmlFor="">Roles:</label>
@@ -148,7 +151,7 @@ export default class UsuarioForm extends Component{
                        LoginService.hasPermiso('USER_CREATE') ?  <button className="btn btn-success" type="submit">Guardar</button>: ""
                      }
               			
-              			<Link to="/roles"><button className="btn btn-danger">Regresar</button></Link>
+              			<Link to="/usuarios"><button className="btn btn-danger">Regresar</button></Link>
         			</Form>
         		}
         		</Formik>

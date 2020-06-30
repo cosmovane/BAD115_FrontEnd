@@ -32,18 +32,21 @@ export default class RolForm extends Component{
 
 	async componentDidMount(){
 		const permisosList = await RolService.allPermisos();
-		//console.log(permisosList.data)
-		this.setState({permisos:permisosList.data}) 
+		if (permisosList !== undefined) {
+			this.setState({permisos:permisosList.data})
+		}
+		 
 		if(this.props.editar){
 			const id = this.props.location.pathname.split('/')[3];
 			const rol = await RolService.buscarRol(parseInt(id));
-			console.log(rol.data)
-			const {nombre,detalle,permisos} = rol.data
+			//console.log(rol.data)
+			if (rol !== undefined) {
+				const {nombre,detalle,permisos} = rol.data
 			this.setState({
 				nombre:nombre,detalle:detalle,permisosSeleccionados:permisos.map(data=>({label:data.nombre,value:data.idPermiso})),permisos:permisosList.data
 			})
-
-			console.log(this.state.permisosSeleccionados)
+			}
+			//console.log(this.state.permisosSeleccionados)
 		}
 	}
 
@@ -61,13 +64,13 @@ export default class RolForm extends Component{
 
 	validate(values){
 		let errors={}
-		console.log(this.state.permisosSeleccionados);
+		//console.log(this.state.permisosSeleccionados);
 		//console.log(perSelect)
 		if(!values.nombre) errors.nombre = 'Ingrese nombre de rol'
 		if(!values.detalle) errors.detalle = 'Ingrese detalle de rol'
-		console.log("antes de validar permisos")
+		//console.log("antes de validar permisos")
 		if(JSON.stringify(this.state.permisosSeleccionados) === '[]') Swal.fire({icon: 'error',title: 'Oops...',text: 'Seleccione permisos!'})
-		console.log("despues de validar permisos")
+		//console.log("despues de validar permisos")
 		return errors;
 	}
 

@@ -42,23 +42,23 @@ export default class Login extends React.Component {
 		}
 		this.setState({username:values.username});
 		LoginService.login(usuario).then(res=>{
-			console.log(res);
+			//console.log(res);
 			let objeto_usuario_payload = LoginService.obtenerDatosToken(res.data.access_token);
 			LoginService.guardarUsuario(res.data.access_token);
 			LoginService.guardarToken(res.data.access_token);
 			let username = LoginService.obtenerUsuario();
-			console.log(username)
+			//console.log(username)
 			Swal.fire({icon: 'success',title: 'Sesión Iniciada',text: `Has iniciado sesión con éxito ${username.username}!`
 		})
 			contadorFallida = 0;
-			console.log(contadorFallida);
+			//console.log(contadorFallida);
 			window.location.reload(false);
 			this.props.history.push('/home');
 		}).catch( (err)=> {
-			console.log(err.response)
+			//console.log(err.response)
 			if(err.response.status == 400 || err.response.status==401){
 				if (!(usernameAnterior===this.state.username)) {
-					console.log("entra al ser usuario diferente")
+					//console.log("entra al ser usuario diferente")
 					contadorFallida=0;
 					usernameAnterior = this.state.username;
 				}

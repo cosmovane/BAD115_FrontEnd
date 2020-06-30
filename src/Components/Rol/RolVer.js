@@ -23,10 +23,13 @@ export default class RolVer extends Component{
 		if(this.props.ver){
 			const id = this.props.location.pathname.split('/')[3];
 			const rol = await RolService.buscarRol(parseInt(id));
-			const {nombre,detalle,permisos} = rol.data
+			if (rol !== undefined) {
+				const {nombre,detalle,permisos} = rol.data
 			this.setState({
 				nombre,detalle,permisos
 			})
+			}
+			
 		}
 	}
 
