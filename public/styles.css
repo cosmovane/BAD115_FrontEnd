@@ -13,16 +13,14 @@ form-control {
 }
 
 .tabla-planilla {
-  /* max-height: 575px;
-  overflow-y: scroll; */
   max-width: 70%;
 }
 
 .planilla {
   align-content: center;
-  margin-right: 4%;
-  margin-left: 4%;
-  max-height: 575px;
+  margin-right: 3%;
+  margin-left: 3%;
+  max-height: 515px;
   overflow-y: scroll;
 }
 
@@ -33,4 +31,17 @@ form-control {
 
 .rc-table-thead{
   background-color: teal;
+}
+
+.btn-planilla{
+  margin: 0.5%;
+}
+
+.alerta-dia-pago{
+  padding: 1px !important;
+}
+
+.disabled{
+  pointer-events: none;
+  cursor: default;
 }

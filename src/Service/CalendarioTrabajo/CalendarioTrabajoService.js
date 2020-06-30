@@ -25,6 +25,10 @@ class CalendarioTrabajoService{
     desactivarCalendarioTrabajo(id) {
         return axios.delete(`${CALENDARIOTRABAJO_API_URL}/${id}`);
     }
+
+    obtenerCalendarioDelAnio(anio){
+      return axios.get(`${BASE_API_URL}/${BASE_API_PLANILLA}/periodicidad/${parseInt(anio)}`)
+    }
 }
 
 export default new CalendarioTrabajoService();

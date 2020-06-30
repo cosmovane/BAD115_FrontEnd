@@ -57,6 +57,10 @@ class EmpleadoService{
         return axios.get(`${GENERO_API_URL}`);
     }
 
+    ultimoEmpleado(){
+      return axios.get(`${EMPLEADO_API_URL}/ultimo`)
+    }
+
 }
 
 
