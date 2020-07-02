@@ -1,23 +1,16 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
 import LoginService from '../Login/LoginService';
 
-import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
+import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants';
 
-const EMPRESA_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/empresa`;
+const INGRESO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/ingreso`;
 
-// const headers = {
-//     'Content-Type': 'application/json'
-// }
+class IngresoService{
 
-class EmpresaService{
-
-  
-    allEmpresas(){
-        console.log(LoginService.agregarAuthorizationHeader())
-        return axios.get(`${EMPRESA_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-
+	allIngresosActivos(){
+		return axios.get(`${INGRESO_API_URL}/list/activos`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            console.log(err)
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -27,16 +20,34 @@ class EmpresaService{
             }else{
                 Swal.fire(
                     'Algo ha salido mal',
-                    'No se puede cargar la lista de empresas' ,
+                     'No se puede cargar la lista de ingresos' ,
                     'error'
                     )
             }
         } );
-    }
+	}
 
-    empresa(id){
-        return axios.get(`${EMPRESA_API_URL}/${id}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+	allIngresos(){
+		return axios.get(`${INGRESO_API_URL}/list/all`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            console.log(err)
+            if(LoginService.isNoAutorizado(err)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }else{
+                Swal.fire(
+                    'Algo ha salido mal',
+                     'No se puede cargar la lista de ingresos' ,
+                    'error'
+                    )
+            }
+        } );
+	}
 
+	buscarIngreso(idIngreso){
+		return axios.get(`${INGRESO_API_URL}/${idIngreso}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err.response)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -51,10 +62,10 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
 
-    empresaCrear(empresa){
-        return axios.post(`${EMPRESA_API_URL}/crear`,empresa,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+	crearIngreso(ingreso){
+		return axios.post(`${INGRESO_API_URL}`,ingreso,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
                     res.data.mensaje,
@@ -75,10 +86,11 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
 
-    empresaActualizar(idEmpresa,idDireccion,empresa){
-        return axios.put(`${EMPRESA_API_URL}/${idEmpresa}/${idDireccion}`,empresa,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+
+	editarIngreso(ingreso,idIngreso){
+		return axios.put(`${INGRESO_API_URL}/${idIngreso}`,ingreso,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
                     res.data.mensaje,
@@ -99,10 +111,16 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
 
-    departamentosMunicipios(){
-        return axios.get(`${EMPRESA_API_URL}/departamento/municipios`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+	desactivarIngreso(idIngreso){
+		return axios.get(`${INGRESO_API_URL}/desactivar/${idIngreso}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    res.data.mensaje,
+                    'success'
+                )
+        } ).catch( (err)=> {
             if(LoginService.isNoAutorizado(err.response)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -117,9 +135,11 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
+  
+  obtenerIngresosActivos(){
+    return axios.get(`${INGRESO_API_URL}/list/activos`)
+  }
 }
 
-
-
-export default new EmpresaService();
+export default new IngresoService();
