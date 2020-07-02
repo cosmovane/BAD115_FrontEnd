@@ -60,9 +60,7 @@ class EmpleadoService{
     ultimoEmpleado(){
       return axios.get(`${EMPLEADO_API_URL}/ultimo`)
     }
-
 }
 
-
-
 export default new EmpleadoService();
+
