@@ -1,11 +1,12 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const BASE_API_URL = 'http://localhost:8000';
+const BASE_API_URL = 'http://10.10.10.115:8000';
 const BASE_API_PLANILLA = 'api/planilla';
 const EMPLEADO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/empleado`;
 const ESTADOCIVIL_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/estadocivil`;
 const GENERO_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/genero`;
+const PUESTOS_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/puestostrabajo`;
 
 class EmpleadoService{
 
@@ -15,6 +16,10 @@ class EmpleadoService{
 
     empleado(id){
         return axios.get(`${EMPLEADO_API_URL}/${id}`);
+    }
+
+    allPuestos(){
+        return axios.get( `${PUESTOS_API_URL}/`)
     }
 
     empleadoCrear(idGenero,idEstadocivil,idPuestotrabajo,empleado){
