@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-const BASE_API_URL = 'http://10.10.10.115:8000';
-const BASE_API_PLANILLA = 'api/planilla';
+//const BASE_API_URL = 'http://10.10.10.115:8000';
+//const BASE_API_PLANILLA = 'api/planilla';
+import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
+
 const EMPLEADO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/empleado`;
 const ESTADOCIVIL_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/estadocivil`;
 const GENERO_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/genero`;
@@ -63,8 +65,10 @@ class EmpleadoService{
         return axios.get(`${GENERO_API_URL}`);
     }
 
+    ultimoEmpleado(){
+      return axios.get(`${EMPLEADO_API_URL}/ultimo`)
+    }
 }
 
-
-
 export default new EmpleadoService();
+
