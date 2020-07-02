@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
 
 import EmpresaService from '../../Service/Empresa/EmpresaService';
 import LoginService from '../../Service/Login/LoginService';
@@ -52,6 +53,8 @@ export default class EmpresaComponent extends Component {
                             LoginService.hasPermiso('EMPRESA_CREATE') ? this.state.empresas.length > 0 ? <button className="btn btn-success" disabled ><FontAwesomeIcon icon={faPlus}/> Agregar</button> : <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                         }
                         {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
+
+                        <Link to="/periocidad/crear"><button className="btn btn-success">Periocidad</button></Link>
                     </div>
                     <table className="table">
                         <thead>

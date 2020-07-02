@@ -50,6 +50,16 @@ class MenuComponent extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+
+            <Nav.Link href="/planilla">Planilla</Nav.Link>
+              <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
+                <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+
             <Nav.Link href="/">Home</Nav.Link>
             {
               LoginService.hasPermiso('EMPRESA_READ') ? <Nav.Link href="/empresa">Empresa</Nav.Link> : ""
@@ -84,6 +94,7 @@ class MenuComponent extends Component {
               {
                 LoginService.hasPermiso('ROL_READ') ? <NavDropdown.Item href="/roles">Gestión roles</NavDropdown.Item> : ""
               }
+
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

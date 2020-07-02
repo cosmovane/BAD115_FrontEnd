@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import UnidadOrganizacionalService from '../../Service/UnidadOrganizacional/UnidadOrganizacionalService';
-
+import UnidadOrganizacionalService from '../../Service/UnidadOrganizacional/UnidadOrganizacionalService'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faEdit, faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faBan} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
@@ -35,8 +34,8 @@ class UnidadOrganizacionalComponent extends Component {
     }
 
     async refreshUnidadesOrganizacionales() {
-      const response = await UnidadOrganizacionalService.allUnidadesOrganizacionales()
-       const unidadesActivos = response.data.filter(
+      const response=await UnidadOrganizacionalService.allUnidadesOrganizacionales()
+      const unidadesActivos = response.data.filter(
         r => {
           if(r.estado){
             return {
@@ -58,7 +57,7 @@ class UnidadOrganizacionalComponent extends Component {
           <br />
           <h3> Unidades de la Empresa</h3>
           <div className="row">
-            <Link to="/departamentos/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
+            <Link to="/departamentos/crear"> <button className="btn btn-success">Agregar </button> </Link>
           </div>
           <br />
           <table className="table">
@@ -76,7 +75,14 @@ class UnidadOrganizacionalComponent extends Component {
                     if(unidadOrganizacional.estado)
                     return <tr key={unidadOrganizacional.idUnidadorganizacional}>
                       <td>{unidadOrganizacional.nombre}</td>
-                      <td>{unidadOrganizacional.unidadOrganizacionalSuperior}</td>
+                  <td>
+                  {
+                    this.state.unidadesOrganizacionales.map(unidadOrgaSup => 
+                      {if(unidadOrgaSup.idUnidadorganizacional == unidadOrganizacional.unidadOrganizacionalSuperior)return unidadOrgaSup.nombre 
+                        else return }
+                      )
+                  }
+                  </td>
                       <td>
                         <Link to={`/departamentos/editar/${unidadOrganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
                         <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(unidadOrganizacional.idUnidadorganizacional)} /></button>
@@ -90,9 +96,6 @@ class UnidadOrganizacionalComponent extends Component {
         </div>
       );
     }
-
-
-
 
     
 }

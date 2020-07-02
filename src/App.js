@@ -11,16 +11,21 @@ import HomeComponent from './Components/Home/Home';
 import ProfesionComponent from './Components/Profesion/Profesion';
 import ProfesionF from './Components/Profesion/ProfesionF';
 import PuestoTrabajoComponent from './Components/PuestoTrabajo/PuestoTrabajo'
-import PuestoTrabajoForm from './Components/PuestoTrabajo/PuestoTrabajoForm'
+import PuestoTrabajoDetalle from './Components/PuestoTrabajo/PuestoTrabajoDetalle'
+
 import EmpleadoComponent from './Components/Empleado/Empleado';
 import EmpleadoDetalleComponent from './Components/Empleado/EmpleadoDetalle';
+import DescuentoComponent from './Components/Descuento/Descuento'
+import DescuentoDetalle from './Components/Descuento/DescuentoDetalle'
+import Planilla from './Components/Planilla/Planilla'
 import CentroCostoComponent from './Components/CentroCosto/CentroCostos';
 import CentroCostoForm from './Components/CentroCosto/CentroCostoForm';
 
 
-
 import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/UnidadOrganizacional';
 import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
+import CalendarioTrabajo from './Components/CalendarioTrabajo/CalendarioTrabajo';
+import CalendarioTrabajoDetalle from './Components/CalendarioTrabajo/CalendarioTrabajoDetalle';
 
 import Ingresos from './Components/CatalogoIngreso/Ingresos';
 import IngresoForm from './Components/CatalogoIngreso/IngresoForm';
@@ -62,47 +67,22 @@ function App() {
       <Router>
        <GuardProvider guards={[requireLogin]} >
         <div>
+    
           <MenuComponent></MenuComponent>
-          {/*<Route exact path="/" component={Login} history ={'/home'}></Route>*/}
-		  {/* <Route exact path="/login" component={Login} history ={'/home'}></Route> */}
- 		  {/*<Route exact path="/home" component={HomeComponent}></Route>*/}
-		  {/*<Route exact path="/empresa" component={EmpresaComponent}></Route>*/}
-		  {/*<Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>*/}
-          {/*<Route exact path="/centro_costo" component={CentroCostoComponent}></Route>*/}
-		  {/*<Route path="/centro_costo/crear" component={CentroCostoForm}></Route>*/}
-
-		  {/*<Route path="/centro_costo_list/:id" render={(props)=><CentroCostoComponent {...props}/>}/>*/}
-          {/*<Route  path="/centro_costo/crear/:id" render={(props)=><CentroCostoForm {...props} crear={true}/>}/>*/}
-          {/*<Route  path="/centro_costo/editar/:id" render={(props)=><CentroCostoForm {...props} editar={true}/>}/>*/}
-
-          {/*<Route exact path="/roles" component={Roles}/>
-          <Route path="/rol/crear" component={RolForm}/>
-          <Route path="/rol/editar/:id" render={(props) =><RolForm {...props} editar={true}/>} />
-          <Route path="/rol/ver/:id" render={(props) =><RolVer {...props} ver={true}/>} />*/}
-
-           {/*<Route exact path="/usuarios" component={Usuarios}/>
-          <Route path="/usuario/crear" component={UsuarioForm} />
-          <Route path="/usuario/editar/:id" render={(props)=><UsuarioForm {...props} editar={true} />}/>
-          <Route path="/usuario/ver/:id" render={(props)=><UsuarioVer {...props} ver={true} />}/>
-          <Route path="/usuario/general/:id" render={(props)=><UsuarioGeneral {...props}/>}/>*/}
-
-          {/*<Route exact path="/departamentos" component={UnidadOrganizacionalComponent} />
-          <Route path="/departamentos/crear" component={UnidadOrganizacionalDetalle} />
-          <Route path="/departamentos/editar/:id" render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true}/>
-          }/>*/}
-
-          {/*<Route path="/profesion" component={ProfesionComponent} />
-          <Route path="profesion/crear" component={ProfesionF} />*/}
-
-          {/*<Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
-          <Route path="/puestotrabajo/crear" component={PuestoTrabajoForm} />
-          <Route path="/puestotrabajo/editar/:id"
-          render={ (props) =><PuestoTrabajoForm {...props} editar={true}
+    
+          <Route exact path="/periocidad" component={CalendarioTrabajo} />
+          <Route path="/periocidad/crear" component={CalendarioTrabajoDetalle} />
+          <Route path="/periocidad/editar/:id" 
+          render={ (props) =><CalendarioTrabajoDetalle {...props} editar={true}
           />
-          }/>*/}
-
-          {/*<Route exact path="/empleado" component={EmpleadoComponent} ></Route>
-          <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>*/}
+          }/>
+          
+          <Route exact path="/descuento" component={DescuentoComponent} />
+          <Route path="/descuento/crear" component={DescuentoDetalle} />
+          <Route path="/descuento/editar/:id"
+          render={ (props) => <DescuentoDetalle {...props} editar={true}/>}
+          />
+          <Route path="/planilla" component={Planilla}/>
 
 
           <GuardedRoute exact path="/" component={Login} />
@@ -149,7 +129,6 @@ function App() {
           <GuardedRoute path="/ingreso/crear" component={IngresoForm} meta={{ auth: true,permiso:'INGRESO_CREATE'}}/>
           <GuardedRoute path="/ingreso/editar/:id" render={(props) =><IngresoForm {...props} editar={true}/>} meta={{ auth: true,permiso:'INGRESO_UPDATE'}}/>
 
-          {/*<Route path="*" component={()=>"404 NOT FOUND"}/>*/}
         </div>
        </GuardProvider>
       </Router>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
 import LoginService from '../Login/LoginService';
+
 import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants';
 
 const INGRESO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/ingreso`;
@@ -136,7 +136,10 @@ class IngresoService{
             }
         } );
 	}
-
+  
+  obtenerIngresosActivos(){
+    return axios.get(`${INGRESO_API_URL}/list/activos`)
+  }
 }
 
 export default new IngresoService();
