@@ -131,6 +131,46 @@ desactivarCosto(idCosto){
     }
 } );
 }
+
+payCosto(){
+      return axios.get(`${EMPRESA_API_URL}/centro_costo/descontar/`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+    if (res.data.indice === -1) {
+        Swal.fire(
+        'Notificación!',
+        res.data.mensaje,
+        'info'
+        )
+    }else if(res.data.indice === 0){
+        Swal.fire(
+        'Buen trabajo!',
+        res.data.mensaje,
+        'success'
+        )
+    }else if(res.data.indice === 1){
+        Swal.fire(
+        title:'Buen trabajo!',
+        width: 900,
+        text:res.data.mensaje,
+        icon:'warning'
+        )
+    }
+    
+} ).catch( (err)=> {
+    if(LoginService.isNoAutorizado(err.response)){
+        Swal.fire(
+            'Algo ha salido mal',
+            'No tienes acceso a este recurso' ,
+            'error'
+            )
+    }else{
+        Swal.fire(
+            'Algo ha salido mal',
+            err.response.data.mensaje,
+            'error'
+            )
+    }
+} );
+}
 }
 
 export default new CentroCostoService();

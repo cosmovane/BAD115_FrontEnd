@@ -38,8 +38,11 @@ export default class IngresoForm extends Component{
 		let errors={}
 		if(!values.acronimo) errors.acronimo = 'Ingrese acrónimo de ingreso'
 		if(!values.nombre) errors.nombre = 'Ingrese nombre de ingreso'
-		if(!values.porcentajeIngreso) errors.porcentajeIngreso = 'Ingrese porcentaje de ingreso, solo numeros'
-		if(!porcentajeTest.test(values.porcentajeIngreso)) errors.porcentajeIngreso = 'Ingreso de numero con coincide con formato'
+		//if(!values.porcentajeIngreso) errors.porcentajeIngreso = 'Ingrese porcentaje de ingreso, solo numeros'
+		if(values.porcentajeIngreso){
+			if(!porcentajeTest.test(values.porcentajeIngreso)) errors.porcentajeIngreso = 'Ingreso de numero con coincide con formato';
+		}
+		
 	
 		return errors;
 	}
