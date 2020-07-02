@@ -13,8 +13,8 @@ class UnidadOrganizacionalDetalle extends Component {
             idUnidadorganizacional:this.props.match.params.id,
             unidadOrganizacionalSuperior: "",
             nombre: "",
-            unidadesOrganizacionales: [],
-            id_empresa: ""
+            unidadesOrganizacionales: []
+         //   id_empresa: ""
          //   empresas: []
         }
         this.onSubmit = this.onSubmit.bind(this)
@@ -28,14 +28,14 @@ class UnidadOrganizacionalDetalle extends Component {
         if (this.props.editar) {
             const id = this.props.location.pathname.split('/')[3]
             const unidadOrganizacional = await UnidadOrganizacionalService.obtenerUnidadOrganizacional(parseInt(id))
-            const {unidadOrganizacionalSuperior, nombre, id_empresa} = unidadOrganizacional.data
-            //const {unidadOrganizacionalSuperior, nombre} = unidadOrganizacional.data
+            //const {unidadOrganizacionalSuperior, nombre, id_empresa} = unidadOrganizacional.data
+            const {unidadOrganizacionalSuperior, nombre} = unidadOrganizacional.data
         //    //  const unidadOrganizacionalSuperior = unidadOrganizacional.data.unidadOrganizacionalSuperior
         //    // const nombre = unidadOrganizacional.data
         //    // const id_empresa = unidadOrganizacional.data.id_empresa
             this.setState({
-               unidadOrganizacionalSuperior, nombre, id_empresa
-                //unidadOrganizacionalSuperior, nombre
+               //unidadOrganizacionalSuperior, nombre, id_empresa
+                unidadOrganizacionalSuperior, nombre
             })
         }
     }
@@ -50,7 +50,7 @@ class UnidadOrganizacionalDetalle extends Component {
             idUnidadorganizacional: this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '',
             unidadOrganizacionalSuperior: values.unidadOrganizacionalSuperior,
             nombre: values.nombre,
-            id_empresa: values.id_empresa,
+            //id_empresa: values.id_empresa,
             estado:true,
             unidadmayor: values.unidadmayor
         }
@@ -77,13 +77,17 @@ class UnidadOrganizacionalDetalle extends Component {
         //let { unidadOrganizacionalSuperior, nombre, id_empresa } = this.state
         let { unidadOrganizacionalSuperior, nombre } = this.state
         const getUnidadSuperior = () => {
+            var x=0;
+            var y=0;
             const unidadesOrganizacionales = this.state.unidadesOrganizacionales;
             return(
                 <div>
                     <select className="form-control" onChange={(uni) => this.setState({unidadOrganizacionalSuperior: uni.target.value })}>
                         <option value='-1'>Seleccione departamento</option>
                         {
-                            unidadesOrganizacionales ? unidadesOrganizacionales.map(m => <option key={m.idUnidadorganizacional} value={m.idUnidadorganizacional}>{m.nombre} </option>) : <option>Seleccione un departamento</option>
+                            unidadesOrganizacionales ? unidadesOrganizacionales.map(m =>  m.estado ? 
+                                m.unidadOrganizacionalSuperior != unidadOrganizacionalSuperior ?
+                            <option key={m.idUnidadorganizacional} value={m.idUnidadorganizacional}>{m.nombre} </option> : y=1 : x=1) : <option>Seleccione un departamento</option>
                         }
                     </select>
                 </div>
@@ -117,13 +121,7 @@ class UnidadOrganizacionalDetalle extends Component {
                                 <label htmlFor="">Nombre</label>
                                 <Field className="form-control" type="text" placeholder="Nombre" name="nombre" />
                             </fieldset>
-                            <fieldset className="form-group">
-                                <select className="form-control" onChange={(e) => this.setState({ selectedOptionve: e.target.value })}>
-                                    
-                                </select>
-                                                       
-                            </fieldset>
-                                                        
+                                                                                  
 
                             <button className="btn btn-success" type="submit">Guardar</button>
                             <Link to="/departamentos"><button className="btn btn-danger">Regresar</button></Link>
