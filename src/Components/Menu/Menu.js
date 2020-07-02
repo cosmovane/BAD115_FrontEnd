@@ -4,6 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
+import Modal from 'react-modal';
 class MenuComponent extends Component {
     render(){
       return (
