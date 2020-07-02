@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import { faEdit,faBan,faPlus,faSave } from '@fortawesome/free-solid-svg-icons'
 import ProfesionService from '../../Service/Profesion/ProfesionService'
-
+import LoginService from '../../Service/Login/LoginService';
 
 class ProfesionComponent extends Component {
 
@@ -50,8 +50,8 @@ updateProfesionClicked(id){
                 <div className="container">
                     <div className="row">
                     {
-                            <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
-                        }
+                        LoginService.hasPermiso('PROFESION_CREATE') ? <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
+                    }
                     </div>
                     <table className="table">
                         <thead>
@@ -69,8 +69,11 @@ updateProfesionClicked(id){
                                             <td>{profesion.acronimo}</td>
                                             <td>{profesion.nombre}</td>
                                             <td>
-                                            <button className="btn btn-warning btn-sm" onClick={() => this.updateProfesionClicked(profesion.idProfesion)}><FontAwesomeIcon icon={faEdit}/></button>
-                                                </td>
+                                            {
+                                                LoginService.hasPermiso('PROFESION_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateProfesionClicked(profesion.idProfesion)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                            }
+                                            
+                                            </td>
                                         </tr>
                                 )
                             }

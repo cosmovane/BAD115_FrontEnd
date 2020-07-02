@@ -6,7 +6,7 @@ const inputStyle = {
   'width': '25em',
   'display': 'inline-block'
 }
-
+import LoginService from '../../Service/Login/LoginService';
 class DescuentoEmpleadoPorcentajeCero extends Component {
   // state = {
   //   descuentosEmplePorcentajeCero: []

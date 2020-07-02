@@ -11,7 +11,8 @@ import BoletaPagoService from '../../Service/BoletaPago/BoletaPagoService'
 import { Page, Text, Document, PDFDownloadLink, StyleSheet } from '@react-pdf/renderer'
 import Swal from 'sweetalert2';
 import IngresoService from '../../Service/CatalogoIngresoService/IngresoService'
-
+import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
+import LoginService from '../../Service/Login/LoginService';
 const InputField = ({ placeholder, name, deshabilitado }) => (
   <div>
     <input min="0" className="form-control" type="number" name={name} placeholder={placeholder} disabled={deshabilitado} />
@@ -324,7 +325,7 @@ class Planilla extends Component {
         })
       })
     })
-  }
+  } 
 
   guardarPlanilla = () => {
     const planilla = this.state.planilla.map(async (boleta, i) => {
@@ -388,6 +389,10 @@ class Planilla extends Component {
 
   }
 
+  pagarPlanilla = async () =>{
+    await CentroCostoService.payCosto();
+  }
+
   render() {
 
     return (
@@ -437,7 +442,7 @@ class Planilla extends Component {
           {({ loading }) => (loading ? 'Creando boletas...' : 'Obtener boletas')}
         </PDFDownloadLink>
 
-        <button className="btn btn-secondary btn-planilla" disabled={!this.state.planillaGuardada}>
+        <button className="btn btn-secondary btn-planilla" onDoubleClick={ () => this.pagarPlanilla()} disabled={!this.state.planillaGuardada}>
           Pagar planilla
         </button>
       </div>

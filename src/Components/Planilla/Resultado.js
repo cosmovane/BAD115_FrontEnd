@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Table from 'rc-table'
 import BoletaPagoService from '../../Service/BoletaPago/BoletaPagoService'
-
+import LoginService from '../../Service/Login/LoginService';
 const columns = [
   {
     title: 'ISSS',

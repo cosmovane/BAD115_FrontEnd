@@ -5,6 +5,7 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import Select from 'react-select'
 import Swal from 'sweetalert2'
 
+import LoginService from '../../Service/Login/LoginService';
 class CalendarioTrabajoDetalle extends Component{
 
     constructor(props){
