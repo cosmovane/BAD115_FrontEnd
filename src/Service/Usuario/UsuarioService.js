@@ -2,22 +2,15 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 import LoginService from '../Login/LoginService';
-
 import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
 
-const EMPRESA_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/empresa`;
+const USUARIO_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}`;
 
-// const headers = {
-//     'Content-Type': 'application/json'
-// }
+class UsuarioService{
 
-class EmpresaService{
-
-  
-    allEmpresas(){
-        console.log(LoginService.agregarAuthorizationHeader())
-        return axios.get(`${EMPRESA_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-
+	allUsuarios(){
+		return axios.get(`${USUARIO_API_URL}/users/list`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            console.log(err)
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -27,16 +20,15 @@ class EmpresaService{
             }else{
                 Swal.fire(
                     'Algo ha salido mal',
-                    'No se puede cargar la lista de empresas' ,
+                     'No se puede cargar la lista de usuarios' ,
                     'error'
                     )
             }
         } );
-    }
+	}
 
-    empresa(id){
-        return axios.get(`${EMPRESA_API_URL}/${id}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-
+	buscarUsuario(idUser){
+		return axios.get(`${USUARIO_API_URL}/user/${idUser}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err.response)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -51,10 +43,10 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
 
-    empresaCrear(empresa){
-        return axios.post(`${EMPRESA_API_URL}/crear`,empresa,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+	crearUsuario(usuario){
+		return axios.post(`${USUARIO_API_URL}/user`,usuario,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
                     res.data.mensaje,
@@ -75,10 +67,10 @@ class EmpresaService{
                     )
             }
         } );
-    }
+	}
 
-    empresaActualizar(idEmpresa,idDireccion,empresa){
-        return axios.put(`${EMPRESA_API_URL}/${idEmpresa}/${idDireccion}`,empresa,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+	editarUsuario(usuario,idUsuario){
+		return axios.put(`${USUARIO_API_URL}/user/${idUsuario}`,usuario,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
                 Swal.fire(
                     'Buen trabajo!',
                     res.data.mensaje,
@@ -99,10 +91,58 @@ class EmpresaService{
                     )
             }
         } );
+	}
+
+	desactivarUsuario(idUsuario){
+		return axios.get(`${USUARIO_API_URL}/user/desactivar/${idUsuario}`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    res.data.mensaje,
+                    'success'
+                )
+        } ).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err.response)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }else{
+                Swal.fire(
+                    'Algo ha salido mal',
+                    err.response.data.mensaje,
+                    'error'
+                    )
+            }
+        } );
+	}
+
+    buscarUsuarioGeneral(idUser){
+        return axios.get(`${USUARIO_API_URL}/user/general/${idUser}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err.response)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }else{
+                Swal.fire(
+                    'Algo ha salido mal',
+                    err.response.data.mensaje,
+                    'error'
+                    )
+            }
+        } );
     }
 
-    departamentosMunicipios(){
-        return axios.get(`${EMPRESA_API_URL}/departamento/municipios`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+    editarUsuarioGeneral(usuario,idUsuario){
+        return axios.put(`${USUARIO_API_URL}/user/general/${idUsuario}`,usuario,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+                Swal.fire(
+                    'Buen trabajo!',
+                    res.data.mensaje,
+                    'success'
+                )
+        } ).catch( (err)=> {
             if(LoginService.isNoAutorizado(err.response)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -120,6 +160,4 @@ class EmpresaService{
     }
 }
 
-
-
-export default new EmpresaService();
+export default new UsuarioService();

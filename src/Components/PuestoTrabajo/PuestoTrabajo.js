@@ -55,6 +55,7 @@ class PuestoTrabajoComponent extends Component {
       <div className="container">
         <h3> Puestos de Trabajo</h3>
         <div className="row">
+
           <Link to="/puestotrabajo/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus} />Agregar </button> </Link>
         </div>
         <br />
