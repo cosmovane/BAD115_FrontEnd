@@ -26,7 +26,7 @@ function App() {
     <div className="App">
       <Router>
         <div>
-          <MenuComponent></MenuComponent>
+          <MenuComponent />
           <Route exact path="/" component={HomeComponent}></Route>
           <Route exact path="/empresa" component={EmpresaComponent}></Route>
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>

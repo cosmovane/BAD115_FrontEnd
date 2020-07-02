@@ -10,22 +10,29 @@ import Alert from 'react-bootstrap/Alert'
 import BoletaPagoService from '../../Service/BoletaPago/BoletaPagoService'
 import { Page, Text, Document, PDFDownloadLink, StyleSheet } from '@react-pdf/renderer'
 import Swal from 'sweetalert2';
+import IngresoService from '../../Service/CatalogoIngresoService/IngresoService'
 
-const InputField = ({ placeholder, name, esServicioProfesional }) => (
+const InputField = ({ placeholder, name, deshabilitado }) => (
   <div>
-    <input min="0" className="form-control" type="number" name={name} placeholder={placeholder} disabled={esServicioProfesional} />
+    <input min="0" className="form-control" type="number" name={name} placeholder={placeholder} disabled={deshabilitado} />
   </div>
 )
 
-const CheckField = ({ esServicioProfesional }) => (
+const CheckField = ({ deshabilitado }) => (
   <div>
-    <FormCheck name="vacaciones" disabled={esServicioProfesional} />
+    <FormCheck name="vacaciones" disabled={deshabilitado} />
   </div>
+)
+
+const AlertaNoDiaPago = () => (
+  <Alert className="alerta-pago" variant="danger">
+    <b>Atención:</b> Hoy no es día de pago
+  </Alert>
 )
 
 const AlertaDiaPago = () => (
-  <Alert className="alerta-dia-pago" variant="danger">
-    <b>Atención:</b> Hoy no es día de pago
+  <Alert className="alerta-pago" variant="success">
+    Día de pago
   </Alert>
 )
 
@@ -39,32 +46,42 @@ const estilosPdf = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
   },
-  author: {
-    margin: 15,
+  empleado: {
+    marginTop: 15,
     fontSize: 12,
     textAlign: 'center',
   },
   subtitle: {
     fontSize: 15,
-    margin: 12,
+    marginBottom: 12,
     textAlign: 'center'
   },
   text: {
-    margin: 15,
     fontSize: 10,
     textAlign: 'center',
   },
-  header: {
-    fontSize: 12,
-    marginBottom: 20,
+  section: {
+    marginTop: 15,
+    fontSize: 11,
+    textAlign: 'center',
+    fontWeight: 'ultrabold'
+  },
+  datosEmpleado: {
+    fontSize: 9,
     textAlign: 'center',
     color: 'grey',
+  },
+  firma: {
+    fontSize: 11,
+    marginTop: 40,
+    textAlign: 'center'
   }
 })
 
-const Boletas = ({ planilla, periodo }) => (
+const Boletas = ({ planilla, periodo, empleados }) => (
   <Document>
-    {planilla.map((boleta) => {
+    {planilla.map((boleta, i) => {
+      const { departamento } = empleados[i]
       return (<Page style={estilosPdf.body} key={boleta.key}>
         <Text style={estilosPdf.title}>
           Boleta de pago
@@ -74,6 +91,47 @@ const Boletas = ({ planilla, periodo }) => (
         </Text>
         <Text style={estilosPdf.empleado}>
           Empleado: {boleta.empleado}
+        </Text>
+        <Text style={estilosPdf.datosEmpleado}>
+          {boleta.esServicioProfesional
+            ? 'Empleado por servicios profesionales'
+            : 'Empleado cotizante'}
+        </Text>
+        <Text style={estilosPdf.datosEmpleado}>
+          Departamento: {departamento}
+        </Text>
+        <Text style={estilosPdf.section}>
+          Detalle
+        </Text>
+        <Text style={estilosPdf.text}>
+          Salario base: {boleta.salarioBase}
+        </Text>
+        <Text style={estilosPdf.text}>
+          Salario nominal: {boleta.salarioNominal}
+        </Text>
+        <Text style={estilosPdf.section}>
+          Descuentos
+        </Text>
+        <Text style={estilosPdf.text}>
+          AFP: {boleta.afp}
+        </Text>
+        <Text style={estilosPdf.text}>
+          ISSS: {boleta.isss}
+        </Text>
+        <Text style={estilosPdf.text}>
+          Renta: {boleta.renta}
+        </Text>
+        <Text style={estilosPdf.text}>
+          Otros: {boleta.totalDescuentos}
+        </Text>
+        <Text style={estilosPdf.section}>
+          Pago
+        </Text>
+        <Text style={estilosPdf.text}>
+          Total pago: {boleta.salarioACobrar}
+        </Text>
+        <Text style={estilosPdf.firma}>
+          Firma del empleado: ________________
         </Text>
       </Page>)
     })
@@ -91,7 +149,8 @@ class Planilla extends Component {
     planilla: [],
     dias: ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
     meses: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    today: new Date()
+    today: new Date(),
+    planillaGuardada: false
   }
 
   async componentDidMount() {
@@ -115,6 +174,25 @@ class Planilla extends Component {
         }
       }
     )
+
+    const ingresos = (await IngresoService.obtenerIngresosActivos()).data
+    const columnasIngresos = _.remove(ingresos, (ingreso) => _.isNull(ingreso.porcentaje_ingreso)).map((ingreso) => {
+      const inputColumn = {
+        title: ingreso.nombre,
+        dataIndex: ingreso.acronimoIngresos,
+        key: ingreso.acronimoIngresos,
+        width: 100,
+        render: (v, row) => <InputField placeholder={ingreso.nombre} name={ingreso.acronimoIngresos.toLowerCase()} deshabilitado={
+          ingreso.acronimoIngresos === 'TV'
+            ? row.noEsDeVentas
+            : ingreso.nombre !== 'Bonos'
+              ? row.esServicioProfesional
+              : false
+        } />
+      }
+      return inputColumn
+    })
+
     const columnasDescuentos = _.flatMap(_.remove(descuentos,
       (descuento) => {
         return descuento.acronimo != 'AFP' && descuento.acronimo != 'ISSS'
@@ -156,49 +234,21 @@ class Planilla extends Component {
         key: 'salarioBase',
         width: 100,
       },
-      {
-        title: 'Horas extras',
-        dataIndex: 'horasExtra',
-        key: 'horasExtra',
-        width: 100,
-        render: (v, row) => <InputField placeholder={'Horas extra'} name={'horasExtra'} esServicioProfesional={row.esServicioProfesional} />
-      },
-      {
-        title: 'Horas de nocturnidad',
-        dataIndex: 'horasNocturnas',
-        key: 'horasNocturnas',
-        width: 100,
-        render: (v, row) => <InputField placeholder={'Nocturnidad'} name={'horasNocturnas'} esServicioProfesional={row.esServicioProfesional} />
-      },
-      {
-        title: 'Total de ventas',
-        dataIndex: 'ventas',
-        key: 'ventas',
-        width: 100,
-        render: (v, row) => <InputField placeholder={'Ventas'} name={'ventas'} esServicioProfesional={row.noEsDeVentas} />
-      },
-      {
-        title: 'Bonos',
-        dataIndex: 'bonos',
-        key: 'bonos',
-        width: 100,
-        render: () => <InputField placeholder={'Bonos'} name={'bonos'} />
-      },
+      ...columnasIngresos,
       {
         title: 'Vacaciones',
         dataIndex: 'vacaciones',
         key: 'vacaciones',
         width: 100,
-        render: (v, row) => <CheckField esServicioProfesional={row.noPuedeTomarVacaciones} />
-      },
-      {
-        title: 'Días festivos',
-        dataIndex: 'diasFestivos',
-        key: 'diasFestivos',
-        width: 100,
-        render: (v, row) => <InputField placeholder={'Días festivos'} name={'diasFestivos'} esServicioProfesional={row.esServicioProfesional} />
+        render: (v, row) => <CheckField deshabilitado={row.noPuedeTomarVacaciones} />
       },
       ...columnasDescuentos,
+      {
+        title: 'Préstamo',
+        dataIndex: 'prestamo',
+        key: 'prestamo',
+        width: 100,
+      }
       ]
     })
   }
@@ -211,7 +261,6 @@ class Planilla extends Component {
         }
       ), ['primernombre', 'segundonombre', 'apellidopaterno', 'apellidomaterno'], ['asc', 'asc', 'asc', 'asc'])
 
-
     this.setState({
       data: empleados.map(empleado => {
         return {
@@ -219,20 +268,23 @@ class Planilla extends Component {
           empleado: `${empleado.primernombre} ${empleado.segundonombre} ${empleado.apellidopaterno} ${empleado.apellidomaterno} ${empleado.apellidocasada}`,
           salarioBase: empleado.salario,
           esServicioProfesional: empleado.esServicioProfesional,
-          noEsDeVentas: _.isNull(empleado.id_unidadorganizacional) ? true : empleado.id_unidadorganizacional.idUnidadorganizacional === 8,
-          noPuedeTomarVacaciones: !empleado.tomarVacaciones
+          noEsDeVentas: _.isNull(empleado.id_unidadorganizacional) ? true : !empleado.id_unidadorganizacional.idUnidadorganizacional === 8,
+          noPuedeTomarVacaciones: !empleado.tomarVacaciones,
+          departamento: _.isNull(empleado.id_unidadorganizacional) ? ''
+            : empleado.id_unidadorganizacional.nombre,
+          prestamo: empleado.prestamo
         }
       })
     })
   }
 
   onSubmit = async () => {
-    const horasExtra = Array.from(document.getElementsByName('horasExtra'))
-    const horasNocturnas = Array.from(document.getElementsByName('horasNocturnas'))
-    const ventas = Array.from(document.getElementsByName('ventas'))
-    const bonos = Array.from(document.getElementsByName('bonos'))
+    const horasExtra = Array.from(document.getElementsByName('he'))
+    const horasNocturnas = Array.from(document.getElementsByName('hn'))
+    const ventas = Array.from(document.getElementsByName('tv'))
+    const bonos = Array.from(document.getElementsByName('bn'))
     const vacaciones = Array.from(document.getElementsByName('vacaciones'))
-    const diasFestivos = Array.from(document.getElementsByName('diasFestivos'))
+    const diasFestivos = Array.from(document.getElementsByName('df'))
     const comida = Array.from(document.getElementsByName('cmda'))
     const diasFaltados = Array.from(document.getElementsByName('dias'))
     const horasFaltadas = Array.from(document.getElementsByName('horas'))
@@ -275,10 +327,12 @@ class Planilla extends Component {
   }
 
   guardarPlanilla = () => {
-    const planilla = this.state.planilla.map(async (boleta) => {
-      const dia = new Date().getMonth()
-      const fecha = `${new Date().getFullYear()}-${dia < 10 ? `0${dia}` : dia}-${new Date().getDate()}`
+    const planilla = this.state.planilla.map(async (boleta, i) => {
+      const mes = new Date().getMonth()
+      const dia = new Date().getDate()
+      const fecha = `${new Date().getFullYear()}-${mes < 10 ? `0${mes + 1}` : mes + 1}-${dia < 10 ? `0${dia}` : dia}`
       const { salarioBase, salarioNominal, renta, isss, isssEmpleador, afp, afpEmpleador, key, salarioACobrar, esServicioProfesional, totalDescuentos } = boleta
+      const { aplicarVacaciones, bonos, diasFaltados, diasFestivos, horasExtra, horasFaltadas, horasNocturnas, ventas, otrosDescuentos } = this.state.datosEmpleados[i]
 
       const boletaPago = {
         fecha,
@@ -294,11 +348,22 @@ class Planilla extends Component {
           afp,
           'afpEmpleador': _.isNull(afpEmpleador) ? 0 : afpEmpleador,
           'pago': salarioACobrar,
-          'otrosDescuentos': totalDescuentos
+          'otrosDescuentos': totalDescuentos,
+          horasExtra,
+          'horasNocturnidad': horasNocturnas,
+          'totalVentas': ventas,
+          bonos,
+          diasFestivos,
+          'vacaciones': aplicarVacaciones,
+          'comida': otrosDescuentos,
+          'diasPerdidos': diasFaltados,
+          'horasADescontar': horasFaltadas
         }],
         'estado': true,
-        'idEmpleado': key
+        'idEmpleado': key,
+        'pagado': false
       }
+      console.log("guardarPlanilla -> boletaPago", boletaPago)
       return await BoletaPagoService.guardarBoleta(boletaPago)
     })
 
@@ -306,9 +371,10 @@ class Planilla extends Component {
       Swal.fire({
         icon: 'success',
         title: 'Buen trabajo!',
-        html: 'Se ha guardado la planilla',
-        timer: 5000,
-        timerProgressBar: true,
+        html: 'Se ha guardado la planilla <br/> <b>Dar click en el botón Pagar planilla</b>',
+      })
+      this.setState({
+        planillaGuardada: true
       })
     }).catch(() => {
       Swal.fire({
@@ -327,15 +393,15 @@ class Planilla extends Component {
     return (
       <div>
         {this.state.today.getDay() === 6 || this.state.today.getDay() === 7
-          ? <AlertaDiaPago />
+          ? <AlertaNoDiaPago />
           : this.state.periodicidad === 'quincenal'
             ? (this.state.today.toDateString() === new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toDateString()
               || this.state.today.getDate() === 15
-              ? ''
-              : <AlertaDiaPago />)
+              ? <AlertaDiaPago />
+              : <AlertaNoDiaPago />)
             : (this.state.today.toDateString() === new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toDateString()
-              ? ''
-              : <AlertaDiaPago />)
+              ? <AlertaDiaPago />
+              : <AlertaNoDiaPago />)
         }
 
         <h3>Planilla {this.state.periodicidad} {this.state.periodicidad !== 'quincenal' ? ''
@@ -361,14 +427,19 @@ class Planilla extends Component {
         <PDFDownloadLink
           className={`btn btn-info btn-planilla ${this.state.pagos.length > 0 ? '' : 'disabled'}`}
           id="obtenerBoletasBtn"
-          document={<Boletas planilla={this.state.planilla} 
-            periodo = {`${this.state.periodicidad !== 'quincenal' ? 'Mes'
-            : new Date().getDate() < 15 ? 'Quincena 1' : 'Quincena 2'} de ${this.state.meses[new Date().getMonth()]} ${new Date().getFullYear()}`}
+          document={<Boletas planilla={this.state.planilla}
+            periodo={`${this.state.periodicidad !== 'quincenal' ? 'Mes'
+              : new Date().getDate() < 15 ? 'Quincena 1' : 'Quincena 2'} de ${this.state.meses[new Date().getMonth()]} ${new Date().getFullYear()}`}
+            empleados={this.state.data}
           />}
           fileName={`boletas ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}.pdf`}
         >
           {({ loading }) => (loading ? 'Creando boletas...' : 'Obtener boletas')}
         </PDFDownloadLink>
+
+        <button className="btn btn-secondary btn-planilla" disabled={!this.state.planillaGuardada}>
+          Pagar planilla
+        </button>
       </div>
     )
   }

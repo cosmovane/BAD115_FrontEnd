@@ -8,7 +8,7 @@ const columns = [
     dataIndex: 'isss',
     key: 'isss',
     width: 100,
-    render: (value) => <div style={{ height: '48px', maxHeight: '48px', color: 'black' }}>{value}</div>
+    render: (value) => <div style={{ height: '46.5px', maxHeight: '46.5px', color: 'black' }}>{value}</div>
   },
   {
     title: 'ISSS Empleador',

@@ -37,11 +37,15 @@ form-control {
   margin: 0.5%;
 }
 
-.alerta-dia-pago{
+.alerta-pago{
   padding: 1px !important;
 }
 
 .disabled{
   pointer-events: none;
   cursor: default;
+}
+
+.btn-light{
+  border-color: black !important;
 }
