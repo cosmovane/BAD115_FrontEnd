@@ -21,6 +21,7 @@
     "multiselect-react-dropdown": "^1.5.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0",
+    "react-datepicker": "^3.0.0",
     "react-clock": "^2.4.0",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
