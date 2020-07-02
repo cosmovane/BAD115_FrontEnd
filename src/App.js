@@ -14,6 +14,8 @@ import PuestoTrabajoComponent from './Components/PuestoTrabajo/PuestoTrabajo'
 import PuestoTrabajoDetalle from './Components/PuestoTrabajo/PuestoTrabajoDetalle'
 
 import EmpleadoComponent from './Components/Empleado/Empleado';
+import ComisionComponent from './Components/Comision/Comision';
+import ComisionDetalleComponent from './Components/Comision/ComisionDetalle';
 import EmpleadoDetalleComponent from './Components/Empleado/EmpleadoDetalle';
 import DescuentoComponent from './Components/Descuento/Descuento'
 import DescuentoDetalle from './Components/Descuento/DescuentoDetalle'
@@ -69,6 +71,29 @@ function App() {
         <div>
     
           <MenuComponent></MenuComponent>
+
+          <Route exact path="/" component={HomeComponent}></Route>
+          <Route exact path="/empresa" component={EmpresaComponent}></Route>
+          <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
+
+          <Route exact path="/profesion" component={ProfesionComponent} />
+          <Route path="/profesion/crear" component={ProfesionF} ></Route>
+          <Route path="/profesion/:id" component={ProfesionF} ></Route>
+
+          <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
+          <Route path="/puestotrabajo/crear" component={PuestoTrabajoForm} />
+          <Route path="/puestotrabajo/editar/:id"
+          render={ (props) =><PuestoTrabajoForm {...props} editar={true}
+          />
+          }/>
+
+          <Route exact path="/empleado" component={EmpleadoComponent} ></Route>
+          <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>
+
+          <Route exact path="/comision" component={ComisionComponent} ></Route>
+          
+          <Route path="/comision/:id" component={ComisionDetalleComponent} ></Route>
+
     
           <Route exact path="/periocidad" component={CalendarioTrabajo} />
           <Route path="/periocidad/crear" component={CalendarioTrabajoDetalle} />
@@ -128,6 +153,7 @@ function App() {
           <GuardedRoute exact path="/ingresos" component={Ingresos} meta={{ auth: true,permiso:'INGRESO_READ'}}/>
           <GuardedRoute path="/ingreso/crear" component={IngresoForm} meta={{ auth: true,permiso:'INGRESO_CREATE'}}/>
           <GuardedRoute path="/ingreso/editar/:id" render={(props) =><IngresoForm {...props} editar={true}/>} meta={{ auth: true,permiso:'INGRESO_UPDATE'}}/>
+
 
         </div>
        </GuardProvider>
