@@ -18,6 +18,7 @@ class MenuComponent extends Component {
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/empresa">Empresa</Nav.Link>
             <Nav.Link href="/empleado">Empleados</Nav.Link>
+            <Nav.Link href="/comision">Comision</Nav.Link>
             <Nav.Link href="/profesion">Profesiones</Nav.Link>
             <Nav.Link href="/departamentos">Departamentos</Nav.Link>
 
