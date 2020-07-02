@@ -23,7 +23,7 @@ export default class EmpresaComponent extends Component {
         EmpresaService.allEmpresas()//HARDCODED
             .then(
                 response => {
-                    console.log(response);
+                 //   console.log(response);
                     this.setState({ empresas: response.data });
                 }
             )
@@ -55,10 +55,10 @@ export default class EmpresaComponent extends Component {
                         <thead>
                             <tr>
                                 {/* <th>ID</th> */}
-                                <th>Representante</th>
-                                <th>NIT</th>
-                                <th>NIC</th>
-                                <th></th>
+                                <th style={{ width: '15%' }}>Representante</th>
+                                <th style={{ width: '55%' }}>NIT</th>
+                                <th style={{ width: '20%' }}>NIC</th>
+                                <th style={{ width: '10%' }}>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -20,9 +20,6 @@ const inputLengthTest = /^.{5,100}$/;
 const pageLengthTest =/^.{5,50}$/;
 const telefonoTest = /^\d{4,4}(-\d{4,4})?$/i;
 const paginaWebTest = /(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-let options = [];
-let valorD=0;
-let valorM=0;
 class EmpresaDetalleComponent extends Component {
 
     constructor(props) {
@@ -44,9 +41,7 @@ class EmpresaDetalleComponent extends Component {
             selectedOption: 0,
             selectedOptionMunicipio: 0,
             departamentoEsp: '',
-            minucipio: '',
-            redirect: false,
-       
+            municipio: '',
         };
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -56,7 +51,6 @@ class EmpresaDetalleComponent extends Component {
     componentDidMount() {
         console.log(this.state.idEmpresa)
         EmpresaService.departamentosMunicipios().then(response => {
-            console.log(response);
             this.setState({
                 departamento: response.data,
             });
@@ -99,9 +93,7 @@ class EmpresaDetalleComponent extends Component {
             departamento: this.state.selectedOption,
             municipio: this.state.selectedOptionMunicipio
         }
-        console.log("ID:" + this.state.idEmpresa)
-
-        // console.log(empresa);
+        
         if (this.state.idEmpresa == -1) {
             console.log(empresa);
             EmpresaService.empresaCrear(empresa).then(() => this.props.history.push('/empresa'));
@@ -112,8 +104,6 @@ class EmpresaDetalleComponent extends Component {
 
     validate(values) {
         let errors = {}
-        console.log("DEPARTAMENTO:" + this.state.selectedOption);
-        console.log("MUNICIPIO:" + this.state.selectedOptionMunicipio);
         if(this.state.selectedOption == 0 || this.state.selectedOptionMunicipio == 0 ){
             Swal.fire({
                 icon: 'error',
@@ -186,7 +176,6 @@ class EmpresaDetalleComponent extends Component {
         let { representante, idEmpresa, nit, nic, paginaweb, telefono, email, page, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio } = this.state
         const getMunicipios = () => {
             const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento == this.state.selectedOption)[0];
-            // console.log()
             return (
                 <div>
                     <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>
@@ -217,10 +206,6 @@ class EmpresaDetalleComponent extends Component {
                                 {
                                     (props) => (
                                         <Form className="form">
-                                            {/* <fieldset className="form-group">
-                                        <label>Id</label>
-                                        <Field className="form-control"  style={inputStyle}  type="text" name="idEmpresa" disabled />
-                                    </fieldset> */}
                                             <Row>
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
@@ -321,22 +306,18 @@ class EmpresaDetalleComponent extends Component {
                                                 </Col>
                                             </Row>
                                             <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/> Guardar</button>
-                                                {/* {this.renderRedirect()}
-                                                <button className="btn btn-danger" onClick={this.setRedirect}>Regresar</button> */}
                                             <Link to="/empresa"><button className="btn btn-danger"><FontAwesomeIcon icon={faReply}/> Regresar</button></Link>
                                             
                                         </Form>
                                     )
                                 }
                             </Formik>
-
                         </Container>
                     </Card.Body>
                 </Card>
             </div >
         );
     }
-
 }
 
 export default EmpresaDetalleComponent;
