@@ -133,7 +133,7 @@ desactivarCosto(idCosto){
 }
 
 payCosto(){
-      return axios.get(`${EMPRESA_API_URL}/centro_costo/descontar/`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
+      return axios.get(`${EMPRESA_API_URL}/centro_costo/descontar`,{headers: LoginService.agregarAuthorizationHeader()}).then( (res)=>{
     if (res.data.indice === -1) {
         Swal.fire(
         'Notificación!',
@@ -147,12 +147,12 @@ payCosto(){
         'success'
         )
     }else if(res.data.indice === 1){
-        Swal.fire(
-        title:'Buen trabajo!',
+        Swal.fire({
+            title:'Buen trabajo!',
         width: 900,
         text:res.data.mensaje,
         icon:'warning'
-        )
+        })
     }
     
 } ).catch( (err)=> {

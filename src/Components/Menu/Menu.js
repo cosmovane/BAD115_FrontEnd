@@ -51,22 +51,14 @@ class MenuComponent extends Component {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-
-            <Nav.Link href="/planilla">Planilla</Nav.Link>
-              <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
-                <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-
-            <Nav.Link href="/">Home</Nav.Link>
             {
               LoginService.hasPermiso('EMPRESA_READ') ? <Nav.Link href="/empresa">Empresa</Nav.Link> : ""
             }
             { 
               LoginService.hasPermiso('EMPLEADO_READ') ? <Nav.Link href="/empleado">Empleados</Nav.Link> : ""
+            }
+            { 
+              LoginService.hasPermiso('COMISION_READ') ? <Nav.Link href="/comision">Comisión</Nav.Link> : ""
             }
             {
               LoginService.hasPermiso('PROFESION_READ') ?<Nav.Link href="/profesion">Profesiones</Nav.Link> : ""
@@ -87,7 +79,7 @@ class MenuComponent extends Component {
                 LoginService.hasPermiso('INGRESO_READ') ? <NavDropdown.Item href="/ingresos">Gestión tipos ingresos</NavDropdown.Item> : ""
               }
               {
-                LoginService.hasPermiso('TIPO_DESCUENTO_READ') ? <NavDropdown.Item href="">Gestión tipos descuentos</NavDropdown.Item> : ""
+                LoginService.hasPermiso('DESCUENTO_READ') ? <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item> : ""
               }
               {
                  LoginService.hasPermiso('USER_READ') ? <NavDropdown.Item href="/usuarios">Gestión usuario</NavDropdown.Item> : ""

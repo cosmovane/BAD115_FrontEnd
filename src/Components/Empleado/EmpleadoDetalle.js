@@ -13,7 +13,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./editarEmpleado.css";
-
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
     'width': '25em',
 }
