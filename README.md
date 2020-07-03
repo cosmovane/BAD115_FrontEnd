@@ -5,4 +5,4 @@ BAD115
 Para correr la aplicación:
 
 - `npm install`
-- `npm run start`
+- `npm start`
