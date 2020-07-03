@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Swal from 'sweetalert2';
+
 
 import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
 
@@ -24,9 +24,12 @@ class ComisionService{
 
     }
 
-    comisionActualizar(id, comision){
+    comisionActualizar(comision){
 
-         return  axios.put(`${COMISION_API_URL}/${id}`,comision)
+        const test=axios.put(`${COMISION_API_URL}/editar`,comision)
+        console.log(test)
+        console.log(`${COMISION_API_URL}/editar`)
+         return  test
     }
 
 

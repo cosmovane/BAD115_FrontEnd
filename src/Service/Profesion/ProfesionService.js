@@ -25,8 +25,8 @@ class ProfesionService {
         return test
       }
     
-      modificarProfesion(id, profesion){
-        return axios.put(`${PROFESION_API_URL}/${id}`, profesion)
+      modificarProfesion(profesion){
+        return axios.put(`${PROFESION_API_URL}`, profesion)
       }
     
 

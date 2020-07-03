@@ -26,7 +26,6 @@ function App() {
           <Route path="/empresa/:id" component={EmpresaDetalleComponent} ></Route>
 
           <Route exact path="/profesion" component={ProfesionComponent} />
-          <Route path="/profesion/crear" component={ProfesionF} ></Route>
           <Route path="/profesion/:id" component={ProfesionF} ></Route>
 
           <Route exact path="/puestotrabajo" component={PuestoTrabajoComponent} />
@@ -40,7 +39,7 @@ function App() {
           <Route path="/empleado/:id" component={EmpleadoDetalleComponent} ></Route>
 
           <Route exact path="/comision" component={ComisionComponent} ></Route>
-          
+
           <Route path="/comision/:id" component={ComisionDetalleComponent} ></Route>
 
         </div>

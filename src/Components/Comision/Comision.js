@@ -11,7 +11,7 @@ export default class ComisionComponent extends Component {
             comisiones: [],
         }
 
-        //this.refreshComisiones = this.refreshComisiones.bind(this)
+        this.refreshComisiones = this.refreshComisiones.bind(this)
 
 
        this.updateComisionClicked = this.updateComisionClicked.bind(this)
@@ -26,7 +26,7 @@ export default class ComisionComponent extends Component {
         const response = await ComisionService.allComisiones()
             .then(
                 response => {
-                 // console.log(response);
+                    console.log(response);
                     this.setState({ comisiones: response.data });
                 }
             )
