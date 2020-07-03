@@ -104,10 +104,10 @@ class EmpleadoDetalleComponent extends Component {
                 idPuestotrabajo: response.data.id_puestotrabajo ? response.data.id_puestotrabajo.idPuestotrabajo : -1 ,
 
 
-                // colonia: response.data.id_direccion.colonia,
-                // descripcion: response.data.id_direccion.descripcion,
-                // selectedOption: response.data.id_direccion.id_departmento.idDepartmento,
-                // selectedOptionMunicipio: response.data.id_direccion.id_municipio.idMunicipio,
+                 colonia: response.data.id_direccion.colonia,
+                 descripcion: response.data.id_direccion.descripcion,
+                 selectedOption: response.data.id_direccion.id_departmento.idDepartmento,
+                 selectedOptionMunicipio: response.data.id_direccion.id_municipio.idMunicipio,
                 // departamentoEsp: response.data.id_direccion.id_departmento.nombre,
                 // municipio: response.data.id_direccion.id_municipio.nombre,
             })).then(response => this.loguear())
@@ -117,7 +117,7 @@ class EmpleadoDetalleComponent extends Component {
     }
 
     loguear() {
-       // console.log(this.state);
+        console.log(this.state);
     }
 
     setCheckbox(e) {
@@ -156,16 +156,15 @@ class EmpleadoDetalleComponent extends Component {
         }
 
         if (this.state.idEmpleado === '-1' ) {
-         //   console.log(empleado);
-            var promesa = EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then(() => this.props.history.push('/empleado'));
-         //   console.log(promesa.isResolved);
+            EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then((e) => this.props.history.push('/empleado'));
         } else {
             empleado.idEmpleado = values.idEmpleado;
-            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then(() => this.props.history.push('/empleado'));
+            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then((e) => this.props.history.push('/empleado'));
         }
-        console.log(this.state);
+
 
     }
+
 
     validate(values) {
         // console.log(this.state);
@@ -278,7 +277,7 @@ class EmpleadoDetalleComponent extends Component {
                         }
 
                         {
-                            municipios ? municipios.municipiosByIdDepartmento.map(m => <option key={m.nombre} value={m.idMunicipio}>{m.nombre}</option>) : <option>Seleccione departamento</option>
+                            municipios ? municipios.municipiosByIdDepartmento.map(m => <option key={m.nombre} value={m.idMunicipio} selected={this.state.selectedOptionMunicipio == m.idMunicipio} >{m.nombre}</option>) : <option>Seleccione departamento</option>
                         }
                     </select>
 
@@ -308,7 +307,7 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="primernombre" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Primer Nombre</label>
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Primer Nombre</label>
                                                         {isEditar ? (
                                                             <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }} onChange={(e) => this.setState({primernombre: e.value})}/>
                                                                     ) : (
@@ -344,7 +343,7 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="fechanacimiento" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Fecha de Nacimiento</label>
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Fecha de Nacimiento</label>
                                                         {isEditar ? (
                                                         <DatePicker
                                                             className="form-control form-element-left" name="fechanacimiento"
@@ -363,7 +362,7 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidopaterno" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Apellido Paterno</label>
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Apellido Paterno</label>
                                                         {isEditar ? (
                                                         <Field className="form-control" style={inputStyle} type="text" name="apellidopaterno" onChange={(e) => this.setState({apellidopaterno: e.value})}/>
                                                                     )  : (
@@ -372,7 +371,7 @@ class EmpleadoDetalleComponent extends Component {
                                                         </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-                                                    <label className='form-element-left' >Genero</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Genero</label>
                                                     { getGeneros() }
                                                 </Col>
                                             </Row>
@@ -390,7 +389,7 @@ class EmpleadoDetalleComponent extends Component {
                                                         </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-                                                    <label className='form-element-left' >Estado Civil</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Estado Civil</label>
                                                     { getEstadosCiviles()  }
                                                 </Col>
                                             </Row>
@@ -399,7 +398,7 @@ class EmpleadoDetalleComponent extends Component {
                                         <hr/>
                                             <Row>
                                                 <Col sm={6}>
-                                                    <label className='form-element-left' >Puesto Asignado</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Puesto Asignado</label>
                                                     { getPuestos()  }
                                                 </Col>
                                                 <Col sm={4}>
@@ -432,7 +431,7 @@ class EmpleadoDetalleComponent extends Component {
                                             <Row>
                                                 <Col>
                                                     <fieldset className="form-group">
-                                                        <label className='form-element-left'>Direcci&oacute;n</label>
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Direcci&oacute;n</label>
                                                         <ErrorMessage name="colonia" component="span" className="alert alert-danger" />
                                                         {isEditar? (
                                                             <Field className="form-control" style={inputStyle} type="text" name="colonia" onChange={(e)=>this.setState({colonia: e.target.value})}/>
@@ -444,7 +443,7 @@ class EmpleadoDetalleComponent extends Component {
                                                 </Col>
                                                 <Col>
                                                     <fieldset className="form-group">
-                                                        <label className='form-element-left'>Referencias</label>
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Referencias</label>
                                                         <ErrorMessage name="descripcion" component="span" className="alert alert-danger" />
                                                         {isEditar ? (
                                                             <Field className="form-control" style={inputStyle} type="text" name="descripcion" placeholder="Descripción" onChange={(e) => this.setState({descripcion: e.target.value})}/>
@@ -457,19 +456,19 @@ class EmpleadoDetalleComponent extends Component {
                                             <Row>
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
-                                                         <label className='form-element-left'>Departamento</label>
+                                                         <label className='form-element-left'><span className='asterisco-red'>*</span>Departamento</label>
                                                         <select className="form-control" onChange={(e) => this.setState({ selectedOption: e.target.value })} >
                                                             {
                                                                 selectedOption > 0 ? <option value={selectedOption}>{departamentoEsp}</option> : <option value="ND">Seleccionar</option>}
 
-                                                            {this.state.departamento.map(dep => <option key={dep.nombre} value={dep.idDepartmento}>{dep.nombre}</option>)}
+                                                            {this.state.departamento.map(dep => <option key={dep.nombre} value={dep.idDepartmento}  selected={this.state.selectedOption == dep.idDepartmento}>{dep.nombre}</option>)}
                                                         </select>
 
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
-                                                        <label className='form-element-left'>Municipio</label>
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Municipio</label>
                                                         {getMunicipios()}
                                                     </fieldset>
                                                 </Col>

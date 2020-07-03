@@ -42,7 +42,7 @@ class EmpleadoService{
             }else {
             Swal.fire(
                 'Algo ha salido mal',
-                'El registro no pudo crearse',
+                'Asegurese de llenar todos los campos obligatorios.',
                 'error'
             )
           }
