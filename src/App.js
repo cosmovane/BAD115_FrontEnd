@@ -111,7 +111,7 @@ function App() {
           <GuardedRoute path="/departamentos/crear" component={UnidadOrganizacionalDetalle} meta={{ auth: true,permiso:'UNIDAD_ORGANIZACIONAL_CREATE'}}/>
           <GuardedRoute path="/departamentos/editar/:id" render={ (props) =><UnidadOrganizacionalDetalle {...props} editar={true}/>} meta={{ auth: true,permiso:'UNIDAD_ORGANIZACIONAL_UPDATE'}}/>
 
-          <GuardedRoute path="/profesion" component={ProfesionComponent} meta={{ auth: true,permiso:'PROFESION_READ'}}/>
+          <GuardedRoute exact path="/profesion" component={ProfesionComponent} meta={{ auth: true,permiso:'PROFESION_READ'}}/>
           <GuardedRoute path="profesion/crear" component={ProfesionF} meta={{ auth: true,permiso:'PROFESION_CREATE'}}/>
           <GuardedRoute path="/profesion/:id" component={ProfesionF} meta={{ auth: true,permiso:'PROFESION_READ'}}/>
           

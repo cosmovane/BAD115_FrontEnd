@@ -13,15 +13,15 @@ const PUESTOS_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/puestostrabajo`;
 class EmpleadoService{
 
     allEmpleados(){
-        return axios.get(`${EMPLEADO_API_URL}`);
+        return axios.get(`${EMPLEADO_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()});
     }
 
     empleado(id){
-        return axios.get(`${EMPLEADO_API_URL}/${id}`);
+        return axios.get(`${EMPLEADO_API_URL}/${id}`,{headers: LoginService.agregarAuthorizationHeader()});
     }
 
     allPuestos(){
-        return axios.get( `${PUESTOS_API_URL}/`)
+        return axios.get( `${PUESTOS_API_URL}/`,{headers: LoginService.agregarAuthorizationHeader()})
     }
 
     empleadoCrear(idGenero,idEstadocivil,idPuestotrabajo,empleado){

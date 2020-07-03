@@ -7,7 +7,7 @@ import Image from 'react-bootstrap/Image';
 import Modal from 'react-modal';
 import  { Redirect,withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2';
-import Clock from 'react-clock';
+import Clock from 'react-live-clock';
 import { Link } from 'react-router-dom';
 import LoginService from '../../Service/Login/LoginService';
 
@@ -69,6 +69,9 @@ class MenuComponent extends Component {
            {
             LoginService.hasPermiso('PUESTO_TRABAJO_READ') ? <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link> : ""
            }
+           {
+            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
+           }
 
             
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
@@ -91,8 +94,9 @@ class MenuComponent extends Component {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-         <Clock
-          value={this.state.date}
+         <Clock 
+           format={'h:mm:ssa'}
+           style={{fontSize: '1.5em', color: 'white'}}
           />
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
           {
