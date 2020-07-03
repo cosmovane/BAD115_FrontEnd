@@ -30,9 +30,6 @@ class UnidadOrganizacionalDetalle extends Component {
             const unidadOrganizacional = await UnidadOrganizacionalService.obtenerUnidadOrganizacional(parseInt(id))
             //const {unidadOrganizacionalSuperior, nombre, id_empresa} = unidadOrganizacional.data
             const {unidadOrganizacionalSuperior, nombre} = unidadOrganizacional.data
-        //    //  const unidadOrganizacionalSuperior = unidadOrganizacional.data.unidadOrganizacionalSuperior
-        //    // const nombre = unidadOrganizacional.data
-        //    // const id_empresa = unidadOrganizacional.data.id_empresa
             this.setState({
                //unidadOrganizacionalSuperior, nombre, id_empresa
                 unidadOrganizacionalSuperior, nombre
@@ -42,9 +39,9 @@ class UnidadOrganizacionalDetalle extends Component {
 
     async onSubmit(values) {
         if(values.unidadOrganizacionalSuperior){
-            values.unidadmayor=true
-        } else{
             values.unidadmayor=false
+        } else{
+            values.unidadmayor=true
         }
         const unidadOrganizacional = {
             idUnidadorganizacional: this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '',
