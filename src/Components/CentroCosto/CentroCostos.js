@@ -78,6 +78,10 @@ export default class CentroCostoComponent extends Component{
         })
     }
 
+     pagarPlanilla = async () =>{
+            await CentroCostoService.payCosto();
+        }
+
 	render(){
         let {id} = this.state
 		return(
@@ -91,10 +95,14 @@ export default class CentroCostoComponent extends Component{
                             {
                                 LoginService.hasPermiso('CENTRO_COSTO_CREATE') ? <button className="btn btn-success" onClick={() => this.costoForm()}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                             }
-                           
                    
                         </Col>
-                        <Col sm={4}>
+                        <Col sm={2}>
+                            <button className="btn btn-secondary btn-planilla" onDoubleClick={ () => this.pagarPlanilla()}>
+                                Pagar planilla
+                            </button>
+                        </Col>
+                        <Col sm={2}>
                            {/* <button className="btn btn-danger" onClick={() => this.costoListAtras()}><FontAwesomeIcon icon={faArrowLeft}/>Regresar</button>*/}
                             <Link to={'/centro_costo_list/-1'}><button className="btn btn-danger"><FontAwesomeIcon icon={faArrowLeft} />Regresar</button></Link>
                         </Col>

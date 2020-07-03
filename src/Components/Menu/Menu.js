@@ -52,6 +52,9 @@ class MenuComponent extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
             {
+            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
+            }
+            {
               LoginService.hasPermiso('EMPRESA_READ') ? <Nav.Link href="/empresa">Empresa</Nav.Link> : ""
             }
             { 
@@ -69,10 +72,6 @@ class MenuComponent extends Component {
            {
             LoginService.hasPermiso('PUESTO_TRABAJO_READ') ? <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link> : ""
            }
-           {
-            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
-           }
-
             
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
               {
