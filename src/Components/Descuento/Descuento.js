@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faBan, faPlus } from '@fortawesome/free-solid-svg-icons'
 import DescuentoService from '../../Service/Descuento/DescuentoService'
 import Swal from 'sweetalert2';
-
+import LoginService from '../../Service/Login/LoginService';
 class DescuentoComponent extends Component {
   constructor(props) {
     super(props)
@@ -68,7 +68,9 @@ class DescuentoComponent extends Component {
         <Container>
           <h3>Descuentos</h3>
           <div className="row">
-            <Link to="/descuento/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus} />Agregar </button> </Link>
+          {
+             LoginService.hasPermiso('DESCUENTO_CREATE') ? <Link to="/descuento/crear"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus} />Agregar </button> </Link> : ""
+          }
           </div>
           <br />
           <Table>
@@ -97,8 +99,12 @@ class DescuentoComponent extends Component {
                         })()
                         }
                         <td>
-                          <Link to={`/descuento/editar/${descuento.idDescuento}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                          <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={() => this.desactivar(descuento.idDescuento)}  /></button>
+                        {
+                          LoginService.hasPermiso('DESCUENTO_UPDATE') ? <Link to={`/descuento/editar/${descuento.idDescuento}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                        }
+                        {
+                          LoginService.hasPermiso('DESCUENTO_DISABLED') ? <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={() => this.desactivar(descuento.idDescuento)}  /></button> : ""
+                        }
                         </td>
                       </tr>
                     else return <div></div>

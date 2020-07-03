@@ -10,7 +10,7 @@ class UsuarioService{
 
 	allUsuarios(){
 		return axios.get(`${USUARIO_API_URL}/users/list`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-            console.log(err)
+           // console.log(err)
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',

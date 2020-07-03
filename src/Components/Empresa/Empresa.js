@@ -54,7 +54,7 @@ export default class EmpresaComponent extends Component {
                         }
                         {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
 
-                        <Link to="/periocidad/crear"><button className="btn btn-success">Periocidad</button></Link>
+                        <Link to="/periocidad"><button className="btn btn-success">Periocidad</button></Link>
                     </div>
                     <table className="table">
                         <thead>

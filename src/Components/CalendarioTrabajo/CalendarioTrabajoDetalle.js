@@ -5,6 +5,7 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import Select from 'react-select'
 import Swal from 'sweetalert2'
 
+import LoginService from '../../Service/Login/LoginService';
 class CalendarioTrabajoDetalle extends Component{
 
     constructor(props){
@@ -33,7 +34,7 @@ class CalendarioTrabajoDetalle extends Component{
         var ano = fecha.getFullYear();
         console.log(ano)
         let errors ={}
-        if(values.periodo < ano || values.periodo>=2120) errors.desde = 'Ingrese el ano de planilla'
+        //if(values.periodo < ano || values.periodo>=2120) errors.desde = 'Ingrese el ano de planilla'
         if(!values.periocidad) errors.periocidad = 'Ingrese periocidad'
         return errors
     }
@@ -41,11 +42,13 @@ class CalendarioTrabajoDetalle extends Component{
     async onSubmit(values) {
         var fecha = new Date();
         var ano = fecha.getFullYear();
-        if(values.periodo == ano){
-            values.activo=true
-        } else{
-            values.activo=false
-        }
+        values.periodo = fecha.getFullYear();
+        values.activo = true;
+        // if(values.periodo == ano){
+        //     values.activo=true
+        // } else{
+        //     values.activo=false
+        // }
         const calendarioTrabajo = {
           calendariotrabajo: this.props.editar ? parseInt(this.props.location.pathname.split('/')[3]) : '',
           periocidad: values.periocidad,
@@ -69,13 +72,18 @@ class CalendarioTrabajoDetalle extends Component{
 
     render(){
         let {periocidad, periodo} = this.state
-        const options = [
-            { value: 'mensual', label: 'Mensual' },
-            { value: 'semanal', label: 'Semanal' }
-          ]
-          const MyComponent = () => (
-            <Select options={options} />
-          )
+        var fecha = new Date();
+        const validationEdit = () => {
+            if(periodo == fecha.getFullYear()){
+                return <button className="btn btn-success" type="submit">Guardar</button>
+            }
+            else{
+                if(!periodo){
+                    return <button className="btn btn-success" type="submit" >Guardar</button>}
+                else{
+                return <button className="btn btn-success" type="submit" disabled >Guardar</button>}
+            }
+        }
         
         return(
             <div className="container">
@@ -94,15 +102,19 @@ class CalendarioTrabajoDetalle extends Component{
 
                         <fieldset>
                             <label htmlFor="">Periocidad</label>
-                            <Field className="form-control" type="text" placeholder="Semanal o Mensual" name="periocidad"></Field>  
-                            {/*MyComponent()*/}
+                            
+                            <select className="form-control" onChange={(uni) => this.setState({periocidad: uni.target.value })}>
+                                <option value='-1' >Seleccione Periodo</option>
+                                <option value="mensual">Mensual</option>
+                                <option value="quincenal">Quincenal</option>
+                            </select>
                         </fieldset>
 
                         <fieldset>
                         <label htmlFor="">Periodo</label>
-                            <Field className="form-control" type="number" placeholder="A?o de planilla" name="periodo"></Field>
+                            <Field className="form-control" type="number" placeholder={fecha.getFullYear()} name="periodo" disabled></Field>
                         </fieldset>
-                        <button className="btn btn-success" type="submit">Guardar</button>
+                        {validationEdit() }
                         <Link to="/empresa"><button className="btn btn-danger">Regresar</button></Link>
                     </Form>
                 }
