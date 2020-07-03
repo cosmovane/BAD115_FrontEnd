@@ -171,12 +171,12 @@ class Planilla extends Component {
             nombre: descuento.nombre,
             descripcion: descuento.descripcion,
             porcentaje: descuento.porcentaje,
-          }
+          } 
         }
       }
     )
 
-    const ingresos = (await IngresoService.obtenerIngresosActivos()).data
+    const ingresos = (await IngresoService.allIngresosActivos()).data
     const columnasIngresos = _.remove(ingresos, (ingreso) => _.isNull(ingreso.porcentaje_ingreso)).map((ingreso) => {
       const inputColumn = {
         title: ingreso.nombre,
