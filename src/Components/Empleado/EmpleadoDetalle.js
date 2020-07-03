@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./editarEmpleado.css";
 import LoginService from '../../Service/Login/LoginService';
+import EmpresaService from "../../Service/Empresa/EmpresaService";
 const inputStyle = {
     'width': '25em',
 }
@@ -39,16 +40,19 @@ class EmpleadoDetalleComponent extends Component {
 
             idPuestotrabajo: '',
             esServicioProfesional: '',
-            departamentos: [],
+            //departamentos: [],
             generos: [],
             estadosciviles: [],
             descripcion: '',
             selectedOption: 0,
             selectedOptionMunicipio: 0,
             departamentoEsp: '',
-            minucipio: '',
             puestos: [],
             redirect: false,
+
+            departamento: [],
+            colonia: '',
+            municipio: '',
         };
 
         //this.handleChangeInputs = this.handleChangeInputs.bind(this);
@@ -67,6 +71,12 @@ class EmpleadoDetalleComponent extends Component {
         EmpleadoService.listarEstadosCiviles().then(response => {
             this.setState({
                 estadosciviles: response.data,
+            });
+        })
+
+        EmpresaService.departamentosMunicipios().then(response => {
+            this.setState({
+                departamento: response.data,
             });
         })
 
@@ -139,17 +149,21 @@ class EmpleadoDetalleComponent extends Component {
             // departamento: this.state.selectedOption,
             // municipio: this.state.selectedOptionMunicipio
         }
-      //  console.log(values.esServicioProfesional);
-       // console.log("ID:" + this.state.idEmpleado)
 
-        if (this.state.idEmpleado === -1) {
+        let direccion = {
+            colonia: values.colonia,
+            descripcion: values.descripcion,
+        }
+
+        if (this.state.idEmpleado === '-1' ) {
          //   console.log(empleado);
-            var promesa = EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
+            var promesa = EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then(() => this.props.history.push('/empleado'));
          //   console.log(promesa.isResolved);
         } else {
             empleado.idEmpleado = values.idEmpleado;
-            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
+            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then(() => this.props.history.push('/empleado'));
         }
+        console.log(this.state);
 
     }
 
@@ -205,7 +219,7 @@ class EmpleadoDetalleComponent extends Component {
 
     render() {
         let isEditar = this.state.idEmpleado !== '-1';
-        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional } = this.state
+        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio } = this.state
         const getGeneros = () => {
             const generos = this.state.generos;
             return (
@@ -253,6 +267,25 @@ class EmpleadoDetalleComponent extends Component {
                 </div>
             )
         }
+
+        const getMunicipios = () => {
+            const municipios = this.state.departamento.filter(({ idDepartmento }) => true)[parseInt(selectedOption)-1];
+            return (
+                <div>
+                    <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>
+                        {
+                            selectedOption > 0 ? <option value={selectedOptionMunicipio}>{municipio}</option> : <option value="NM">seleccione municipio</option>
+                        }
+
+                        {
+                            municipios ? municipios.municipiosByIdDepartmento.map(m => <option key={m.nombre} value={m.idMunicipio}>{m.nombre}</option>) : <option>Seleccione departamento</option>
+                        }
+                    </select>
+
+                </div>
+            )
+        }
+
         return (
             < div >
                 <Card style={{ width: 'relative', 'marginLeft': 'auto', 'marginRight': 'auto' }} >
@@ -261,12 +294,12 @@ class EmpleadoDetalleComponent extends Component {
                         <Container>
                             <h5 className='form-element-left'>Datos Personales</h5>
                             <hr/>
-                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional }}
+                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio }}
                                     onSubmit={this.onSubmit}
-                                    validateOnChange={true}
+                                    validateOnChange={false}
                                     validateOnBlur={false}
                                     validate={this.validate}
-                                    enableReinitialize={true}
+                                    enableReinitialize={isEditar}
                             >
                                 {
                                     (props) => (
@@ -395,6 +428,53 @@ class EmpleadoDetalleComponent extends Component {
                                             <br/><br/>
                                         <h5 className='form-element-left'>Direcci&oacute;n</h5>
                                         <hr/>
+
+                                            <Row>
+                                                <Col>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'>Direcci&oacute;n</label>
+                                                        <ErrorMessage name="colonia" component="span" className="alert alert-danger" />
+                                                        {isEditar? (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="colonia" onChange={(e)=>this.setState({colonia: e.target.value})}/>
+                                                        ) : (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="colonia" />
+                                                        )}
+
+                                                    </fieldset>
+                                                </Col>
+                                                <Col>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'>Referencias</label>
+                                                        <ErrorMessage name="descripcion" component="span" className="alert alert-danger" />
+                                                        {isEditar ? (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="descripcion" placeholder="Descripción" onChange={(e) => this.setState({descripcion: e.target.value})}/>
+                                                        ) : (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="descripcion" placeholder="Descripción" />
+                                                        )}
+                                                    </fieldset>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col sm={6}>
+                                                    <fieldset className="form-group">
+                                                         <label className='form-element-left'>Departamento</label>
+                                                        <select className="form-control" onChange={(e) => this.setState({ selectedOption: e.target.value })} >
+                                                            {
+                                                                selectedOption > 0 ? <option value={selectedOption}>{departamentoEsp}</option> : <option value="ND">Seleccionar</option>}
+
+                                                            {this.state.departamento.map(dep => <option key={dep.nombre} value={dep.idDepartmento}>{dep.nombre}</option>)}
+                                                        </select>
+
+                                                    </fieldset>
+                                                </Col>
+                                                <Col sm={4}>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'>Municipio</label>
+                                                        {getMunicipios()}
+                                                    </fieldset>
+                                                </Col>
+                                            </Row>
+
                                             {/*<Row>*/}
                                             {/*    <Card.Title>Dirección</Card.Title>*/}
 
