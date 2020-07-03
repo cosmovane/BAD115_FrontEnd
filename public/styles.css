@@ -1,9 +1,51 @@
-form-control{
-    size: 5px;
+form-control {
+  size: 5px;
 }
 
-#idEmpresa{
-    size: 4px;
-    color: blue;
-    background: #282c34;
+#idEmpresa {
+  size: 4px;
+  color: blue;
+  background: #282c34;
+}
+
+.rc-table-cell-fix-left {
+  background-color: whitesmoke;
+}
+
+.tabla-planilla {
+  max-width: 70%;
+}
+
+.planilla {
+  align-content: center;
+  margin-right: 3%;
+  margin-left: 3%;
+  max-height: 515px;
+  overflow-y: scroll;
+}
+
+.resultados {
+  float: right;
+  max-width: 30%;
+}
+
+.rc-table-thead{
+  background-color: teal;
+}
+
+.btn-planilla{
+  margin: 0.5%;
+}
+
+.alerta-pago{
+  padding: 1px !important;
+}
+
+.disabled{
+  pointer-events: none;
+  cursor: default;
+}
+
+.btn-light{
+  border-color: black !important;
 }
