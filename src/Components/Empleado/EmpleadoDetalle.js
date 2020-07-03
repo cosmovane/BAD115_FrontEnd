@@ -9,7 +9,11 @@ import { Redirect,Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
+import DatePicker from "react-datepicker";
 
+import "react-datepicker/dist/react-datepicker.css";
+import "./editarEmpleado.css";
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
     'width': '25em',
 }
@@ -31,20 +35,23 @@ class EmpleadoDetalleComponent extends Component {
             fechanacimiento: '',
             idDireccion: '',
             idGenero: '',
-            idEstadoCivil: '',
+            idEstadocivil: '',
 
-            departamento: [],
+            idPuestotrabajo: '',
+            esServicioProfesional: '',
+            departamentos: [],
             generos: [],
             estadosciviles: [],
             descripcion: '',
-            colonia: '',
             selectedOption: 0,
             selectedOptionMunicipio: 0,
             departamentoEsp: '',
             minucipio: '',
+            puestos: [],
             redirect: false,
         };
 
+        this.handleChangeInputs = this.handleChangeInputs.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.validate = this.validate.bind(this);
     }
@@ -52,20 +59,23 @@ class EmpleadoDetalleComponent extends Component {
     componentDidMount() {
         // console.log(this.state.idEmpresa)
         EmpleadoService.listarGeneros().then(response => {
-            console.log(response);
             this.setState({
                 generos: response.data,
             });
         })
         EmpleadoService.listarEstadosCiviles().then(response => {
-            console.log(response);
             this.setState({
                 estadosciviles: response.data,
             });
         })
-        if (this.state.idEmpleado == -1) {
-            return
-        }
+
+        EmpleadoService.allPuestos().then(response => {
+            this.setState({
+                puestos: response.data,
+            })
+        })
+
+        if (!this.state.idEmpleado == -1) {
 
         EmpleadoService.empleado(this.state.idEmpleado)
             .then(response => this.setState({
@@ -75,12 +85,13 @@ class EmpleadoDetalleComponent extends Component {
                 apellidopaterno: response.data.apellidopaterno,
                 apellidomaterno: response.data.apellidomaterno,
                 apellidocasada: response.data.apellidocasada,
-                fechanacimiento: response.data.fechanacimiento,
-
-
+                fechanacimiento: new Date(response.data.fechanacimiento),
+                esServicioProfesional: response.data.esServicioProfesional,
+                idGenero: response.data.id_genero.idGenero,
+                idEstadocivil: response.data.id_estadocivil.idEstadocivil,
                 // idDireccion: response.data.id_direccion.idDireccion,
-                // idGenero: response.data.id_genero.idGenero,
-                // idEstadoCivil: response.data.id_estadocivil.idEstadoCivil,
+                idPuestotrabajo: response.data.id_puestotrabajo ? response.data.id_puestotrabajo.idPuestotrabajo : -1 ,
+
 
                 // colonia: response.data.id_direccion.colonia,
                 // descripcion: response.data.id_direccion.descripcion,
@@ -88,9 +99,21 @@ class EmpleadoDetalleComponent extends Component {
                 // selectedOptionMunicipio: response.data.id_direccion.id_municipio.idMunicipio,
                 // departamentoEsp: response.data.id_direccion.id_departmento.nombre,
                 // municipio: response.data.id_direccion.id_municipio.nombre,
-            }))
+            })).then(response => this.loguear())
+
+        }
 
     }
+
+    loguear() {
+       // console.log(this.state);
+    }
+
+    setCheckbox(e) {
+        this.setState({esServicioProfesional: e.target.checked});
+    }
+
+
 
     onSubmit(values) {
         let empleado = {
@@ -100,25 +123,32 @@ class EmpleadoDetalleComponent extends Component {
             apellidomaterno: values.apellidomaterno,
             apellidocasada: values.apellidocasada,
             fechanacimiento: values.fechanacimiento,
+            esServicioProfesional: values.esServicioProfesional,
+            //id_genero: values.idGenero,
+
+
 
             // descripcion: values.descripcion,
             // departamento: this.state.selectedOption,
             // municipio: this.state.selectedOptionMunicipio
         }
-        console.log("ID:" + this.state.idEmpleado)
+      //  console.log(values.esServicioProfesional);
+       // console.log("ID:" + this.state.idEmpleado)
 
-        if (this.state.idEmpleado == -1) {
-            console.log(empleado);
-            var promesa = EmpleadoService.empleadoCrear( this.state.id_genero, this.state.id_estadocivil,'-1', empleado).then(() => this.props.history.push('/empleado'));
-            console.log(promesa.isResolved);
+        if (this.state.idEmpleado === -1) {
+         //   console.log(empleado);
+            var promesa = EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
+         //   console.log(promesa.isResolved);
         } else {
             empleado.idEmpleado = values.idEmpleado;
-            EmpleadoService.empleadoActualizar(this.state.id_genero, this.state.id_estadocivil, '-1', empleado).then(() => this.props.history.push('/empleado'));
+            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
         }
+
     }
 
     validate(values) {
-        let errors = {}
+        // console.log(this.state);
+        // let errors = {}
         // console.log("DEPARTAMENTO:" + this.state.selectedOption);
         // console.log("MUNICIPIO:" + this.state.selectedOptionMunicipio);
         // if(this.state.selectedOption == 0 || this.state.selectedOptionMunicipio == 0 ){
@@ -128,32 +158,37 @@ class EmpleadoDetalleComponent extends Component {
         //         text: 'Seleccione departamento y/o municipio!',
         //     })
         // }
-        if(!values.primernombre){
-            errors.primernombre = "Debe ingresar al menos un nombre"
-        } else if(!inputLengthTest.test(values.primernombre)){
-            errors.primernombre = "No exceda los 50 caracteres por valor.";
-        }
+        //  if(!this.state.primernombre){
+        //     errors.primernombre = "Debe ingresar al menos un nombre"
+        // } else if(!inputLengthTest.test(this.state.primernombre)){
+        //     errors.primernombre = "No exceda los 50 caracteres por valor.";
+        //  }
 
-        if(!values.apellidopaterno){
-            errors.apellidopaterno = "Debe ingresar al menos un apellido"
-        } else if(!inputLengthTest.test(values.apellidopaterno)){
-            errors.apellidopaterno = "No exceda los 50 caracteres por valor.";
-        }
+        // if(!this.state.apellidopaterno){
+        //     errors.apellidopaterno = "Debe ingresar al menos un apellido"
+        // } else if(!inputLengthTest.test(this.state.apellidopaterno)){
+        //     errors.apellidopaterno = "No exceda los 50 caracteres por valor.";
+        // }
 
-        if(!inputLengthTest.test(values.segundonombre)){
-            errors.segundonombre = "No exceda los 50 caracteres por valor.";
-        }
+        // if(!inputLengthTest.test(this.state.segundonombre)){
+        //     errors.segundonombre = "No exceda los 50 caracteres por valor.";
+        // }
 
-        if(!inputLengthTest.test(values.apellidomaterno)){
-            errors.apellidomaterno = "No exceda los 50 caracteres por valor.";
-        }
+        // if(!inputLengthTest.test(this.state.apellidomaterno)){
+        //     errors.apellidomaterno = "No exceda los 50 caracteres por valor.";
+        // }
 
-        if(!inputLengthTest.test(values.apellidocasada)){
-            errors.apellidocasada = "No exceda los 50 caracteres por valor.";
-        }
+        // if(!inputLengthTest.test(this.state.apellidocasada)){
+        //     errors.apellidocasada = "No exceda los 50 caracteres por valor.";
+        // }
 
-        return errors;
+        // return errors;
     }
+
+    handleChangeInputs(event) {
+        this.setState({value: event.target.value});
+    }
+
 
     setRedirect = () => {
         this.setState({
@@ -167,29 +202,48 @@ class EmpleadoDetalleComponent extends Component {
     }
 
     render() {
-        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento } = this.state
+        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional } = this.state
         const getGeneros = () => {
             const generos = this.state.generos;
             return (
                 <div>
-                    <select className="form-control" onChange={(e) => this.setState({ id_genero: e.target.value })}>
+                    <select className="form-control" onChange={(e) => this.setState({ idGenero: e.target.value })}>
                         <option value='-1'>Seleccione un Genero</option>
+
                         {
-                            generos ? generos.map(m => <option key={m.idGenero} value={m.idGenero}>{m.nombre}</option>) : <option>Seleccione un Genero</option>
+                            generos ? generos.map( m => <option key={m.idGenero} value={m.idGenero} selected={ this.state.idGenero === m.idGenero } >{m.nombre}</option>) : <option>Seleccione un Genero</option>
                         }
                     </select>
                 </div>
             )
 
         }
+
+        const getPuestos = () => {
+            const puestos = this.state.puestos;
+            return (
+                <div>
+                    <select className="form-control"
+                            onChange={(e) => this.setState({ idPuestotrabajo: e.target.value })}>
+                        <option value='-1'>Seleccione un Puesto</option>
+                        {
+                            puestos ? puestos.map(m =>
+                                <option key={m.idPuestotrabajo} value={m.idPuestotrabajo}
+                                        selected={this.state.idPuestotrabajo === m.idPuestotrabajo}>{m.nombre}</option>) : <option>Seleccione un Puesto</option>
+                        }
+                    </select>
+                </div>
+            )
+        }
+
         const getEstadosCiviles = () => {
             const estadosciviles = this.state.estadosciviles;
             return (
                 <div>
-                    <select className="form-control" onChange={(e) => this.setState({ id_estadocivil: e.target.value })}>
+                    <select className="form-control" onChange={(e) => this.setState({ idEstadocivil: e.target.value })}>
                         <option value='-1'>Seleccione un Estado Civil</option>
                         {
-                            estadosciviles ? estadosciviles.map(m => <option key={m.idEstadocivil} value={m.idEstadocivil}>{m.nombre}</option>) : <option>Seleccione un Estado Civil</option>
+                            estadosciviles ? estadosciviles.map(m => <option key={m.idEstadocivil} value={m.idEstadocivil} selected={this.state.idEstadocivil === m.idEstadocivil}>{m.nombre}</option>) : <option>Seleccione un Estado Civil</option>
                         }
                     </select>
 
@@ -202,7 +256,10 @@ class EmpleadoDetalleComponent extends Component {
                     <Card.Header><h3>Empleado</h3></Card.Header>
                     <Card.Body>
                         <Container>
-                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento }} onSubmit={this.onSubmit}
+                            <h5 className='form-element-left'>Datos Personales</h5>
+                            <hr/>
+                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional }}
+                                    onSubmit={this.onSubmit}
                                     validateOnChange={false}
                                     validateOnBlur={false}
                                     validate={this.validate}
@@ -211,38 +268,41 @@ class EmpleadoDetalleComponent extends Component {
                                 {
                                     (props) => (
                                         <Form className="form">
-                                            {/* <fieldset className="form-group">
-                                        <label>Id</label>
-                                        <Field className="form-control"  style={inputStyle}  type="text" name="idEmpresa" disabled />
-                                    </fieldset> */}
                                             <Row>
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="primernombre" component="span" className="alert alert-danger" />
-                                                        <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }} placeholder="Primer Nombre" />
+                                                        <label className='form-element-left' >Primer Nombre</label>
+                                                        <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }}
+                                                              onChange={(e) => this.setState({primernombre: e.value})}
+                                                        />
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidocasada" component="span" className="alert alert-danger" />
-                                                        {/* <label>NIC</label> */}
-                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidocasada" placeholder="Apellido de Casada" />
+                                                        <label className='form-element-left' >Apellido de Casada</label>
+                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidocasada"  onChange={(e) => this.setState({apellidocasada: e.value})}/>
                                                     </fieldset>
                                                 </Col>
                                             </Row>
                                             <Row>
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
-                                                        <ErrorMessage name="segundonombre" component="span" className="alert alert-danger" />
-                                                        {/* <label>NIT</label> */}
-                                                        <Field className="form-control" style={inputStyle} type="text" name="segundonombre" placeholder="Segundo Nombre" />
+                                                        <ErrorMessage name="segundonombre" component="span" className="alert alert-danger"  />
+                                                        <label className='form-element-left' >Segundo Nombre</label>
+                                                        <Field className="form-control" style={inputStyle} type="text" name="segundonombre" onChange={(e) => this.setState({segundonombre: e.value})}/>
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="fechanacimiento" component="span" className="alert alert-danger" />
-                                                        {/* <label>NIC</label> */}
-                                                        <Field className="form-control" style={inputStyle} type="text" name="fechanacimiento" placeholder="Fecha de Nacimiento" />
+                                                        <label className='form-element-left' >Fecha de Nacimiento</label>
+                                                        <DatePicker
+                                                            className="form-control form-element-left" name="fechanacimiento"
+                                                            selected={this.state.fechanacimiento}
+                                                            onChange={(e) => this.setState({ fechanacimiento: e })}
+                                                        />
                                                     </fieldset>
                                                 </Col>
                                             </Row>
@@ -250,11 +310,12 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidopaterno" component="span" className="alert alert-danger" />
-                                                        {/* <label>Pagina web</label> */}
-                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidopaterno" placeholder="Apellido Paterno" />
+                                                        <label className='form-element-left' >Apellido Paterno</label>
+                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidopaterno" onChange={(e) => this.setState({apellidopaterno: e.value})}/>
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
+                                                    <label className='form-element-left' >Genero</label>
                                                     { getGeneros() }
                                                 </Col>
                                             </Row>
@@ -262,15 +323,38 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidomaterno" component="span" className="alert alert-danger" />
-                                                        {/* <label>Email</label> */}
-                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidomaterno" placeholder="Apellido Materno" />
+                                                        <label className='form-element-left' >Apellido Materno</label>
+                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidomaterno" onChange={(e) => this.setState({apellidomaterno: e.value})}/>
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
+                                                    <label className='form-element-left' >Estado Civil</label>
                                                     { getEstadosCiviles()  }
                                                 </Col>
                                             </Row>
-
+                                            <br/><br/>
+                                        <h5 className='form-element-left'>Puesto de Trabajo</h5>
+                                        <hr/>
+                                            <Row>
+                                                <Col sm={6}>
+                                                    <label className='form-element-left' >Puesto de Trabajo</label>
+                                                    { getPuestos()  }
+                                                </Col>
+                                                <Col sm={4}>
+                                                    <br/><br/>
+                                                    <label >
+                                                    <input
+                                                        type="checkbox"
+                                                        name='esServicioProfesional'
+                                                        checked={this.state.esServicioProfesional}
+                                                        onChange={(e) => this.setCheckbox(e)}
+                                                        className="form-check-input"
+                                                    />Contrato por Servicios Profesionales</label>
+                                                </Col>
+                                            </Row>
+                                            <br/><br/>
+                                        <h5 className='form-element-left'>Direcci&oacute;n</h5>
+                                        <hr/>
                                             {/*<Row>*/}
                                             {/*    <Card.Title>Dirección</Card.Title>*/}
 

@@ -1,13 +1,14 @@
-import axios from 'axios'
+import axios from 'axios';
 import Swal from 'sweetalert2';
 import LoginService from '../Login/LoginService';
 import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
-const PROFESION_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/profesion`
 
-class ProfesionService {
+const COMISION_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/comision`;
 
-    allProfesiones() {
-        return axios.get(`${PROFESION_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+class ComisionService{
+
+    allComisiones(){
+        return axios.get(`${COMISION_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -16,14 +17,10 @@ class ProfesionService {
                     )
             }
         } );
-      }
+    }
     
-      /*obtenerProfesion(id) {
-        return axios.get(`${PROFESION_API_URL}/${id}`)
-      }*/
-
-      profesion(id, profesion){
-        return axios.get(`${PROFESION_API_URL}/${id}`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+    comision(id){
+        return axios.get(`${COMISION_API_URL}/${id}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -32,10 +29,10 @@ class ProfesionService {
                     )
             }
         } );
-      }
+    }
 
-      agregarProfesion(profesion) {
-        const test=axios.post(`${PROFESION_API_URL}/crear`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+    comisionCrear(comision){
+        const test=axios.post(`${COMISION_API_URL}/crear`,comision,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -45,13 +42,15 @@ class ProfesionService {
             }
         } );
         
-        console.log(test)
-        console.log(`${PROFESION_API_URL}`)
-        return test
-      }
-    
-      modificarProfesion(id, profesion){
-        return axios.put(`${PROFESION_API_URL}/${id}`, profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+        //console.log(test)
+       // console.log(`${COMISION_API_URL}/crear`)
+       // return test
+
+    }
+
+    comisionActualizar(id, comision){
+
+         return  axios.put(`${COMISION_API_URL}/${id}`,comision,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -60,9 +59,9 @@ class ProfesionService {
                     )
             }
         } );
-      }
-    
+    }
+
+
 
 }
-
-export default new ProfesionService()
+export default new ComisionService();

@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faEdit, faBan} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
-
+import LoginService from '../../Service/Login/LoginService';
 
 class UnidadOrganizacionalComponent extends Component {
 
@@ -57,7 +57,9 @@ class UnidadOrganizacionalComponent extends Component {
           <br />
           <h3> Unidades de la Empresa</h3>
           <div className="row">
-            <Link to="/departamentos/crear"> <button className="btn btn-success">Agregar </button> </Link>
+          {
+            LoginService.hasPermiso('UNIDAD_ORGANIZACIONAL_CREATE') ? <Link to="/departamentos/crear"> <button className="btn btn-success">Agregar </button> </Link> : ""
+          }
           </div>
           <br />
           <table className="table">
@@ -84,8 +86,12 @@ class UnidadOrganizacionalComponent extends Component {
                   }
                   </td>
                       <td>
-                        <Link to={`/departamentos/editar/${unidadOrganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link>
-                        <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(unidadOrganizacional.idUnidadorganizacional)} /></button>
+                      {
+                         LoginService.hasPermiso('UNIDAD_ORGANIZACIONAL_UPDATE') ? <Link to={`/departamentos/editar/${unidadOrganizacional.idUnidadorganizacional}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button></Link> : ""
+                      }
+                      {
+                         LoginService.hasPermiso('UNIDAD_ORGANIZACIONAL_DISABLED') ? <button className="btn btn-secondary btn-sm"><FontAwesomeIcon icon={faBan} onDoubleClick={ () => this.desactivar(unidadOrganizacional.idUnidadorganizacional)} /></button> : ""
+                       }
                       </td>
                     </tr>
                     else return <div></div>}

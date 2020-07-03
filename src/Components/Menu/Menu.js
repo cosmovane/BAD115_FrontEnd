@@ -7,7 +7,7 @@ import Image from 'react-bootstrap/Image';
 import Modal from 'react-modal';
 import  { Redirect,withRouter } from 'react-router-dom'
 import Swal from 'sweetalert2';
-import Clock from 'react-clock';
+import Clock from 'react-live-clock';
 import { Link } from 'react-router-dom';
 import LoginService from '../../Service/Login/LoginService';
 
@@ -37,36 +37,33 @@ class MenuComponent extends Component {
   }
 
     render(){
-      let username = LoginService.obtenerUsuario();
+      
    //   console.log(username)
    //   console.log(LoginService.isAuthenticated())
    //console.log(username.id)
       if(LoginService.isAuthenticated()){
+        let username = LoginService.obtenerUsuario();
       return (
         <Card
           bg="secondary" key="secondary"
         >
         <Navbar bg="dark" expand="lg" variant="dark">
-          <Navbar.Brand href=""> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
+          <Navbar.Brand href="/home"> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-
-            <Nav.Link href="/planilla">Planilla</Nav.Link>
-              <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Gestión tipos ingresos</NavDropdown.Item>
-                <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Gestión tipos generos</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-
-            <Nav.Link href="/">Home</Nav.Link>
+            <Nav.Link href="/home">Home</Nav.Link>
+            {
+            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
+            }
             {
               LoginService.hasPermiso('EMPRESA_READ') ? <Nav.Link href="/empresa">Empresa</Nav.Link> : ""
             }
             { 
               LoginService.hasPermiso('EMPLEADO_READ') ? <Nav.Link href="/empleado">Empleados</Nav.Link> : ""
+            }
+            { 
+              LoginService.hasPermiso('COMISION_READ') ? <Nav.Link href="/comision">Comisión</Nav.Link> : ""
             }
             {
               LoginService.hasPermiso('PROFESION_READ') ?<Nav.Link href="/profesion">Profesiones</Nav.Link> : ""
@@ -77,7 +74,6 @@ class MenuComponent extends Component {
            {
             LoginService.hasPermiso('PUESTO_TRABAJO_READ') ? <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link> : ""
            }
-
             
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
               {
@@ -87,7 +83,7 @@ class MenuComponent extends Component {
                 LoginService.hasPermiso('INGRESO_READ') ? <NavDropdown.Item href="/ingresos">Gestión tipos ingresos</NavDropdown.Item> : ""
               }
               {
-                LoginService.hasPermiso('TIPO_DESCUENTO_READ') ? <NavDropdown.Item href="">Gestión tipos descuentos</NavDropdown.Item> : ""
+                LoginService.hasPermiso('DESCUENTO_READ') ? <NavDropdown.Item href="/descuento">Gestión tipos descuentos</NavDropdown.Item> : ""
               }
               {
                  LoginService.hasPermiso('USER_READ') ? <NavDropdown.Item href="/usuarios">Gestión usuario</NavDropdown.Item> : ""
@@ -99,8 +95,9 @@ class MenuComponent extends Component {
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
-         <Clock
-          value={this.state.date}
+         <Clock 
+           format={'h:mm:ssa'}
+           style={{fontSize: '1.5em', color: 'white'}}
           />
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
           {
