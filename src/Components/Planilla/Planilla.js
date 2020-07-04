@@ -196,7 +196,7 @@ class Planilla extends Component {
 
     const columnasDescuentos = _.flatMap(_.remove(descuentos,
       (descuento) => {
-        return descuento.acronimo != 'AFP' && descuento.acronimo != 'ISSS'
+        return descuento.acronimo != 'AFP' && descuento.acronimo != 'ISSS' && descuento.acronimo != 'PRESTAMO'
       }), descuento => {
         const column = {
           title: descuento.nombre,
@@ -364,7 +364,6 @@ class Planilla extends Component {
         'idEmpleado': key,
         'pagado': false
       }
-      console.log("guardarPlanilla -> boletaPago", boletaPago)
       return await BoletaPagoService.guardarBoleta(boletaPago)
     })
 

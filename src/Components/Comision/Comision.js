@@ -11,7 +11,7 @@ export default class ComisionComponent extends Component {
             comisiones: [],
         }
 
-        //this.refreshComisiones = this.refreshComisiones.bind(this)
+        this.refreshComisiones = this.refreshComisiones.bind(this)
 
 
        this.updateComisionClicked = this.updateComisionClicked.bind(this)
@@ -26,7 +26,7 @@ export default class ComisionComponent extends Component {
         const response = await ComisionService.allComisiones()
             .then(
                 response => {
-                 // console.log(response);
+                    console.log(response);
                     this.setState({ comisiones: response.data });
                 }
             )
@@ -38,7 +38,7 @@ export default class ComisionComponent extends Component {
 
 
     updateComisionClicked(id, comison){
-        this.props.history.push(`/comison/${id}`)
+        this.props.history.push(`/comision/${id}`)
     }
 
     render() {
@@ -72,7 +72,7 @@ export default class ComisionComponent extends Component {
                                             <td>{comision.porcentajecomision}</td>
                                             <td>
                                             {
-                                                LoginService.hasPermiso('COMISION_CREATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                                LoginService.hasPermiso('COMISION_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}> <FontAwesomeIcon icon={faEdit}/></button> : ""
                                             }
                                             
                                                 </td>

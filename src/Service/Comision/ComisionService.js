@@ -1,6 +1,8 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import LoginService from '../Login/LoginService';
+
+
 import { BASE_API_URL, BASE_API_PLANILLA } from '../../utilities/constants'
 
 const COMISION_API_URL=`${BASE_API_URL}/${BASE_API_PLANILLA}/comision`;
@@ -32,33 +34,54 @@ class ComisionService{
     }
 
     comisionCrear(comision){
-        const test=axios.post(`${COMISION_API_URL}/crear`,comision,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+        return axios.post(`${COMISION_API_URL}/crear`,comision,{headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue creado con exito.',
+                'success'
+            )
+        } ).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,
                     'error'
-                    )
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
             }
         } );
-        
-        //console.log(test)
-       // console.log(`${COMISION_API_URL}/crear`)
-       // return test
 
     }
 
-    comisionActualizar(id, comision){
+    comisionActualizar(comision){
 
-         return  axios.put(`${COMISION_API_URL}/${id}`,comision,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+        return axios.put(`${COMISION_API_URL}/editar`,comision, {headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue actualizado con exito.',
+                'success'
+            )
+        }).catch((err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,
                     'error'
-                    )
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
             }
-        } );
+        })
+
     }
 
 

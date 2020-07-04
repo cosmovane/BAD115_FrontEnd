@@ -17,94 +17,58 @@ const inputStyle = {
 class ProfesionF extends Component {
 
     constructor(props) {
-      super(props)
-      this.state = {
-        acronimo: "",
-        nombre: ""
-      }
-  
-      this.onSubmit = this.onSubmit.bind(this)
-     // this.validate = this.validate.bind(this)
-     this.render = this.render.bind(this);
+        super(props)
+        this.state = {
+            idProfesion: this.props.match.params.id,
+            acronimo: "",
+            nombre: ""
+        }
+
+        this.onSubmit = this.onSubmit.bind(this)
+        this.validate = this.validate.bind(this)
+        this.render = this.render.bind(this);
     }
 
-    
      componentDidMount() {
+         if (this.state.idProfesion !== '-1') {
+             ProfesionService.profesion(this.state.idProfesion)
+                 .then( response => this.setState({
+                    acronimo: response.data.acronimo,
+                    nombre: response.data.nombre
+                 }))
+         }
+    }
 
-    /*  ProfesionService.profesion(this.state.idProfesion)
-        .then(response => this.setState(this.state,
-            {
-            idProfesion: response.data.idProfesion,
-            acronimo: response.data.acronimo,
-            nombre: response.data.nombre,
+    onSubmit(values) {
+          let profesion = {
+            idProfesion: this.state.idProfesion,
+            acronimo: values.acronimo,
+            nombre: values.nombre,
+          }
+
+          if (this.state.idProfesion === '-1') {
+            ProfesionService.agregarProfesion(profesion).then(() => this.props.history.push('/profesion/'));
+        } else {
+            ProfesionService.modificarProfesion(profesion).then(() => this.props.history.push('/profesion/'));
+        }
+    }
+
+    validate(values) {
+    }
 
 
-        })).then( response => this.printResult())*/
-
-     /* if (this.props.editar) {
-        const id = this.props.location.pathname.split('/')[3]
-        const profesion = await ProfesionService.obtenerProfesion(parseInt(id))
-        const { acronimo, nombre} = profesion.data
+    setRedirect = () => {
         this.setState({
-          acronimo, nombre 
-        })
-      }*/
-    }
-
-    printResult(){
-      console.log(this.state);
-    }
-
-    async onSubmit(values) {
-      let profesion = {
-        acronimo: values.acronimo,
-        nombre: values.nombre,
-      }
-    
-     // console.log(profesion)
-    
-      
-
-      if (this.state.idProfesion == -1) {
-        console.log(profesion);
-        var pro= ProfesionService.agregarProfesion(profesion).then(() => this.props.history.push('/profesion'));
-        console.log(pro.isResolved);
-    } else {
-        profesion.idProfesion = values.idProfesion;
-        ProfesionService.modificarProfesion(profesion).then(() => this.props.history.push('/profesion'));
-    }
-
-    //  this.props.history.push('/profesion')
-            Swal.fire({
-                icon: 'success',
-                tittle: 'Buen trabajo',
-                html: 'Registro guardado con éxito',
-                timer: 5000,
-                timerProgressBar: true,})
-    /*  this.props.editar ? await ProfesionService.modificarProfesion(profesion.idProfesion, profesion)
-      : await ProfesionService.agregarProfesion(profesion)
-    this.props.history.push('/profesion')
-    const mensaje = this.props.editar ? 'Registro modificado con éxito' : 'Registro creado con éxito'
-    Swal.fire({
-      icon: 'success',
-      title: 'Buen trabajo!',
-      html: mensaje,
-      timer: 5000,
-      timerProgressBar: true,
-    })*/
-  }
-    
-  setRedirect = () => {
-    this.setState({
         redirect: true
-    })
-}
-
-renderRedirect = () => {
-    if (this.state.redirect) {
-        return <Redirect to='/profesion' />
+        })
     }
-}
+
+    renderRedirect = () => {
+        if (this.state.redirect) {
+            return <Redirect to='/profesion' />
+        }
+    }
+
 
     render() {
       let { acronimo, nombre} = this.state
@@ -132,7 +96,7 @@ renderRedirect = () => {
                     <fieldset className="form-group">
                                                     
                      <ErrorMessage name="acronimo" component="span" className="alert alert-danger" />
-                       <Field className="form-control" type="text" name="acronimo" style={{ width: '25em' }} placeholder="Acronimo" />
+                       <Field className="form-control" type="text" name="acronimo" style={{ width: '25em' }} placeholder="Acronimo" required />
                    </fieldset>
                   </Col>
                 <Col sm={4}>
@@ -142,7 +106,7 @@ renderRedirect = () => {
                        <Col sm={6}>
                    <fieldset className="form-group">
                    <ErrorMessage name="hasta" component="span" className="alert alert-danger" />
-                                                                                     <Field className="form-control" style=   {inputStyle} type="text" name="nombre" placeholder="Nombre"/>
+                   <Field className="form-control" style=   {inputStyle} type="text" name="nombre" placeholder="Nombre" required />
                      </fieldset>
                         </Col>
                         </Row>

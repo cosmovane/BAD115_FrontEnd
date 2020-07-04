@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+#calendario{
+  position: relative;
+  background-color: white;
+  
+}
+
+#btncalendar{
+  color: #ffffff;
+  background-color: #313438;
+  border-width: 0px;
+}

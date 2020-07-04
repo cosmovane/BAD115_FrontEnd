@@ -52,7 +52,7 @@ class CalendarioTrabajo extends Component{
             this.state.calendariosTrabajo.map(
                 calendarioTra => {
                     while(x == null){
-                        if(calendarioTra.periodo ==2025){
+                        if(calendarioTra.periodo ==fecha.getFullYear()){
                             x = true;
                         } else{}
                     }
@@ -64,23 +64,10 @@ class CalendarioTrabajo extends Component{
                 
             })
         }
-        //const [modalIsOpen, setModalIsOpen] = useState(false)
         return (
             
             <div className="container">
-                {/* 
-                <div>
-                    <button onClick ={() => setModalIsOpen(true)}>Open modal</button>
-                    <Modal isOpen ={modalIsOpen}>
-                        <h5>Modal</h5>
-                        <p>Contenido</p>
-                    <div>
-                        <button onClick={() => setModalIsOpen(false)}>Close</button>
-                    </div>
-                    </Modal> 
-                </div>       
-                */} 
-                
+
                 <br/>                  
                 <h3>Periocidad de pago</h3>
                 <div className="row">

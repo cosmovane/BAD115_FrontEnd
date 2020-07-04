@@ -11,6 +11,7 @@ import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 
 import LoginService from '../../Service/Login/LoginService';
+import EmpleadoService from "../../Service/Empleado/EmpleadoService";
 const inputStyle = {
     'width': '25em',
 }
@@ -29,86 +30,61 @@ class ComisionDetalleComponent extends Component {
         };
 
         this.onSubmit = this.onSubmit.bind(this);
-        this.validate = this.validate.bind(this);
+       // this.validate = this.validate.bind(this);
         this.render = this.render.bind(this);
 
     }
 
     componentDidMount() {
-    
-         ComisionService.comision(this.state.idComision)
-        .then(response => this.setState(this.state,
-            {
-            idComision: response.data.idComision,
-            desde: response.data.desde,
-            hasta: response.data.hasta,
-            porcentajecomision: response.data.porcentajecomision,
 
-        })).then( response => this.printResult())
+        if (this.state.idComision !== '-1') {
+            ComisionService.comision(this.state.idComision)
+                .then(response => this.setState({
+                    desde: response.data.desde,
+                    hasta: response.data.hasta,
+                    porcentajecomision: response.data.porcentajecomision,
+                }))
+        }
+
     }
 
-    printResult(){
-        console.log(this.state);
-    }
-
-    async onSubmit(values) {
+    onSubmit(values) {
         let comision = {
+            idComision: this.state.idComision,
             desde: values.desde,
             hasta: values.hasta,
             porcentajecomision: values.porcentajecomision,
 
-            
         }
-           // console.log(comision)
-
-            /*const response= await ComisionService.comisionCrear(comision)
-
-            this.props.history.push('/comision')
-            Swal.fire({
-                icon: 'success',
-                tittle: 'Buen trabajo',
-                html: 'Registro guardado con éxito',
-                timer: 5000,
-                timerProgressBar: true,
-            })*/
-
-
             
-        if (this.state.idComision == -1) {
-            console.log(comision);
-            var pro = ComisionService.comisionCrear(comision).then(() => this.props.history.push('/comision'));
-            console.log(pro.isResolved);
+        if (this.state.idComision === '-1') {
+            ComisionService.comisionCrear(comision).then((e) => this.props.history.push('/comision'));
         } else {
-            comision.idComision = values.idComision;
-            ComisionService.comisionActualizar(comision).then(() => this.props.history.push('/comision'));
+            console.log(comision);
+        ComisionService.comisionActualizar(comision).then((e) => this.props.history.push('/comision'));
         }
-
-        this.props.history.push('/comision')
-        Swal.fire({
-            icon: 'success',
-            tittle: 'Buen trabajo',
-            html: 'Registro guardado con éxito',
-            timer: 5000,
-            timerProgressBar: true,
-        })
   
     }
 
     validate(values) {
-        /*let errors = {}
+        let errors = {};
+        if(values.porcentajecomision > 1){
+            errors.porcentajecomision = "El Numero no debe ser superior a 1.";
+        }
+        else if(values.porcentajecomision < 0 ){
+            errors.porcentajecomision = "El Numero no debe ser inferior a 0";
+        }
 
-        if (!this.validateNumber(values.desde) || !this.validateNumber(values.hasta)) errors.desde = 'Debe ingresar un monton con dos decimales'
-        if (!this.validateNumber(values.hasta) || !this.validateNumber(values.hasta)) errors.hasta = 'Debe ingresar un monton con dos decimales'
-        if ((values.desde <= 0 || values.desde >= 100000)) errors.desde = 'Debe ingresar un monto mayor a cero y menor de 100,000'
-        if ((values.hasta <= 0 || values.hasta >= 100000)) errors.hasta = 'Debe ingresar un monto mayor a cero y menor de 100,000'
-        if (values.desde > values.hasta) errors.hasta = 'El monto final debe ser menor al monto inicial'
-    
-        if (!values.porcentajecomision) errors.porcentajecomision = 'Ingrese un porcentaje'
-        if (!values.desde) errors.desde = 'Ingrese el monto inicial'
-        if (!values.hasta) errors.hasta = 'Ingrese el monto final'
+        if(values.desde === ""){
+            errors.desde = "No deje vacio el campo";
+        } else if(parseInt(values.desde) >= parseInt(values.hasta) ){
+            errors.desde = "Este numero debe ser menor que el otro extremo del intervalo";
+        }
 
-        return errors*/
-    
+        if(values.hasta === ""){
+            errors.hasta = "No deje vacio el campo";
+        }
+        return errors;
     }
 
 
@@ -147,9 +123,9 @@ class ComisionDetalleComponent extends Component {
                            <Row>
                         <Col sm={6}>
                            <fieldset className="form-group">
-                                                        
+                           <label className='form-element-left'>Inicio de Rango</label>
                            <ErrorMessage name="desde" component="span" className="alert alert-danger" />
-                          <Field className="form-control" type="number" name="desde" style={{ width: '25em' }} placeholder="Desde" />
+                          <Field className="form-control" type="number" name="desde" style={{ width: '25em' }} placeholder="Desde" required/>
                               </fieldset>
                               </Col>
                              <Col sm={4}>
@@ -158,20 +134,21 @@ class ComisionDetalleComponent extends Component {
                                 <Row>
                              <Col sm={6}>
                           <fieldset className="form-group">
+                          <label className='form-element-left'>Fin de Rango</label>
                           <ErrorMessage name="hasta" component="span" className="alert alert-danger" />
-                                                      
-                          <Field className="form-control" style={inputStyle} type="number" name="hasta" placeholder="Hasta"/>                                    </fieldset>
+                          <Field className="form-control" style={inputStyle} type="number" name="hasta" placeholder="Hasta" required/>                                    </fieldset>
                               </Col>
                               <Col sm={6}>
                               <fieldset className="form-group">
+                                  <label className='form-element-left'>Porcentaje de Comisi&oacute;n (0.00 hasta 1.00)</label>
                               <ErrorMessage name="porcentajecomision" component="span" className="alert alert-danger" />
-                                                      
                             <Field className="form-control" style={inputStyle} type="number" name="porcentajecomision" placeholder="Porcentaje" />
                                  </fieldset>
                                 </Col>
                              </Row>
-        
-                  <button className="btn btn-success" type="submit"> Guardar</button>                                    <Link to="/comision">{this.renderRedirect()}<button className="btn btn-danger" onClick={this.setRedirect}> Regresar</button></Link>
+                            <br/>
+                         <button className="btn btn-success" type="submit"> Guardar</button>
+                         <Link to="/comision">{this.renderRedirect()}<button className="btn btn-danger"> Regresar</button></Link>
                                             
                        </Form>
                                     )

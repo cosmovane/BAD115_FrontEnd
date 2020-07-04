@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import Clock from 'react-live-clock';
 import { Link } from 'react-router-dom';
 import LoginService from '../../Service/Login/LoginService';
+import Calendario from '../Calendario/Calendario';
 
 class MenuComponent extends Component {
   constructor(props){
@@ -99,6 +100,7 @@ class MenuComponent extends Component {
            format={'h:mm:ssa'}
            style={{fontSize: '1.5em', color: 'white'}}
           />
+          <Calendario />
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
           {
             LoginService.hasPermiso('USER_GENERAL_READ') ? <Link to={`/usuario/general/${username.id}`} className="dropdown-item">Mi perfíl</Link> : ""
@@ -108,6 +110,7 @@ class MenuComponent extends Component {
 
               </NavDropdown>
         </Navbar>
+        
         </Card>
       );
       } else {
