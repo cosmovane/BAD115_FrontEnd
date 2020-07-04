@@ -14,6 +14,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./editarEmpleado.css";
 import LoginService from '../../Service/Login/LoginService';
+import EmpresaService from "../../Service/Empresa/EmpresaService";
 const inputStyle = {
     'width': '25em',
 }
@@ -39,19 +40,23 @@ class EmpleadoDetalleComponent extends Component {
 
             idPuestotrabajo: '',
             esServicioProfesional: '',
-            departamentos: [],
+            //departamentos: [],
             generos: [],
             estadosciviles: [],
             descripcion: '',
             selectedOption: 0,
             selectedOptionMunicipio: 0,
             departamentoEsp: '',
-            minucipio: '',
             puestos: [],
             redirect: false,
+
+            departamento: [],
+            colonia: '',
+            municipio: '',
         };
 
-        this.handleChangeInputs = this.handleChangeInputs.bind(this);
+        //this.handleChangeInputs = this.handleChangeInputs.bind(this);
+      //  this.handleDatePicker = this.handleDatePicker.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.validate = this.validate.bind(this);
     }
@@ -69,13 +74,19 @@ class EmpleadoDetalleComponent extends Component {
             });
         })
 
+        EmpresaService.departamentosMunicipios().then(response => {
+            this.setState({
+                departamento: response.data,
+            });
+        })
+
         EmpleadoService.allPuestos().then(response => {
             this.setState({
                 puestos: response.data,
             })
         })
 
-        if (!this.state.idEmpleado == -1) {
+        if (this.state.idEmpleado !== '-1') {
 
         EmpleadoService.empleado(this.state.idEmpleado)
             .then(response => this.setState({
@@ -93,10 +104,10 @@ class EmpleadoDetalleComponent extends Component {
                 idPuestotrabajo: response.data.id_puestotrabajo ? response.data.id_puestotrabajo.idPuestotrabajo : -1 ,
 
 
-                // colonia: response.data.id_direccion.colonia,
-                // descripcion: response.data.id_direccion.descripcion,
-                // selectedOption: response.data.id_direccion.id_departmento.idDepartmento,
-                // selectedOptionMunicipio: response.data.id_direccion.id_municipio.idMunicipio,
+                 colonia: response.data.id_direccion.colonia,
+                 descripcion: response.data.id_direccion.descripcion,
+                 selectedOption: response.data.id_direccion.id_departmento.idDepartmento,
+                 selectedOptionMunicipio: response.data.id_direccion.id_municipio.idMunicipio,
                 // departamentoEsp: response.data.id_direccion.id_departmento.nombre,
                 // municipio: response.data.id_direccion.id_municipio.nombre,
             })).then(response => this.loguear())
@@ -106,11 +117,17 @@ class EmpleadoDetalleComponent extends Component {
     }
 
     loguear() {
-       // console.log(this.state);
+        console.log(this.state);
     }
 
     setCheckbox(e) {
         this.setState({esServicioProfesional: e.target.checked});
+    }
+
+    handleDatePicker =(e) => {
+        this.setState({
+            fechanacimiento: e,
+        })
     }
 
 
@@ -132,19 +149,22 @@ class EmpleadoDetalleComponent extends Component {
             // departamento: this.state.selectedOption,
             // municipio: this.state.selectedOptionMunicipio
         }
-      //  console.log(values.esServicioProfesional);
-       // console.log("ID:" + this.state.idEmpleado)
 
-        if (this.state.idEmpleado === -1) {
-         //   console.log(empleado);
-            var promesa = EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
-         //   console.log(promesa.isResolved);
-        } else {
-            empleado.idEmpleado = values.idEmpleado;
-            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo, empleado).then(() => this.props.history.push('/empleado'));
+        let direccion = {
+            colonia: values.colonia,
+            descripcion: values.descripcion,
         }
 
+        if (this.state.idEmpleado === '-1' ) {
+            EmpleadoService.empleadoCrear( this.state.idGenero, this.state.idEstadocivil,this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then((e) => this.props.history.push('/empleado'));
+        } else {
+            empleado.idEmpleado = values.idEmpleado;
+            EmpleadoService.empleadoActualizar(this.state.idGenero, this.state.idEstadocivil, this.state.idPuestotrabajo,this.state.selectedOptionMunicipio, empleado, direccion).then((e) => this.props.history.push('/empleado'));
+        }
+
+
     }
+
 
     validate(values) {
         // console.log(this.state);
@@ -185,11 +205,6 @@ class EmpleadoDetalleComponent extends Component {
         // return errors;
     }
 
-    handleChangeInputs(event) {
-        this.setState({value: event.target.value});
-    }
-
-
     setRedirect = () => {
         this.setState({
             redirect: true
@@ -202,7 +217,8 @@ class EmpleadoDetalleComponent extends Component {
     }
 
     render() {
-        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional } = this.state
+        let isEditar = this.state.idEmpleado !== '-1';
+        let { idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio } = this.state
         const getGeneros = () => {
             const generos = this.state.generos;
             return (
@@ -250,6 +266,25 @@ class EmpleadoDetalleComponent extends Component {
                 </div>
             )
         }
+
+        const getMunicipios = () => {
+            const municipios = this.state.departamento.filter(({ idDepartmento }) => true)[parseInt(selectedOption)-1];
+            return (
+                <div>
+                    <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>
+                        {
+                            selectedOption > 0 ? <option value={selectedOptionMunicipio}>{municipio}</option> : <option value="NM">seleccione municipio</option>
+                        }
+
+                        {
+                            municipios ? municipios.municipiosByIdDepartmento.map(m => <option key={m.nombre} value={m.idMunicipio} selected={this.state.selectedOptionMunicipio == m.idMunicipio} >{m.nombre}</option>) : <option>Seleccione departamento</option>
+                        }
+                    </select>
+
+                </div>
+            )
+        }
+
         return (
             < div >
                 <Card style={{ width: 'relative', 'marginLeft': 'auto', 'marginRight': 'auto' }} >
@@ -258,12 +293,12 @@ class EmpleadoDetalleComponent extends Component {
                         <Container>
                             <h5 className='form-element-left'>Datos Personales</h5>
                             <hr/>
-                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional }}
+                            <Formik initialValues={{ idEmpleado, primernombre, segundonombre, apellidopaterno, apellidomaterno, apellidocasada, fechanacimiento, esServicioProfesional, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio }}
                                     onSubmit={this.onSubmit}
                                     validateOnChange={false}
                                     validateOnBlur={false}
                                     validate={this.validate}
-                                    enableReinitialize={true}
+                                    enableReinitialize={isEditar}
                             >
                                 {
                                     (props) => (
@@ -272,18 +307,25 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="primernombre" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Primer Nombre</label>
-                                                        <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }}
-                                                              onChange={(e) => this.setState({primernombre: e.value})}
-                                                        />
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Primer Nombre</label>
+                                                        {isEditar ? (
+                                                            <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }} onChange={(e) => this.setState({primernombre: e.value})}/>
+                                                                    ) : (
+                                                            <Field className="form-control" type="text" name="primernombre" style={{ width: '25em' }}/>
+                                                        )}
+
                                                     </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidocasada" component="span" className="alert alert-danger" />
                                                         <label className='form-element-left' >Apellido de Casada</label>
+                                                        {isEditar ? (
                                                         <Field className="form-control" style={inputStyle} type="text" name="apellidocasada"  onChange={(e) => this.setState({apellidocasada: e.value})}/>
-                                                    </fieldset>
+                                                                    ) : (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="apellidocasada" />
+                                                        )}
+                                                        </fieldset>
                                                 </Col>
                                             </Row>
                                             <Row>
@@ -291,18 +333,28 @@ class EmpleadoDetalleComponent extends Component {
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="segundonombre" component="span" className="alert alert-danger"  />
                                                         <label className='form-element-left' >Segundo Nombre</label>
+                                                        {isEditar ? (
                                                         <Field className="form-control" style={inputStyle} type="text" name="segundonombre" onChange={(e) => this.setState({segundonombre: e.value})}/>
-                                                    </fieldset>
+                                                                    ) : (
+                                                        <Field className="form-control" style={inputStyle} type="text" name="segundonombre"/>
+                                                        )}
+                                                        </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="fechanacimiento" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Fecha de Nacimiento</label>
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Fecha de Nacimiento</label>
+                                                        {isEditar ? (
                                                         <DatePicker
                                                             className="form-control form-element-left" name="fechanacimiento"
                                                             selected={this.state.fechanacimiento}
-                                                            onChange={(e) => this.setState({ fechanacimiento: e })}
+                                                            onChange={(e) => this.handleDatePicker(e)}
                                                         />
+                                                        ) : (
+                                                            <Field className="form-control" style={inputStyle} type="date" name="fechanacimiento" placeholder="Fecha de Nacimiento" />
+
+                                                        )}
+
                                                     </fieldset>
                                                 </Col>
                                             </Row>
@@ -310,12 +362,16 @@ class EmpleadoDetalleComponent extends Component {
                                                 <Col sm={6}>
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidopaterno" component="span" className="alert alert-danger" />
-                                                        <label className='form-element-left' >Apellido Paterno</label>
+                                                        <label className='form-element-left' ><span className='asterisco-red'>*</span>Apellido Paterno</label>
+                                                        {isEditar ? (
                                                         <Field className="form-control" style={inputStyle} type="text" name="apellidopaterno" onChange={(e) => this.setState({apellidopaterno: e.value})}/>
-                                                    </fieldset>
+                                                                    )  : (
+                                                        <Field className="form-control" style={inputStyle} type="text" name="apellidopaterno"/>
+                                                        )}
+                                                        </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-                                                    <label className='form-element-left' >Genero</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Genero</label>
                                                     { getGeneros() }
                                                 </Col>
                                             </Row>
@@ -324,11 +380,16 @@ class EmpleadoDetalleComponent extends Component {
                                                     <fieldset className="form-group">
                                                         <ErrorMessage name="apellidomaterno" component="span" className="alert alert-danger" />
                                                         <label className='form-element-left' >Apellido Materno</label>
+                                                        {isEditar ? (
                                                         <Field className="form-control" style={inputStyle} type="text" name="apellidomaterno" onChange={(e) => this.setState({apellidomaterno: e.value})}/>
-                                                    </fieldset>
+                                                                )  : (
+                                                              <Field className="form-control" style={inputStyle} type="text" name="apellidomaterno"/>
+                                                        )}
+
+                                                        </fieldset>
                                                 </Col>
                                                 <Col sm={4}>
-                                                    <label className='form-element-left' >Estado Civil</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Estado Civil</label>
                                                     { getEstadosCiviles()  }
                                                 </Col>
                                             </Row>
@@ -337,24 +398,82 @@ class EmpleadoDetalleComponent extends Component {
                                         <hr/>
                                             <Row>
                                                 <Col sm={6}>
-                                                    <label className='form-element-left' >Puesto de Trabajo</label>
+                                                    <label className='form-element-left' ><span className='asterisco-red'>*</span>Puesto Asignado</label>
                                                     { getPuestos()  }
                                                 </Col>
                                                 <Col sm={4}>
                                                     <br/><br/>
-                                                    <label >
-                                                    <input
-                                                        type="checkbox"
-                                                        name='esServicioProfesional'
-                                                        checked={this.state.esServicioProfesional}
-                                                        onChange={(e) => this.setCheckbox(e)}
-                                                        className="form-check-input"
-                                                    />Contrato por Servicios Profesionales</label>
+
+                                                        {isEditar ? (
+                                                            <label >
+                                                                <input
+                                                                    type="checkbox"
+                                                                    name='esServicioProfesional'
+                                                                    checked={this.state.esServicioProfesional}
+                                                                    onChange={(e) => this.setCheckbox(e)}
+                                                                    className="form-check-input"
+                                                                />Contrato por Servicios Profesionales</label>
+                                                        ) : (
+                                                            <label >
+                                                                <input
+                                                                    type="checkbox"
+                                                                    name='esServicioProfesional'
+                                                                    className="form-check-input"
+                                                                />Contrato por Servicios Profesionales</label>
+                                                        )}
+
                                                 </Col>
                                             </Row>
                                             <br/><br/>
                                         <h5 className='form-element-left'>Direcci&oacute;n</h5>
                                         <hr/>
+
+                                            <Row>
+                                                <Col>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Direcci&oacute;n</label>
+                                                        <ErrorMessage name="colonia" component="span" className="alert alert-danger" />
+                                                        {isEditar? (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="colonia" onChange={(e)=>this.setState({colonia: e.target.value})}/>
+                                                        ) : (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="colonia" />
+                                                        )}
+
+                                                    </fieldset>
+                                                </Col>
+                                                <Col>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Referencias</label>
+                                                        <ErrorMessage name="descripcion" component="span" className="alert alert-danger" />
+                                                        {isEditar ? (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="descripcion" placeholder="Descripción" onChange={(e) => this.setState({descripcion: e.target.value})}/>
+                                                        ) : (
+                                                            <Field className="form-control" style={inputStyle} type="text" name="descripcion" placeholder="Descripción" />
+                                                        )}
+                                                    </fieldset>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col sm={6}>
+                                                    <fieldset className="form-group">
+                                                         <label className='form-element-left'><span className='asterisco-red'>*</span>Departamento</label>
+                                                        <select className="form-control" onChange={(e) => this.setState({ selectedOption: e.target.value })} >
+                                                            {
+                                                                selectedOption > 0 ? <option value={selectedOption}>{departamentoEsp}</option> : <option value="ND">Seleccionar</option>}
+
+                                                            {this.state.departamento.map(dep => <option key={dep.nombre} value={dep.idDepartmento}  selected={this.state.selectedOption == dep.idDepartmento}>{dep.nombre}</option>)}
+                                                        </select>
+
+                                                    </fieldset>
+                                                </Col>
+                                                <Col sm={4}>
+                                                    <fieldset className="form-group">
+                                                        <label className='form-element-left'><span className='asterisco-red'>*</span>Municipio</label>
+                                                        {getMunicipios()}
+                                                    </fieldset>
+                                                </Col>
+                                            </Row>
+
                                             {/*<Row>*/}
                                             {/*    <Card.Title>Dirección</Card.Title>*/}
 

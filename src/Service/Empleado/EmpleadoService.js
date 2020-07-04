@@ -24,9 +24,9 @@ class EmpleadoService{
         return axios.get( `${PUESTOS_API_URL}/`,{headers: LoginService.agregarAuthorizationHeader()})
     }
 
-    empleadoCrear(idGenero,idEstadocivil,idPuestotrabajo,empleado){
+    empleadoCrear(idGenero,idEstadocivil,idPuestotrabajo, idMunicipio,empleado, direccion ){
 
-        return axios.post(`${EMPLEADO_API_URL}/${idGenero}/${idEstadocivil}/${idPuestotrabajo}`,empleado,{headers: LoginService.agregarAuthorizationHeader()}).then( ()=>{
+        return axios.post(`${EMPLEADO_API_URL}/${idGenero}/${idEstadocivil}/${idPuestotrabajo}/${idMunicipio}`,{ empleado, direccion},{headers: LoginService.agregarAuthorizationHeader()}).then( ()=>{
                 Swal.fire(
                     'Buen trabajo!',
                     'El registro fue creado con exito.',
@@ -42,15 +42,15 @@ class EmpleadoService{
             }else {
             Swal.fire(
                 'Algo ha salido mal',
-                'El registro no pudo crearse',
+                'Asegurese de llenar todos los campos obligatorios.',
                 'error'
             )
           }
         } );
     }
 
-    empleadoActualizar(idGenero,idEstadocivil,idPuestotrabajo,empleado){
-        return axios.put(`${EMPLEADO_API_URL}/${idGenero}/${idEstadocivil}/${idPuestotrabajo}`,empleado,{headers: LoginService.agregarAuthorizationHeader()}).then( ()=>{
+    empleadoActualizar(idGenero,idEstadocivil,idPuestotrabajo,idMunicipio,empleado, direccion){
+        return axios.put(`${EMPLEADO_API_URL}/${idGenero}/${idEstadocivil}/${idPuestotrabajo}/${idMunicipio}`,{ empleado, direccion},{headers: LoginService.agregarAuthorizationHeader()}).then( ()=>{
             Swal.fire(
                 'Buen trabajo!',
                 'El registro fue actualizado con exito.',
