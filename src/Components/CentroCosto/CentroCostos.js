@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col'
 
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
 import LoginService from '../../Service/Login/LoginService';
-
+import Calendario from '../Calendario/Calendario';
 export default class CentroCostoComponent extends Component{
 	constructor(props){
 		super(props)
@@ -16,7 +16,8 @@ export default class CentroCostoComponent extends Component{
 			costos:[],
             costosBackup:[],
             id:'',
-            buscarText:''
+            buscarText:'',
+            unidad:''
 		}
 
         this.desactivar = this.desactivar.bind(this)
@@ -39,7 +40,7 @@ export default class CentroCostoComponent extends Component{
 		const response = await CentroCostoService.listCostos(parseInt(id));
         //console.log(response.data)
         if (response !== undefined) {
-            this.setState({costos:response.data,id:id,costosBackup:response.data}); 
+            this.setState({costos:response.data.costos,id:id,costosBackup:response.data.costos,unidad:response.data.unidad}); 
         }
 		
 	}
@@ -87,7 +88,7 @@ export default class CentroCostoComponent extends Component{
         let {id} = this.state
 		return(
 				 <div className="container">
-                <h3>Centro de costos</h3>
+                <h3>Centro de costos | Unidad {this.state.unidad}</h3>
                 {/* {this.state.message && <div class="alert alert-success">{this.state.message}</div>} */}
                 <div className="container">
                    
@@ -153,7 +154,15 @@ export default class CentroCostoComponent extends Component{
                             }
                         </tbody>
                     </table>
+
                 </div>
+                <Row>
+                    <Col sm={12}>
+                         <Calendario/>
+                   </Col>
+                   
+                </Row>
+               
             </div>
 			);
 	}

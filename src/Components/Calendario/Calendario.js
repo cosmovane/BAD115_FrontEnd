@@ -30,7 +30,7 @@ class Calendario extends Component {
     render(){
         return (            
             <div id="calendario">
-                <button onClick={()=>this.operation()} id="btncalendar">Calendario</button>
+                <button onClick={()=>this.operation()} id="btncalendar" className="btn btn-secondary">Calendario</button>
                 {
                     this.state.showCalendar ? <FullCalendar
                     locale="es"
