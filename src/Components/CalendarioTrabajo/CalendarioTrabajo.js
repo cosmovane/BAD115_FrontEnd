@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //import { Modal } from "react-bootstrap";
 import Modal from 'react-modal';
 
+import LoginService from '../../Service/Login/LoginService';
+
 class CalendarioTrabajo extends Component{
     constructor(props){
         super(props)
@@ -79,11 +81,14 @@ class CalendarioTrabajo extends Component{
                 </div>       
                 */} 
                 
-                <br/>                 
+                <br/>                  
                 <h3>Periocidad de pago</h3>
                 <div className="row">
                     {/*validacionCrear()*/}
-                    <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link>
+                    {
+                        LoginService.hasPermiso('CALENDARIO_TRABAJO_CREATE') ? <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link> : ""
+                    }
+                    
                 </div>
                 <table className="table">
                     <thead>
@@ -113,9 +118,14 @@ class CalendarioTrabajo extends Component{
                                         <td>{calendarioTrabajo.periodo}</td>
                                         <td>{calendarioTrabajo.periocidad}</td>
                                         <td>
-                                            <button className="btn btn-warning btn-sm" disabled><FontAwesomeIcon icon={faEdit} /></button>
+                                        {
+                                            LoginService.hasPermiso('CALENDARIO_TRABAJO_UPDATE') ? < button className="btn btn-warning btn-sm" disabled><FontAwesomeIcon icon={faEdit} /></button>: ""
+                                        }
+                                        {
+                                             LoginService.hasPermiso('CALENDARIO_TRABAJO_DISABLED') ? <button className="btn btn-secondary btn-sm" disabled ><FontAwesomeIcon icon={faBan} /></button>: ""
+                                        }
                                         
-                                            <button className="btn btn-secondary btn-sm" disabled ><FontAwesomeIcon icon={faBan} /></button>
+                                            
                                         </td>
                                     </tr>
                                     }
