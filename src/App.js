@@ -173,7 +173,9 @@ function App() {
 
 
       <div id="calendario">
+        {/* 
         <button className="btn btn-success" onClick={openModal}>Calendario</button>
+            */}
         <Modal
           isOpen={modalIsOpen}
           onAfterOpen={afterOpenModal}
