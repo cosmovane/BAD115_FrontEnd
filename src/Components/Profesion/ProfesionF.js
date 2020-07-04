@@ -32,7 +32,7 @@ class ProfesionF extends Component {
     
      componentDidMount() {
 
-   /*  ProfesionService.profesion(this.state.idProfesion)
+   /* ProfesionService.profesion(this.state.idProfesion)
         .then(response => this.setState(this.state,
             {
             idProfesion: response.data.idProfesion,

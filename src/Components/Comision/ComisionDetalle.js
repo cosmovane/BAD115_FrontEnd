@@ -73,7 +73,7 @@ class ComisionDetalleComponent extends Component {
                 timerProgressBar: true,
             })*/
 
-           // console.log(comision)
+            console.log(comision)
            //const response = await ComisionService.comisionActualizar(comision)
             
         if (this.state.idComision == -1) {

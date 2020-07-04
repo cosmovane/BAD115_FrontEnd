@@ -72,7 +72,7 @@ export default class ComisionComponent extends Component {
                                             <td>{comision.porcentajecomision}</td>
                                             <td>
                                             {
-                                                LoginService.hasPermiso('COMISION_CREATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                                LoginService.hasPermiso('COMISION_CREATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}> <FontAwesomeIcon icon={faEdit}/></button> : ""
                                             }
                                             
                                                 </td>

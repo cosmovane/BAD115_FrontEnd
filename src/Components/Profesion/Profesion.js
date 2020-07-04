@@ -50,7 +50,7 @@ updateProfesionClicked(id){
                 <div className="container">
                     <div className="row">
                     {
-                            <Link to="/profesion/-1"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar </button> </Link>
+                            <Link to="/profesion/-1"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar</button> </Link>
                         }
                     </div>
                     <table className="table">

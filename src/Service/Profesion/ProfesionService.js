@@ -18,9 +18,9 @@ class ProfesionService {
         } );
       }
     
-      /*obtenerProfesion(id) {
-        return axios.get(`${PROFESION_API_URL}/${id}`)
-      }*/
+      //obtenerProfesion(id) {
+       // return axios.get(`${PROFESION_API_URL}/${id}`)
+      //}
 
       profesion(id, profesion){
         return axios.get(`${PROFESION_API_URL}/${id}`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {

@@ -44,7 +44,7 @@ class ComisionService{
             }
         } );
         
-        //console.log(test)
+        console.log(test)
        // console.log(`${COMISION_API_URL}/crear`)
        // return test
 

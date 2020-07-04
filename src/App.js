@@ -106,6 +106,7 @@ function App() {
           
            <GuardedRoute exact path="/periocidad" component={CalendarioTrabajo}  meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_READ' }}/>
            <GuardedRoute path="/periocidad/crear" component={CalendarioTrabajoDetalle}  meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_CREATE' }}/>
+           
            <GuardedRoute path="/periocidad/editar/:id" render={(props) =><CalendarioTrabajoDetalle {...props} editar={true}/>} meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_UPDATE'}}/>
           
            <GuardedRoute exact path="/comision" component={ComisionComponent}  meta={{ auth: true,permiso:'COMISION_READ' }}/>
