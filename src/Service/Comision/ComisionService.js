@@ -34,28 +34,54 @@ class ComisionService{
     }
 
     comisionCrear(comision){
-        const test=axios.post(`${COMISION_API_URL}/crear`,comision,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+        return axios.post(`${COMISION_API_URL}/crear`,comision,{headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue creado con exito.',
+                'success'
+            )
+        } ).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,
                     'error'
-                    )
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
             }
         } );
-        
-        console.log(test)
-       // console.log(`${COMISION_API_URL}/crear`)
-       // return test
 
     }
 
     comisionActualizar(comision){
 
-        const test=axios.put(`${COMISION_API_URL}/editar`,comision)
-        console.log(test)
-        console.log(`${COMISION_API_URL}/editar`)
-         return  test
+        return axios.put(`${COMISION_API_URL}/editar`,comision, {headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue actualizado con exito.',
+                'success'
+            )
+        }).catch((err)=> {
+            if(LoginService.isNoAutorizado(err)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
+            }
+        })
+
     }
 
 
