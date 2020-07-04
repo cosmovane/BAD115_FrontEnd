@@ -22,8 +22,8 @@ class ProfesionService {
        // return axios.get(`${PROFESION_API_URL}/${id}`)
       //}
 
-      profesion(id, profesion){
-        return axios.get(`${PROFESION_API_URL}/${id}`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+      profesion(id){
+        return axios.get(`${PROFESION_API_URL}/${id}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
@@ -35,23 +35,51 @@ class ProfesionService {
       }
 
       agregarProfesion(profesion) {
-        const test=axios.post(`${PROFESION_API_URL}/crear`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+        return axios.post(`${PROFESION_API_URL}/crear`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue creado con exito.',
+                'success'
+            )
+        } ).catch( (err)=> {
             if(LoginService.isNoAutorizado(err)){
                 Swal.fire(
                     'Algo ha salido mal',
                     'No tienes acceso a este recurso' ,
                     'error'
-                    )
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
             }
         } );
-        
-        console.log(test)
-        console.log(`${PROFESION_API_URL}`)
-        return test
       }
     
       modificarProfesion(profesion){
-        return axios.put(`${PROFESION_API_URL}`, profesion)
+        return axios.put(`${PROFESION_API_URL}/`, profesion, {headers: LoginService.agregarAuthorizationHeader()}).then( () => {
+            Swal.fire(
+                'Buen trabajo!',
+                'El registro fue actualizado con exito.',
+                'success'
+            )
+        } ).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                )
+            }else {
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'Asegurese de llenar todos los campos obligatorios.',
+                    'error'
+                )
+            }
+        } );
       }
     
 

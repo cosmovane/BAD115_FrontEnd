@@ -67,6 +67,24 @@ class ComisionDetalleComponent extends Component {
     }
 
     validate(values) {
+        let errors = {};
+        if(values.porcentajecomision > 1){
+            errors.porcentajecomision = "El Numero no debe ser superior a 1.";
+        }
+        else if(values.porcentajecomision < 0 ){
+            errors.porcentajecomision = "El Numero no debe ser inferior a 0";
+        }
+
+        if(values.desde === ""){
+            errors.desde = "No deje vacio el campo";
+        } else if(parseInt(values.desde) >= parseInt(values.hasta) ){
+            errors.desde = "Este numero debe ser menor que el otro extremo del intervalo";
+        }
+
+        if(values.hasta === ""){
+            errors.hasta = "No deje vacio el campo";
+        }
+        return errors;
     }
 
 
@@ -105,9 +123,9 @@ class ComisionDetalleComponent extends Component {
                            <Row>
                         <Col sm={6}>
                            <fieldset className="form-group">
-                                                        
+                           <label className='form-element-left'>Inicio de Rango</label>
                            <ErrorMessage name="desde" component="span" className="alert alert-danger" />
-                          <Field className="form-control" type="number" name="desde" style={{ width: '25em' }} placeholder="Desde" />
+                          <Field className="form-control" type="number" name="desde" style={{ width: '25em' }} placeholder="Desde" required/>
                               </fieldset>
                               </Col>
                              <Col sm={4}>
@@ -116,19 +134,19 @@ class ComisionDetalleComponent extends Component {
                                 <Row>
                              <Col sm={6}>
                           <fieldset className="form-group">
+                          <label className='form-element-left'>Fin de Rango</label>
                           <ErrorMessage name="hasta" component="span" className="alert alert-danger" />
-                                                      
-                          <Field className="form-control" style={inputStyle} type="number" name="hasta" placeholder="Hasta"/>                                    </fieldset>
+                          <Field className="form-control" style={inputStyle} type="number" name="hasta" placeholder="Hasta" required/>                                    </fieldset>
                               </Col>
                               <Col sm={6}>
                               <fieldset className="form-group">
+                                  <label className='form-element-left'>Porcentaje de Comisi&oacute;n (0.00 hasta 1.00)</label>
                               <ErrorMessage name="porcentajecomision" component="span" className="alert alert-danger" />
-                                                      
                             <Field className="form-control" style={inputStyle} type="number" name="porcentajecomision" placeholder="Porcentaje" />
                                  </fieldset>
                                 </Col>
                              </Row>
-        
+                            <br/>
                          <button className="btn btn-success" type="submit"> Guardar</button>
                          <Link to="/comision">{this.renderRedirect()}<button className="btn btn-danger"> Regresar</button></Link>
                                             
