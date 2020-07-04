@@ -28,6 +28,7 @@ export default class CentroCostoComponent extends Component{
 	}
 
 	async desactivar(id){
+        console.log('id de costo:'+id)
 		await CentroCostoService.desactivarCosto(id)
 		await this.refreshCostos()
 	}
