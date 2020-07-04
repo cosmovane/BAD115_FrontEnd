@@ -51,7 +51,7 @@ class CalendarioTrabajo extends Component{
             var x = 0;
             this.state.calendariosTrabajo.map(
                 calendarioTra => {
-                    if(calendarioTra.periodo == fecha.getFullYear()){
+                    if(calendarioTra.periodo == fecha.getFullYear() && calendarioTra.estado == true){
                         x=x+1;
                     } else{ }
                     
