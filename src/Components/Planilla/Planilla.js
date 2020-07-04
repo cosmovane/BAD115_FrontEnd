@@ -10,9 +10,12 @@ import Alert from 'react-bootstrap/Alert'
 import BoletaPagoService from '../../Service/BoletaPago/BoletaPagoService'
 import { Page, Text, Document, PDFDownloadLink, StyleSheet } from '@react-pdf/renderer'
 import Swal from 'sweetalert2';
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import IngresoService from '../../Service/CatalogoIngresoService/IngresoService'
 import CentroCostoService from '../../Service/CentroCosto/CentroCostoService';
 import LoginService from '../../Service/Login/LoginService';
+import Calendario from '../Calendario/Calendario';
 const InputField = ({ placeholder, name, deshabilitado }) => (
   <div>
     <input min="0" className="form-control" type="number" name={name} placeholder={placeholder} disabled={deshabilitado} />
@@ -444,6 +447,12 @@ class Planilla extends Component {
         <button className="btn btn-secondary btn-planilla" onDoubleClick={ () => this.pagarPlanilla()} disabled={!this.state.planillaGuardada}>
           Pagar planilla
         </button>
+        <Row>
+            <Col sm={12}>
+                  <Calendario/>
+            </Col>
+                   
+        </Row>
       </div>
     )
   }

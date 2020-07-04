@@ -100,14 +100,13 @@ class MenuComponent extends Component {
            format={'h:mm:ssa'}
            style={{fontSize: '1.5em', color: 'white'}}
           />
-          <Calendario />
           <NavDropdown title={`${username.username}`} id="basic-nav-dropdown">
           {
             LoginService.hasPermiso('USER_GENERAL_READ') ? <Link to={`/usuario/general/${username.id}`} className="dropdown-item">Mi perfíl</Link> : ""
           }
            
             <button onClick={()=>this.logout()} className="dropdown-item" type="submit">Sign Out</button>
-
+  
               </NavDropdown>
         </Navbar>
         
