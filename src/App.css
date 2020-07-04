@@ -39,5 +39,12 @@
 
 #calendario{
   position: relative;
-  margin-top: 5em;
+  background-color: white;
+  
+}
+
+#btncalendar{
+  color: #ffffff;
+  background-color: #313438;
+  border-width: 0px;
 }
