@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
 
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
     'width': '25em',
 }
@@ -55,7 +56,7 @@ class EmpresaDetalleComponent extends Component {
                 departamento: response.data,
             });
         })
-        if (this.state.idEmpresa == -1) {
+        if (this.state.idEmpresa === -1) {
             return
         }
 
@@ -94,7 +95,7 @@ class EmpresaDetalleComponent extends Component {
             municipio: this.state.selectedOptionMunicipio
         }
         
-        if (this.state.idEmpresa == -1) {
+        if (this.state.idEmpresa === -1) {
             console.log(empresa);
             EmpresaService.empresaCrear(empresa).then(() => this.props.history.push('/empresa'));
         } else {
@@ -104,7 +105,7 @@ class EmpresaDetalleComponent extends Component {
 
     validate(values) {
         let errors = {}
-        if(this.state.selectedOption == 0 || this.state.selectedOptionMunicipio == 0 ){
+        if(this.state.selectedOption === 0 || this.state.selectedOptionMunicipio === 0 ){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -305,7 +306,11 @@ class EmpresaDetalleComponent extends Component {
                                                     </fieldset>
                                                 </Col>
                                             </Row>
-                                            <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/> Guardar</button>
+                                            {
+
+                                                LoginService.hasPermiso('EMPRESA_CREATE') ? <button className="btn btn-success" type="submit"><FontAwesomeIcon icon={faSave}/> Guardar</button> : ""
+                                            }                   
+                                            
                                             <Link to="/empresa"><button className="btn btn-danger"><FontAwesomeIcon icon={faReply}/> Regresar</button></Link>
                                             
                                         </Form>

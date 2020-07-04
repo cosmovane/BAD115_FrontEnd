@@ -1,0 +1,8 @@
+.form-element-left {
+    display: flex;
+    justify-content: left;
+}
+
+.asterisco-red {
+    color: red;
+}
