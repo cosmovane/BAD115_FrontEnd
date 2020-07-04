@@ -33,8 +33,6 @@ import CalendarioTrabajoDetalle from './Components/CalendarioTrabajo/CalendarioT
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import Modal from 'react-modal';
-import { Calendar } from '@fullcalendar/core';
-import esLocale from '@fullcalendar/core/locales/es';
 
 import Ingresos from './Components/CatalogoIngreso/Ingresos';
 import IngresoForm from './Components/CatalogoIngreso/IngresoForm';
