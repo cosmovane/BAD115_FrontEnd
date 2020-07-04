@@ -3,6 +3,7 @@ import './App.css';
 import {Route, BrowserRouter as Router } from 'react-router-dom'
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import { withRouter } from "react-router";
+import Swal from 'sweetalert2';
 
 import MenuComponent from './Components/Menu/Menu';
 import EmpresaComponent from './Components/Empresa/Empresa';
@@ -43,18 +44,31 @@ import UsuarioVer from './Components/Usuario/UsuarioVer';
 import Login from './Components/Login/Login';
 
 import LoginService from '../src/Service/Login/LoginService';
+import NotFound from './Components/Login/NotFound';
 
 const requireLogin=(to,from,next)=>{
 	if(to.meta.auth){
 		if(LoginService.isAuthenticated()){
       if (LoginService.isTokenExpirado()) {
         LoginService.logout();
+        Swal.fire(
+                    'Estado de cuenta',
+                    'Susesión ha expirado' ,
+                    'info'
+        )
         next.redirect('/login');
       }
 			else if (LoginService.hasPermiso(to.meta.permiso)){ 
 				next();
-			}
-			next.redirect('/home');
+			}else{
+        Swal.fire(
+                    'Estado de cuenta',
+                    'No tiene permiso a este recurso!!' ,
+                    'info'
+        )
+        next.redirect('/home');
+      }
+			
 		}
 		next.redirect('/login');
 	}else{
@@ -63,18 +77,18 @@ const requireLogin=(to,from,next)=>{
 };
 
 
+
 function App() {
   return (
     <div className="App">
       <Router>
        <GuardProvider guards={[requireLogin]} >
         <div>
-    
+          
           <MenuComponent></MenuComponent>
-               
           <GuardedRoute exact path="/" component={Login} />
           <GuardedRoute exact path="/login" component={Login} />
-          <GuardedRoute exact path="/home" component={HomeComponent} meta={{ auth: true }} />
+          <GuardedRoute exact path="/home" component={HomeComponent} meta={{ auth: true,permiso:'GENERAL_HOME' }} />
           <GuardedRoute exact path="/empresa" component={EmpresaComponent}  meta={{ auth: true,permiso:'EMPRESA_READ' }}/>
           <GuardedRoute path="/empresa/:id" component={EmpresaDetalleComponent} meta={{auth:true,permiso:'EMPRESA_READ'}} />
 
@@ -125,10 +139,11 @@ function App() {
           <GuardedRoute exact path="/ingresos" component={Ingresos} meta={{ auth: true,permiso:'INGRESO_READ'}}/>
           <GuardedRoute path="/ingreso/crear" component={IngresoForm} meta={{ auth: true,permiso:'INGRESO_CREATE'}}/>
           <GuardedRoute path="/ingreso/editar/:id" render={(props) =><IngresoForm {...props} editar={true}/>} meta={{ auth: true,permiso:'INGRESO_UPDATE'}}/>
-
-
+          
+  
         </div>
        </GuardProvider>
+
       </Router>
     </div>
   );

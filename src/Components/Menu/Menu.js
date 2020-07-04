@@ -37,20 +37,25 @@ class MenuComponent extends Component {
   }
 
     render(){
-      let username = LoginService.obtenerUsuario();
+      
    //   console.log(username)
    //   console.log(LoginService.isAuthenticated())
    //console.log(username.id)
       if(LoginService.isAuthenticated()){
+        let username = LoginService.obtenerUsuario();
       return (
         <Card
           bg="secondary" key="secondary"
         >
         <Navbar bg="dark" expand="lg" variant="dark">
-          <Navbar.Brand href=""> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
+          <Navbar.Brand href="/home"> <Image src="circle-logo-parrot.png" style={{ width:50 }}></Image> </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+            <Nav.Link href="/home">Home</Nav.Link>
+            {
+            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
+            }
             {
               LoginService.hasPermiso('EMPRESA_READ') ? <Nav.Link href="/empresa">Empresa</Nav.Link> : ""
             }
@@ -69,10 +74,6 @@ class MenuComponent extends Component {
            {
             LoginService.hasPermiso('PUESTO_TRABAJO_READ') ? <Nav.Link href="/puestotrabajo">Puestos de Trabajo</Nav.Link> : ""
            }
-           {
-            LoginService.hasPermiso('BOLETA_PAGO_READ') ? <Nav.Link href="/planilla">Planilla</Nav.Link> : ""
-           }
-
             
               <NavDropdown title="Configuraciones" id="basic-nav-dropdown">
               {
