@@ -176,7 +176,7 @@ class EmpresaDetalleComponent extends Component {
     render() {
         let { representante, idEmpresa, nit, nic, paginaweb, telefono, email, page, colonia, descripcion, selectedOption, selectedOptionMunicipio, departamentoEsp, municipio } = this.state
         const getMunicipios = () => {
-            const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento === this.state.selectedOption)[0];
+            const municipios = this.state.departamento.filter(({ idDepartmento }) => idDepartmento == this.state.selectedOption)[0];
             return (
                 <div>
                     <select className="form-control" onChange={(e) => this.setState({ selectedOptionMunicipio: e.target.value })}>
