@@ -20,8 +20,27 @@ import UnidadOrganizacionalComponent from './Components/UnidadOrganizacional/Uni
 import UnidadOrganizacionalDetalle from './Components/UnidadOrganizacional/UnidadOrganizacionalDetalle';
 import CalendarioTrabajo from './Components/CalendarioTrabajo/CalendarioTrabajo';
 import CalendarioTrabajoDetalle from './Components/CalendarioTrabajo/CalendarioTrabajoDetalle';
+//import EventCalendar from './Components/EventCalendar/EventCalendar';
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import Modal from 'react-modal';
+
 
 function App() {
+  var subtitle;
+  const [modalIsOpen,setIsOpen] = React.useState(false);
+  function openModal() {
+    setIsOpen(true);
+  }
+ 
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+    subtitle.style.color = '#f00';
+  }
+ 
+  function closeModal(){
+    setIsOpen(false);
+  }
   return (
     <div className="App">
       <Router>
@@ -59,6 +78,40 @@ function App() {
           <Route path="/planilla" component={Planilla}/>
         </div>
       </Router>
+      
+      <div id="calendario">
+      <button className="btn btn-success" onClick={openModal}>Calendario</button>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          contentLabel="Example Modal"
+        >
+ 
+          <h2 ref={_subtitle => (subtitle = _subtitle)}></h2>
+          <button onClick={closeModal} className="btn btn-danger">Cerrar</button>
+          <form>
+            <FullCalendar
+          plugins={[ dayGridPlugin ]}
+          initialView="dayGridMonth"
+          //weekends={false}
+          events={[
+          { title: 'A?o nuevo', date: '2020-01-01' },
+          { title: 'San Valentin', date: '2020-02-14'},
+          { title: 'Dia del trabajo', date: '2020-05-01'},
+          { title: 'Dia de la madre', date: '2020-05-10'},
+          { title: 'Dia del padre', date: '2020-06-17'},
+          { title: 'Fiestas de San Salvador', date: '2020-08-06'},
+          { title: 'Dia de la independencia', date: '2020-09-15'},
+          { title: 'Dia de los muertos', date: '2020-11-02'},
+          { title: 'Navidad', date: '2020-12-25'}
+        ]}
+      />
+          </form>
+        </Modal>
+        
+      
+      </div>
     </div>
   );
 }
