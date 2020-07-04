@@ -6,7 +6,15 @@ const CALENDARIOTRABAJO_API_URL = `${BASE_API_URL}/${BASE_API_PLANILLA}/periocid
 
 class CalendarioTrabajoService{
     allCalendarioTrabajo(){
-        return axios.get(`${CALENDARIOTRABAJO_API_URL}`);
+        return axios.get(`${CALENDARIOTRABAJO_API_URL}`,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
+            if(LoginService.isNoAutorizado(err)){
+                Swal.fire(
+                    'Algo ha salido mal',
+                    'No tienes acceso a este recurso' ,
+                    'error'
+                    )
+            }
+        });
     }
 
     agregarCalendarioTrabajo(calendarioTrabajo) {

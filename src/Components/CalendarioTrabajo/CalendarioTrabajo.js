@@ -48,15 +48,14 @@ class CalendarioTrabajo extends Component{
     render(){
         var fecha = new Date();
         const validacionCrear = () => {
-            var x = null;
+            var x = 0;
             this.state.calendariosTrabajo.map(
                 calendarioTra => {
-                    while(x == null){
-                        if(calendarioTra.periodo ==fecha.getFullYear()){
-                            x = true;
-                        } else{}
-                    }
-                    if(x==true){
+                    if(calendarioTra.periodo == fecha.getFullYear()){
+                        x=x+1;
+                    } else{ }
+                    
+                    if(x > 0){
                         return <Link to="periocidad/crear"><button className="btn btn-success" disabled>Agregar</button></Link>;
                     } else {
                         return <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link>
@@ -71,10 +70,8 @@ class CalendarioTrabajo extends Component{
                 <br/>                  
                 <h3>Periocidad de pago</h3>
                 <div className="row">
-                    {/*validacionCrear()*/}
-                    {
-                        LoginService.hasPermiso('CALENDARIO_TRABAJO_CREATE') ? <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link> : ""
-                    }
+                    {validacionCrear()}
+                    
                     
                 </div>
                 <table className="table">
