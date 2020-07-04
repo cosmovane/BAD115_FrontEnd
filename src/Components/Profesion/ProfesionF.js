@@ -26,12 +26,13 @@ class ProfesionF extends Component {
       this.onSubmit = this.onSubmit.bind(this)
      // this.validate = this.validate.bind(this)
      this.render = this.render.bind(this);
+     
     }
 
     
      componentDidMount() {
 
-    /*  ProfesionService.profesion(this.state.idProfesion)
+   /* ProfesionService.profesion(this.state.idProfesion)
         .then(response => this.setState(this.state,
             {
             idProfesion: response.data.idProfesion,
@@ -67,11 +68,11 @@ class ProfesionF extends Component {
 
       if (this.state.idProfesion == -1) {
         console.log(profesion);
-        var pro= ProfesionService.agregarProfesion(profesion).then(() => this.props.history.push('/profesion'));
+        var pro= ProfesionService.agregarProfesion(profesion).then(() => this.props.history.push('/profesion/crear'));
         console.log(pro.isResolved);
     } else {
         profesion.idProfesion = values.idProfesion;
-        ProfesionService.modificarProfesion(profesion).then(() => this.props.history.push('/profesion'));
+        ProfesionService.modificarProfesion(profesion).then(() => this.props.history.push('/profesion/{id}'));
     }
 
     //  this.props.history.push('/profesion')

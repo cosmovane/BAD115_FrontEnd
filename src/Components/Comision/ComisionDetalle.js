@@ -29,14 +29,14 @@ class ComisionDetalleComponent extends Component {
         };
 
         this.onSubmit = this.onSubmit.bind(this);
-        this.validate = this.validate.bind(this);
+       // this.validate = this.validate.bind(this);
         this.render = this.render.bind(this);
 
     }
 
     componentDidMount() {
     
-         ComisionService.comision(this.state.idComision)
+      /*   ComisionService.comision(this.state.idComision)
         .then(response => this.setState(this.state,
             {
             idComision: response.data.idComision,
@@ -44,12 +44,12 @@ class ComisionDetalleComponent extends Component {
             hasta: response.data.hasta,
             porcentajecomision: response.data.porcentajecomision,
 
-        })).then( response => this.printResult())
+        }))//.then( response => this.printResult())*/
     }
 
-    printResult(){
+    /*printResult(){
         console.log(this.state);
-    }
+    }*/
 
     async onSubmit(values) {
         let comision = {
@@ -59,7 +59,8 @@ class ComisionDetalleComponent extends Component {
 
             
         }
-           // console.log(comision)
+
+                   // console.log(comision)
 
             /*const response= await ComisionService.comisionCrear(comision)
 
@@ -72,7 +73,8 @@ class ComisionDetalleComponent extends Component {
                 timerProgressBar: true,
             })*/
 
-
+            console.log(comision)
+           //const response = await ComisionService.comisionActualizar(comision)
             
         if (this.state.idComision == -1) {
             console.log(comision);
@@ -80,10 +82,10 @@ class ComisionDetalleComponent extends Component {
             console.log(pro.isResolved);
         } else {
             comision.idComision = values.idComision;
-            ComisionService.comisionActualizar(comision).then(() => this.props.history.push('/comision'));
+        ComisionService.comisionActualizar(comision).then(() => this.props.history.push('/comision'));
         }
-
-        this.props.history.push('/comision')
+       
+      this.props.history.push('/comision')
         Swal.fire({
             icon: 'success',
             tittle: 'Buen trabajo',

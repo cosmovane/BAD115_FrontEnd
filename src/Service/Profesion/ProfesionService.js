@@ -18,9 +18,9 @@ class ProfesionService {
         } );
       }
     
-      /*obtenerProfesion(id) {
-        return axios.get(`${PROFESION_API_URL}/${id}`)
-      }*/
+      //obtenerProfesion(id) {
+       // return axios.get(`${PROFESION_API_URL}/${id}`)
+      //}
 
       profesion(id, profesion){
         return axios.get(`${PROFESION_API_URL}/${id}`,profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
@@ -50,16 +50,8 @@ class ProfesionService {
         return test
       }
     
-      modificarProfesion(id, profesion){
-        return axios.put(`${PROFESION_API_URL}/${id}`, profesion,{headers: LoginService.agregarAuthorizationHeader()}).catch( (err)=> {
-            if(LoginService.isNoAutorizado(err)){
-                Swal.fire(
-                    'Algo ha salido mal',
-                    'No tienes acceso a este recurso' ,
-                    'error'
-                    )
-            }
-        } );
+      modificarProfesion(profesion){
+        return axios.put(`${PROFESION_API_URL}`, profesion)
       }
     
 

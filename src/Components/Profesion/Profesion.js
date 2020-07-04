@@ -15,8 +15,8 @@ class ProfesionComponent extends Component {
     }
     //this.ProfesionService = new PersonaService();
     this.refreshProfesiones = this.refreshProfesiones.bind(this);
-    this.addCourseClicked = this.addCourseClicked.bind(this)
-    this.updateProfesionClicked = this.updateProfesionClicked.bind(this)
+   // this.addCourseClicked = this.addCourseClicked.bind(this)
+   // this.updateProfesionClicked = this.updateProfesionClicked.bind(this)
 }
 
 async componentDidMount() {
@@ -46,12 +46,12 @@ updateProfesionClicked(id){
     return (
       <div className="container">
                 <br />
-                <h3>Profesions</h3>
+                <h3>Profesiones</h3>
                 <div className="container">
                     <div className="row">
                     {
-                        LoginService.hasPermiso('PROFESION_CREATE') ? <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
-                    }
+                            <Link to="/profesion/-1"> <button className="btn btn-success"> <FontAwesomeIcon icon={faPlus}/>Agregar</button> </Link>
+                        }
                     </div>
                     <table className="table">
                         <thead>
@@ -69,11 +69,9 @@ updateProfesionClicked(id){
                                             <td>{profesion.acronimo}</td>
                                             <td>{profesion.nombre}</td>
                                             <td>
-                                            {
-                                                LoginService.hasPermiso('PROFESION_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateProfesionClicked(profesion.idProfesion)}><FontAwesomeIcon icon={faEdit}/></button> : ""
-                                            }
-                                            
-                                            </td>
+                                            <Link to={`/profesion/${profesion.idProfesion}`}><button className="btn btn-warning btn-sm"><FontAwesomeIcon icon={faEdit} /></button>
+                                            </Link>
+                                                </td>
                                         </tr>
                                 )
                             }

@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+
 import {Route, BrowserRouter as Router } from 'react-router-dom'
 import { GuardProvider, GuardedRoute } from 'react-router-guards';
 import { withRouter } from "react-router";
@@ -72,7 +73,7 @@ const requireLogin=(to,from,next)=>{
         )
         next.redirect('/home');
       }
-			
+
 		}
 		next.redirect('/login');
 	}else{
@@ -88,12 +89,12 @@ function App() {
   function openModal() {
     setIsOpen(true);
   }
- 
+
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    subtitle.style.color = '#f00';
+    subtitle.style.color = '#ff0000';
   }
- 
+
   function closeModal(){
     setIsOpen(false);
   }
@@ -102,8 +103,13 @@ function App() {
       <Router>
        <GuardProvider guards={[requireLogin]} >
         <div>
-          
+
           <MenuComponent></MenuComponent>
+
+
+
+
+
           <GuardedRoute exact path="/" component={Login} />
           <GuardedRoute exact path="/login" component={Login} />
           <GuardedRoute exact path="/home" component={HomeComponent} meta={{ auth: true,permiso:'GENERAL_HOME' }} />
@@ -133,6 +139,7 @@ function App() {
           
            <GuardedRoute exact path="/periocidad" component={CalendarioTrabajo}  meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_READ' }}/>
            <GuardedRoute path="/periocidad/crear" component={CalendarioTrabajoDetalle}  meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_CREATE' }}/>
+
            <GuardedRoute path="/periocidad/editar/:id" render={(props) =><CalendarioTrabajoDetalle {...props} editar={true}/>} meta={{ auth: true,permiso:'CALENDARIO_TRABAJO_UPDATE'}}/>
           
            <GuardedRoute exact path="/comision" component={ComisionComponent}  meta={{ auth: true,permiso:'COMISION_READ' }}/>
@@ -157,13 +164,13 @@ function App() {
           <GuardedRoute exact path="/ingresos" component={Ingresos} meta={{ auth: true,permiso:'INGRESO_READ'}}/>
           <GuardedRoute path="/ingreso/crear" component={IngresoForm} meta={{ auth: true,permiso:'INGRESO_CREATE'}}/>
           <GuardedRoute path="/ingreso/editar/:id" render={(props) =><IngresoForm {...props} editar={true}/>} meta={{ auth: true,permiso:'INGRESO_UPDATE'}}/>
-          
-  
+
+
         </div>
        </GuardProvider>
 
       </Router>
-      
+
 
       <div id="calendario">
         <button className="btn btn-success" onClick={openModal}>Calendario</button>
@@ -173,7 +180,7 @@ function App() {
           onRequestClose={closeModal}
           contentLabel="Example Modal"
         >
- 
+
           <h2 ref={_subtitle => (subtitle = _subtitle)}></h2>
           <button onClick={closeModal} className="btn btn-danger">Cerrar</button>
           <form>
