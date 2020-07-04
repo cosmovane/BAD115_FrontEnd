@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Link } from 'react-router-dom'
 import { faEdit,faBan,faPlus,faSave } from '@fortawesome/free-solid-svg-icons'
 import ProfesionService from '../../Service/Profesion/ProfesionService'
-
+import LoginService from '../../Service/Login/LoginService';
 
 class ProfesionComponent extends Component {
 

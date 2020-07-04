@@ -3,7 +3,7 @@ import ComisionService from '../../Service/Comision/ComisionService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom'
-
+import LoginService from '../../Service/Login/LoginService';
 export default class ComisionComponent extends Component {
     constructor(props) {
         super(props)
@@ -50,7 +50,7 @@ export default class ComisionComponent extends Component {
                 <div className="container">
                     <div className="row">
                     {
-                            <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+                         LoginService.hasPermiso('COMISION_CREATE') ? <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                         }
                     </div>
                     <table className="table">
@@ -71,7 +71,10 @@ export default class ComisionComponent extends Component {
                                             <td>{comision.hasta}</td>
                                             <td>{comision.porcentajecomision}</td>
                                             <td>
-                                            <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}><FontAwesomeIcon icon={faEdit}/></button>
+                                            {
+                                                LoginService.hasPermiso('COMISION_CREATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateComisionClicked(comision.idComision)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                            }
+                                            
                                                 </td>
                                         </tr>
                                 )

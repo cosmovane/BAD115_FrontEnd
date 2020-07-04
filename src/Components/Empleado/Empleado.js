@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import EmpleadoService from '../../Service/Empleado/EmpleadoService';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faEdit,faSave,faPlus} from '@fortawesome/free-solid-svg-icons';
-
+import LoginService from '../../Service/Login/LoginService';
 export default class EmpleadoComponent extends Component {
     constructor(props) {
         super(props)
@@ -46,7 +46,7 @@ export default class EmpleadoComponent extends Component {
                 <div className="container">
                     <div className="row">
                         {
-                            <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button>
+                           LoginService.hasPermiso('EMPLEADO_CREATE') ? <button className="btn btn-success" onClick={this.addCourseClicked}><FontAwesomeIcon icon={faPlus}/>Agregar</button> : ""
                         }
                         {/* <button className="btn btn-success" onClick={this.addCourseClicked}>Agregar</button> */}
                     </div>
@@ -67,7 +67,11 @@ export default class EmpleadoComponent extends Component {
                                         {/* <td>{empresa.idEmpresa}</td> */}
                                         <td>{empleado.primernombre} {empleado.segundonombre} {empleado.apellidopaterno} {empleado.apellidomaterno}</td>
                                         <td>{empleado.fechanacimiento}</td>
-                                        <td><button className="btn btn-warning btn-sm" onClick={() => this.updateEmpleadoClicked(empleado.idEmpleado)}><FontAwesomeIcon icon={faEdit}/></button></td>
+                                        <td>
+                                        {
+                                          LoginService.hasPermiso('EMPLEADO_UPDATE') ? <button className="btn btn-warning btn-sm" onClick={() => this.updateEmpleadoClicked(empleado.idEmpleado)}><FontAwesomeIcon icon={faEdit}/></button> : ""
+                                        }
+                                        </td>
                                     </tr>
                             )
                         }

@@ -9,7 +9,7 @@ import { Redirect,Link } from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
-
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
   'width': '25em',
 }
@@ -32,7 +32,7 @@ class ProfesionF extends Component {
     
      componentDidMount() {
 
-     ProfesionService.profesion(this.state.idProfesion)
+   /*  ProfesionService.profesion(this.state.idProfesion)
         .then(response => this.setState(this.state,
             {
             idProfesion: response.data.idProfesion,
@@ -40,7 +40,7 @@ class ProfesionF extends Component {
             nombre: response.data.nombre,
 
 
-        })).then( response => this.printResult())
+        })).then( response => this.printResult())*/
 
      /* if (this.props.editar) {
         const id = this.props.location.pathname.split('/')[3]

@@ -10,6 +10,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSave,faReply} from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2'
 
+import LoginService from '../../Service/Login/LoginService';
 const inputStyle = {
     'width': '25em',
 }
@@ -35,7 +36,7 @@ class ComisionDetalleComponent extends Component {
 
     componentDidMount() {
     
-         ComisionService.comision(this.state.idComision)
+      /*   ComisionService.comision(this.state.idComision)
         .then(response => this.setState(this.state,
             {
             idComision: response.data.idComision,
@@ -43,7 +44,7 @@ class ComisionDetalleComponent extends Component {
             hasta: response.data.hasta,
             porcentajecomision: response.data.porcentajecomision,
 
-        }))//.then( response => this.printResult())
+        }))//.then( response => this.printResult())*/
     }
 
     /*printResult(){
@@ -72,7 +73,7 @@ class ComisionDetalleComponent extends Component {
                 timerProgressBar: true,
             })*/
 
-            console.log(comision)
+           // console.log(comision)
            //const response = await ComisionService.comisionActualizar(comision)
             
         if (this.state.idComision == -1) {
@@ -84,9 +85,7 @@ class ComisionDetalleComponent extends Component {
         ComisionService.comisionActualizar(comision).then(() => this.props.history.push('/comision'));
         }
        
-
-
-        this.props.history.push('/comision')
+      this.props.history.push('/comision')
         Swal.fire({
             icon: 'success',
             tittle: 'Buen trabajo',
