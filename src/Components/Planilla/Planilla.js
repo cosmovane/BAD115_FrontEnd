@@ -177,22 +177,22 @@ class Planilla extends Component {
     )
 
     const ingresos = (await IngresoService.allIngresosActivos()).data
-    const columnasIngresos = _.remove(ingresos, (ingreso) => _.isNull(ingreso.porcentaje_ingreso)).map((ingreso) => {
-      const inputColumn = {
-        title: ingreso.nombre,
-        dataIndex: ingreso.acronimoIngresos,
-        key: ingreso.acronimoIngresos,
-        width: 100,
-        render: (v, row) => <InputField placeholder={ingreso.nombre} name={ingreso.acronimoIngresos.toLowerCase()} deshabilitado={
-          ingreso.acronimoIngresos === 'TV'
+    const columnasIngresos = _.remove(ingresos, (ingreso) => {return ingreso.porcentaje_ingreso === 0}).map((ingreso) => {
+        const inputColumn = {
+          title: ingreso.nombre,
+          dataIndex: ingreso.acronimoIngresos,
+          key: ingreso.acronimoIngresos,
+          width: 100,
+          render: (v, row) => <InputField placeholder={ingreso.nombre} name={ingreso.acronimoIngresos.toLowerCase()} deshabilitado={
+            ingreso.acronimoIngresos === 'TV'
             ? row.noEsDeVentas
             : ingreso.nombre !== 'Bonos'
-              ? row.esServicioProfesional
-              : false
-        } />
-      }
-      return inputColumn
-    })
+            ? row.esServicioProfesional
+            : false
+          } />
+        }
+        return inputColumn
+      })
 
     const columnasDescuentos = _.flatMap(_.remove(descuentos,
       (descuento) => {
