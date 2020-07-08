@@ -51,17 +51,17 @@ class CalendarioTrabajo extends Component{
             var x = 0;
             this.state.calendariosTrabajo.map(
                 calendarioTra => {
+                    if(calendarioTra.estado){
                     if(calendarioTra.periodo == fecha.getFullYear() && calendarioTra.estado == true){
                         x=x+1;
                     } else{ }
-                    
-                    if(x > 0){
-                        return <Link to="periocidad/crear"><button className="btn btn-success" disabled>Agregar</button></Link>;
-                    } else {
-                        return <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link>
                     }
-                
             })
+            if(x > 0){
+                return <Link to="periocidad/crear"><button className="btn btn-success" disabled>Agregar</button></Link>;
+            } else {
+                return <Link to="periocidad/crear"><button className="btn btn-success" >Agregar</button></Link>
+            }
         }
         return (
             
@@ -87,7 +87,7 @@ class CalendarioTrabajo extends Component{
                         this.state.calendariosTrabajo.map(
                             calendarioTrabajo => {
                             if(calendarioTrabajo.estado){
-                                    if(calendarioTrabajo.activo){ 
+                                    if(calendarioTrabajo.periodo == fecha.getFullYear()){ 
                                         return <tr key={calendarioTrabajo.calendariotrabajo}>
                                         <td>{calendarioTrabajo.periodo}</td>
                                         <td>{calendarioTrabajo.periocidad}</td>
