@@ -177,29 +177,29 @@ class Planilla extends Component {
           } 
         }
       }
-    )
+      )
 
     const ingresos = (await IngresoService.allIngresosActivos()).data
-    const columnasIngresos = _.remove(ingresos, (ingreso) => _.isNull(ingreso.porcentaje_ingreso)).map((ingreso) => {
-      const inputColumn = {
-        title: ingreso.nombre,
-        dataIndex: ingreso.acronimoIngresos,
-        key: ingreso.acronimoIngresos,
-        width: 100,
-        render: (v, row) => <InputField placeholder={ingreso.nombre} name={ingreso.acronimoIngresos.toLowerCase()} deshabilitado={
-          ingreso.acronimoIngresos === 'TV'
-            ? row.noEsDeVentas
+    const columnasIngresos = _.remove(ingresos, (ingreso) => {return ingreso.porcentaje_ingreso === 0}).map((ingreso) => {
+        const inputColumn = {
+          title: ingreso.nombre,
+          dataIndex: ingreso.acronimoIngresos,
+          key: ingreso.acronimoIngresos,
+          width: 100,
+          render: (v, row) => <InputField placeholder={ingreso.nombre} name={ingreso.acronimoIngresos.toLowerCase()} deshabilitado={
+            ingreso.acronimoIngresos === 'TV'
+            ? !row.esDeVentas
             : ingreso.nombre !== 'Bonos'
-              ? row.esServicioProfesional
-              : false
-        } />
-      }
-      return inputColumn
-    })
+            ? row.esServicioProfesional
+            : false
+          } />
+        }
+        return inputColumn
+      })
 
     const columnasDescuentos = _.flatMap(_.remove(descuentos,
       (descuento) => {
-        return descuento.acronimo != 'AFP' && descuento.acronimo != 'ISSS' && descuento.acronimo != 'PRESTAMO'
+        return descuento.porcentaje == 0
       }), descuento => {
         const column = {
           title: descuento.nombre,
@@ -264,7 +264,6 @@ class Planilla extends Component {
           if (empleado.estado) return empleado
         }
       ), ['primernombre', 'segundonombre', 'apellidopaterno', 'apellidomaterno'], ['asc', 'asc', 'asc', 'asc'])
-
     this.setState({
       data: empleados.map(empleado => {
         return {
@@ -272,7 +271,7 @@ class Planilla extends Component {
           empleado: `${empleado.primernombre} ${empleado.segundonombre} ${empleado.apellidopaterno} ${empleado.apellidomaterno} ${empleado.apellidocasada}`,
           salarioBase: empleado.salario,
           esServicioProfesional: empleado.esServicioProfesional,
-          noEsDeVentas: _.isNull(empleado.id_unidadorganizacional) ? true : !empleado.id_unidadorganizacional.idUnidadorganizacional === 8,
+          esDeVentas: _.isNull(empleado.id_unidadorganizacional) ? false : empleado.id_unidadorganizacional.idUnidadorganizacional === 8,
           noPuedeTomarVacaciones: !empleado.tomarVacaciones,
           departamento: _.isNull(empleado.id_unidadorganizacional) ? ''
             : empleado.id_unidadorganizacional.nombre,
